@@ -33,7 +33,6 @@ parser$add_argument("-i", "--input",
 parser$add_argument("-o", "--output", default="T2_result",
                     help = "output file name. [default \"%(default)s\"]")
 
-
 args <- parser$parse_args()
 
 data = read.delim(args$input, stringsAsFactors=FALSE, header= TRUE, sep='\t')
@@ -43,15 +42,21 @@ for(row in 1:nrow(data)){
   PMIDs=as.character(unique(data[row, pmids_cols_index]))
   
   if(length(PMIDs) > 0){
-    efetch_result = efetch(uid=unique(data[row, pmids_cols_index]), db="pubmed", retmode = "xml")
+    efetch_result = try(efetch(uid=unique(data[row, pmids_cols_index]), db="pubmed", retmode = "xml"),silent=TRUE)
     abstracts= custom_grep(efetch_result$content, tag = "Abstract", format = "char")
     cat(length(abstracts), " abstracts were found for PMIDs of", data[row,"ID"], "\n")
     abstracts= sapply(1:length(abstracts), function(i){paste(custom_grep(abstracts[i], tag="AbstractText", format="char"),collapse="")})
     abstracts = sapply(1:length(abstracts), function(x){replace_html(abstracts[x])})
     data[row, sapply(seq_along(abstracts),function(x){as.character(paste0("ABSTRACT_",x))})] <- abstracts
-    Sys.sleep(.75) #sys.sleep in order to avoid curl error of fetching abstracts
+    Sys.sleep(0.75) #sys.sleep in order to avoid curl error of fetching abstracts
     
+    if(round(row/10) == row/10){
+      Sys.sleep(5)
+    }
   }
 }
 
 write.table(data, args$output, sep = '\t', row.names = FALSE, col.names = TRUE)
+
+
+

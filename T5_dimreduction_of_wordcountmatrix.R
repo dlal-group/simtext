@@ -13,6 +13,7 @@
 # -o OUTPUT, --output OUTPUT    output file name of dataframe with ID, GROUPING and DIM1, DIM2 column. [default "T5_result"]
 # -p PLOT, --plot PLOT          output file name of plot [default "T5_result_plot"]
 # -n {1:50}, --number {1:50}    Perplexity value for T-SNE [default "2"]
+# -t TEXTSIZE, --textsize TEXTSIZE   Textsize of labels in output plot [default 1]
 
 if (!require('argparse')) install.packages('argparse'); suppressPackageStartupMessages(library("argparse"))
 if (!require('Rtsne')) install.packages('Rtsne'); library('Rtsne')
@@ -22,7 +23,7 @@ if (!require('ggrepel')) install.packages('ggrepel'); library('ggrepel')
 
 parser <- ArgumentParser()
 parser$add_argument("-i", "--input", 
-                    help = "input fie name of dataframe with ID (and GROUPING column(s)). add path if file is not in working directory")
+                    help = "input fie name of dataframe with ID and GROUPING column(s). add path if file is not in working directory")
 parser$add_argument("-m", "--matrix", 
                     help = "input file name of wordcont matrix (rows= ID, columns=words). add path if file is not in working directory.")
 parser$add_argument("-o", "--output", default="T5_result",
@@ -31,14 +32,18 @@ parser$add_argument("-p", "--perplexity", type="integer", default=2, choices=seq
                     help="Numeric perplexity value for T-SNE Perplexity parameter (should not be bigger than 3 * perplexity < nrow(X) - 1) [default \"%(default)s\"]")
 parser$add_argument("-g", "--plot", default="T5_result_plot",
                     help= "output file name of plot [default \"%(default)s\"]")
-
+parser$add_argument("-t", "--textsize", default=1, type="integer", 
+                    help= "Textsize of labels in output plot [default \"%(default)s\"]")
 
 args <- parser$parse_args()
 
 data <- read.delim(args$input, stringsAsFactors=FALSE, header = TRUE, sep='\t')
+
 wordcount_matrix <- read.delim(args$matrix, stringsAsFactors=FALSE, header = TRUE, sep='\t')
 
-data= data[,-grep(c("ABSTRACT|TEXT|PMID"), names(data))] #only keep columns: ID,GROUPING
+if(length(grep(c("ABSTRACT|TEXT|PMID"), names(data))) > 0){
+  data= data[,-grep(c("ABSTRACT|TEXT|PMID"), names(data))] #only keep columns: ID,GROUPING
+}
 
 wordcount_matrix = as.matrix(wordcount_matrix)
 wordcount_matrix = (wordcount_matrix>0) *1 #transform matrix to binary matrix
@@ -47,20 +52,17 @@ tsne_result <- Rtsne(wordcount_matrix, perplexity = args$perplexity, check_dupli
 data["TSNE_X"] = tsne_result$Y[,1]
 data["TSNE_Y"] = tsne_result$Y[,2]
 
-  
 tsne_plot = ggplot(data, aes(x=TSNE_X, y=TSNE_Y)) +
   geom_text_repel(aes(label=data$ID, colour = factor(data[,grep(c("GROUPING"), names(data))[1]])),
-                  size=5,
+                  size=args$textsize,
                   box.padding = 0,
                   fontface = "bold") +
   theme_classic()+
   scale_colour_brewer(palette="Paired")+
-  theme(legend.title = element_blank())
+  theme(legend.title = element_blank())+
+  guides(color = guide_legend(override.aes = list(size = 3)))
 
-ggsave(paste0(args$output, ".pdf"),plot=tsne_plot, width = 9, height = 6)
+ggsave(paste0(args$output, ".png"),plot=tsne_plot, width = 9, height = 6)
 
 write.table(data, args$output, sep = '\t')
-
-
-
 

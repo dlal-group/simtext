@@ -37,7 +37,7 @@ parser$add_argument("-i", "--input",
 parser$add_argument("-o", "--output", default="T1_result",
                     help = "output file name. [default \"%(default)s\"]")
 parser$add_argument("-n", "--number", type="integer", default=5, choices=seq(1, 20), metavar="{0..20}",
-                    help="Number of PMIDs (and abstracts) to save per  ID. [default \"%(default)s\"]")
+                    help="Number of PMIDs (or abstracts) to save per  ID. [default \"%(default)s\"]")
 parser$add_argument("-a", "--abstract", action="store_true", default=FALSE,
                     help="Instead of PMIDs, abstracts are saved.")
 parser$add_argument("-k", "--key", type="character", 
@@ -84,7 +84,10 @@ for(i in 1:nrow(data)){
                                 query= data$ID[i],
                                 number= args$number,
                                 key= args$key,
-                                abstract= args$abstract) }
+                                abstract= args$abstract) 
+  if(round(i/10) == i/10){
+    Sys.sleep(5)
+  }}
 
 write.table(data, args$output, append = FALSE, sep = '\t', row.names = FALSE, col.names = TRUE)
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env Rscript
 #TOOL4:text_to_wordcountmatrix
 #
-#the tool performs textmining of all text per ID and generates a wordcount matrix with the top used words per ID.
+#the tool performs textmining of all text per ID and generates a word matrix with the top used words per ID.
 #all columns starting with "ABSTRACT" or "TEXT" are used for textmining.
 #
 #packages: r-argparse-2.0.1, r-textclean-0.9.3, r-snowballc-0.6.0,  r-pubmedwordcloud-0.3.3, ("SemNetCleaner" not found in anaconda cloud)
 #
-# usage: T2_pubmedsearch_by_pmid.R [-h] [-i INPUT] [-o OUTPUT]
+# usage: T4_text_to_wordcountmatrix.R [-h] [-i INPUT] [-o OUTPUT]
 # 
 # optional arguments:
 # -h, --help                    show this help message and exit
@@ -35,7 +35,7 @@ parser$add_argument("-o", "--output", default="T4_result",
 parser$add_argument("-n", "--number", type="integer", default=50, choices=seq(1, 500), metavar="{0..500}",
                     help="Number of mostfrequent words used per ID in wordcount matrix [default \"%(default)s\"]")
 parser$add_argument("-r", "--remove_num", action="store_true", default=FALSE,
-                    help="Remove any numbers in text.")
+                    help= "Remove any numbers in text.")
 parser$add_argument("-l", "--lower_case", action="store_false", default=TRUE,
                     help="By default all characters are translated to lower case. Use -l if unwanted.")
 parser$add_argument("-w", "--remove_stopwords", action="store_false", default=TRUE,
@@ -64,6 +64,8 @@ for(row in 1:nrow(data)){
                                stemDoc= args$stemDoc)
     
     top_words$word <- as.character(top_words$word)
+    
+    cat("Top words for ", data$ID[row], " are extracted.", "\n")
     
       if(args$plurals == TRUE){
         top_words$word <- sapply(top_words$word, function(x){singularize(x)})

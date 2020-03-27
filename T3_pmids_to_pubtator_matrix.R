@@ -37,21 +37,47 @@ data = read.delim(args$input, stringsAsFactors=FALSE, header = TRUE, sep='\t')
 pmid_cols_index <- grep(c("PMID"), names(data))
 
 get_mesh_ids = function(pmids, categories){
-  results= pubtator_function(pmids)
+  results= try(pubtator_function(as.character(pmids)))
   df_terms = as.data.frame(str_split_fixed(unlist(results[c(categories)]), ">", n=2))
   mesh_ids = unique(as.character(df_terms$V2))
+  mesh_ids = mesh_ids[!mesh_ids==""]
   return(mesh_ids)
 }
 
 for (i in 1:nrow(data)){
+
   terms= get_mesh_ids(data[i,pmid_cols_index], args$categories)
-  word_matrix[i,terms] <- 1
+  terms= terms[!terms == "No Data"]
+  
+  if (length(terms) == 0){
+      terms= get_mesh_ids(data[i,pmid_cols_index], args$categories)
+      terms= terms[!terms == "No Data"]
+      Sys.sleep(30)}
+  
+  if (length(terms) == 0){
+        terms= get_mesh_ids(data[i,pmid_cols_index], args$categories)
+        terms= terms[!terms == "No Data"]
+        Sys.sleep(45)
+        } 
+  if (length(terms) == 0){
+          terms= get_mesh_ids(data[i,pmid_cols_index], args$categories)
+          terms= terms[!terms == "No Data"]
+          Sys.sleep(60)
+          }
+  if (length(terms) >0 ){
+          word_matrix[i,terms] <- 1
+          Sys.sleep(1)}
+  
+  if(round(i/5) == i/5){
+    Sys.sleep(10)}
+  
+  cat("Pubtator found", length(terms), "terms for", data[i,"ID"],'\n')
 }
 
 word_matrix <- as.matrix(word_matrix)
 word_matrix[is.na(word_matrix)] <- 0
 
-
-cat("A word matrix with ", nrow(word_matrix), " rows and ", ncol(word_matrix), "columns is generated.", "\n")
+cat("A word matrix with ",nrow(word_matrix)," rows and ",ncol(word_matrix)," columns is generated.","\n")
 
 write.table(word_matrix, args$output, sep = '\t')
+
