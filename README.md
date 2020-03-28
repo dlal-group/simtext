@@ -8,6 +8,7 @@
     
     b) manually curated PMID columns, column names should contain "PMID. eg."PMID_1", "PMID_2" 
 
+# See Tutorial_usecases.doc for more details.
 # Quick overview of tools:
  T1: Pubmed search by keyword. Save PMIDs or abstracts.
 
