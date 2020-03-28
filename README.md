@@ -4,8 +4,9 @@
 - input data requires columns: "ID", "GROUPING"
 - input data can have additional columns: 
 
-a) additional text columns, column names should contain "TEXT". eg."TEXT_1", "TEXT_2"
-b) manually curated PMID columns, column names should contain "PMID. eg."PMID_1", "PMID_2" 
+    a) additional text columns, column names should contain "TEXT". eg."TEXT_1", "TEXT_2"
+    
+    b) manually curated PMID columns, column names should contain "PMID. eg."PMID_1", "PMID_2" 
 
 # Quick overview of tools:
  T1: Pubmed search by keyword. Save PMIDs or abstracts.
