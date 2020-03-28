@@ -3,6 +3,7 @@
 - working directory should contain scripts and input data table 
 - input data requires columns: "ID", "GROUPING"
 - input data can have additional columns: 
+
 a) additional text columns, column names should contain "TEXT". eg."TEXT_1", "TEXT_2"
 b) manually curated PMID columns, column names should contain "PMID. eg."PMID_1", "PMID_2" 
 
