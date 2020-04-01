@@ -20,4 +20,4 @@
 
  T5: Dimensionality reduction (t-SNE) of word matrix into co-ordinates of subjects (column "ID") in 2D.
 
- Still coming: shiny app that visualize results of tools
+ Still coming: shiny app that visualizes results of tools
