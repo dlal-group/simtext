@@ -16,8 +16,8 @@
 
  T3: Pubtator search for specific scientific words in abstracts. Generation of matrix with IDs/scientific terms. As input PMIDs are used.
 
- T4: Textmining of abstracts/text. Generation of wordcount matrix based on top words. 
+ T4: Textmining of abstracts/text. Generation of word co-occurence matrix based on top words. 
 
- T5: Dimensionality reduction (T-SNE) of word matrix into co-ordinates of subjects in 2D.
+ T5: Dimensionality reduction (t-SNE) of word matrix into co-ordinates of subjects (column "ID") in 2D.
 
  Still coming: shiny app that visualize results of tools
