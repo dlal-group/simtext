@@ -1,5 +1,5 @@
 
-### commands to test the tools with a small test data set ###
+### commands to test the tools with "test_data" ###
 
  $ RScript T1_pubmedsearch_by_keyword.R -i "test_data" 
  #output: T1_result
