@@ -1,17 +1,17 @@
 
 ### commands to test the tools with "test_data" ###
 
- $ RScript T1_pubmedsearch_by_keyword.R -i "test_data" 
- #output: T1_result
+ $ RScript ../T1_pubmedsearch_by_keyword.R -i "test_data" 
+ #output: data/T1_result
 
- $ RScript T2_pubmedsearch_by_pmid.R -i "T1_result"
+ $ RScript ../T2_pubmedsearch_by_pmid.R -i "T1_result"
  #output: T2_result
 
- $ RScript T3_pmids_to_pubtator_matrix.R -i "T1_result" 
- #output: T3_result
+ $ RScript ../T3_pmids_to_pubtator_matrix.R -i "T1_result" 
+ #output: data/T3_result
 
- $ RScript T4_text_to_wordcountmatrix.R -i "T2_result"
- #output: T4_result
+ $ RScript ../T4_text_to_wordcountmatrix.R -i "T2_result"
+ #output: data/T4_result
 
- $ RScript T5_dimreduction_of_wordcountmatrix.R -i "test_data" -m "T4_result" -p 1 -t 3
- #output: T5_result and T5_result.png
+ $ RScript ../T5_dimreduction_of_wordcountmatrix.R -i "test_data" -m "T4_result" -p 1 -t 3
+ #output: data/T5_result and data/T5_result.png

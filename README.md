@@ -1,4 +1,4 @@
-# Similarity app
+# SimText
 
 - working directory should contain scripts and input data table 
 - input data requires columns: "ID", "GROUPING"
