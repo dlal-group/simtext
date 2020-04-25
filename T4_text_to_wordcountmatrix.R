@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 #TOOL4:text_to_wordcountmatrix
 #
-#the tool performs textmining of all text per ID and generates a word matrix with the top used words per ID.
+#the tool performs textmining of all text per ID (per row) and generates a word matrix with the top used words per ID.
 #all columns starting with "ABSTRACT" or "TEXT" are used for textmining.
 #
 #packages: r-argparse-2.0.1, r-textclean-0.9.3, r-snowballc-0.6.0,  r-pubmedwordcloud-0.3.3, ("SemNetCleaner" not found in anaconda cloud)
@@ -60,7 +60,6 @@ for(row in 1:nrow(data)){
                                rmNum = args$remove_num, 
                                tolw= args$lower_case,
                                rmWords= args$remove_stopwords,
-                               #yrWords= remove_words, 
                                stemDoc= args$stemDoc)
     
     top_words$word <- as.character(top_words$word)

@@ -1,9 +1,10 @@
 #!/usr/bin/env Rscript
 #TOOL3:pmids_to_pubtator_matrix
 #
-# The tool takes all PMIDs per ID and uses pubtator to extract all "Genes", "Diseases", "Mutations", "Chemicals", "Species" terms of the abstarcts.
-# All MESH terms/ gene&species ID that occured per ID are used to generate matrix with rows= ID subjects and columns= MESH terms/ gene&species IDs.
-# The resulting matrix is binary with 0= did not occur and 1=did occur. 
+# The tool takes all PMIDs per ID and uses pubtator to extract all "Genes", "Diseases", "Mutations", "Chemicals", "Species" terms of the abstracts. 
+# The user can choose if terms of all, some or one of the aforementioned categories should be used.
+# All terms that occured for all IDs are used to generate a matrix with rows= IDs and columns= terms.
+# The resulting matrix is binary with 0= did not occur and 1= did occur. 
 
 # usage: T3_pmids_to_pubtator_matrix.R [-h] [-i INPUT] [-o OUTPUT]
 # [-c {Genes,Diseases,Mutations,Chemicals,Species} [{Genes,Diseases,Mutations,Chemicals,Species} ...]]
@@ -31,45 +32,47 @@ parser$add_argument("-c", "--categories", choices=c("Genes", "Diseases", "Mutati
 
 args <- parser$parse_args()
 
-word_matrix = data.frame()
-
 data = read.delim(args$input, stringsAsFactors=FALSE, header = TRUE, sep='\t')
 pmid_cols_index <- grep(c("PMID"), names(data))
 
-get_mesh_ids = function(pmids, categories){
+word_matrix = data.frame()
+
+get_pubtator_terms = function(pmids, categories){
   results= try(pubtator_function(as.character(pmids)))
   df_terms = as.data.frame(str_split_fixed(unlist(results[c(categories)]), ">", n=2))
-  mesh_ids = unique(as.character(df_terms$V2))
-  mesh_ids = mesh_ids[!mesh_ids==""]
-  return(mesh_ids)
+  pubtator_terms = unique(as.character(df_terms$V1))
+  pubtator_terms = pubtator_terms[!pubtator_terms==""]
+  return(pubtator_terms)
 }
 
 for (i in 1:nrow(data)){
 
-  terms= get_mesh_ids(data[i,pmid_cols_index], args$categories)
+  terms= get_pubtator_terms(data[i,pmid_cols_index], args$categories)
   terms= terms[!terms == "No Data"]
   
   if (length(terms) == 0){
-      terms= get_mesh_ids(data[i,pmid_cols_index], args$categories)
+      terms= get_pubtator_terms(data[i,pmid_cols_index], args$categories)
       terms= terms[!terms == "No Data"]
       Sys.sleep(30)}
   
   if (length(terms) == 0){
-        terms= get_mesh_ids(data[i,pmid_cols_index], args$categories)
+        terms= get_pubtator_terms(data[i,pmid_cols_index], args$categories)
         terms= terms[!terms == "No Data"]
         Sys.sleep(45)
         } 
   if (length(terms) == 0){
-          terms= get_mesh_ids(data[i,pmid_cols_index], args$categories)
+          terms= get_pubtator_terms(data[i,pmid_cols_index], args$categories)
           terms= terms[!terms == "No Data"]
           Sys.sleep(60)
-          }
+  }
+  
+  #add terms to word matrix (as new or already existing columns) 
   if (length(terms) >0 ){
           word_matrix[i,terms] <- 1
           Sys.sleep(1)}
   
   if(round(i/5) == i/5){
-    Sys.sleep(10)}
+    Sys.sleep(5)}
   
   cat("Pubtator found", length(terms), "terms for", data[i,"ID"],'\n')
 }

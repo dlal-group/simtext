@@ -1,8 +1,9 @@
 #!/usr/bin/env Rscript
 #TOOL2:pubmedsearch_by_pmid
 #
-#the tool  takes all PMIDs of columns starting with "PMID" and 
-#saves the according abstracts in the table.
+#the tool takes per row all PMIDs of columns starting with "PMID" and 
+#saves the according abstracts from PubMed in the table.
+#The abstract columns are called "ABSTRACT_1", "ABSTARCT_2" etc. 
 #
 #packages: r-argparse-2.0.1, r-reutils-0.2.3, r-easypubmed-2.13, r-textclean-0.9.3
 #
