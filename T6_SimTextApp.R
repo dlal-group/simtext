@@ -35,7 +35,14 @@ parser$add_argument("-i", "--input",
                     help = "input file name. add path if file is not in working directory")
 parser$add_argument("-m", "--matrix", default= NULL,
                     help = "matrix file name. add path if file is not in working directory")
+parser$add_argument("-p", "--port", type="integer", default=NULL,
+                    help="Specify port, otherwise randomly select")
 args <- parser$parse_args()
+
+# Set port
+if(!is.null(args$port)){
+  options(shiny.port = args$port)
+}
 
 #load data
 data = read.delim(args$input, stringsAsFactors=FALSE)
