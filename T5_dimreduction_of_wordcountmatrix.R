@@ -62,7 +62,7 @@ tsne_plot = ggplot(data, aes(x=TSNE_X, y=TSNE_Y)) +
   theme(legend.title = element_blank())+
   guides(color = guide_legend(override.aes = list(size = 3)))
 
-ggsave(paste0(args$output, ".png"),plot=tsne_plot, width = 9, height = 6)
+ggsave(args$plot, device="png", plot=tsne_plot, width = 9, height = 6)
 
 write.table(data, args$output, sep = '\t')
 
