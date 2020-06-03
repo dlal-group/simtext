@@ -1,24 +1,29 @@
 #!/usr/bin/env Rscript
-#TOOL4:text_to_wordcountmatrix
+# TOOL3 text_to_wordmatrix
 #
-#the tool performs textmining of all text per ID (per row) and generates a word matrix with the top used words per ID.
-#all columns starting with "ABSTRACT" or "TEXT" are used for textmining.
+#The tool extracts the most frequent words per entity (per row). Text of columns starting with "ABSTRACT" or "TEXT" are considered. 
+#All extracted terms are used to generate a word matrix with rows = entities and columns = extracted words. 
+#The resulting matrix is binary with 0= word not present in abstracts of entity and 1= word present in abstracts of entity.
+#
+#Input: Output of tool 1 or 2, or tab-delimited table with entities in column called “ID_<name>”, 
+#e.g. “ID_genes” and text in columns starting with "ABSTRACT" or "TEXT".
+#
+#Output: Binary matrix with rows = entities and columns = extracted words.
 #
 #packages: r-argparse-2.0.1, r-textclean-0.9.3, r-snowballc-0.6.0,  r-pubmedwordcloud-0.3.3, ("SemNetCleaner" not found in anaconda cloud)
 #
-# usage: T4_text_to_wordcountmatrix.R [-h] [-i INPUT] [-o OUTPUT]
+#usage: T3_text_to_wordmatrix.R [-h] [-i INPUT] [-o OUTPUT]
 # 
 # optional arguments:
 # -h, --help                    show this help message and exit
 # -i INPUT, --input INPUT       input fie name. add path if file is not in working directory
-# -o OUTPUT, --output OUTPUT    output file name. [default "T4_result"]
-# -n {1:500}, --number {1:500}  Number of mostfrequent words used per ID in wordcount matrix. [default "50"]
+# -o OUTPUT, --output OUTPUT    output file name. [default "T3_output"]
+# -n {1:500}, --number {1:500}  Number of most frequent words used per ID in word matrix. [default "50"]
 # -r, --remove_num              Remove any numbers in text.
 # -l, --lower_case              By default all characters are translated to lower case. Use -l if this should not be done.
 # -w, --remove_stopwords        By default a set of English stopwords (e.g., 'the' or 'not') are removed. Use -s if unwanted.
 # -s, --stemDoc                 Apply Porter's stemming algorithm: collapsing words to a common root to aid comparison of vocabulary
 # -p, --plurals                 By default words in plural and singular are merged to the singular form. Use -p if unwanted
-
 
 if (!require('argparse')) install.packages('argparse'); suppressPackageStartupMessages(library("argparse"))
 if (!require("PubMedWordcloud")) install.packages("PubMedWordcloud"); library("PubMedWordcloud") 
@@ -26,14 +31,13 @@ if (!require('SnowballC')) install.packages('SnowballC'); suppressPackageStartup
 if (!require('textclean')) install.packages('textclean'); suppressPackageStartupMessages(library("textclean"))
 if (!require('SemNetCleaner')) install.packages('SemNetCleaner'); suppressPackageStartupMessages(library("SemNetCleaner"))
 
-
 parser <- ArgumentParser()
 parser$add_argument("-i", "--input", 
                     help = "input fie name. add path if file is not in workind directory")
-parser$add_argument("-o", "--output", default="T4_result",
+parser$add_argument("-o", "--output", default="T3_output",
                     help = "output file name. [default \"%(default)s\"]")
 parser$add_argument("-n", "--number", type="integer", default=50, choices=seq(1, 500), metavar="{0..500}",
-                    help="Number of mostfrequent words used per ID in wordcount matrix [default \"%(default)s\"]")
+                    help="Number of most frequent words used per ID in word matrix [default \"%(default)s\"]")
 parser$add_argument("-r", "--remove_num", action="store_true", default=FALSE,
                     help= "Remove any numbers in text.")
 parser$add_argument("-l", "--lower_case", action="store_false", default=TRUE,
@@ -50,10 +54,10 @@ args <- parser$parse_args()
 
 
 data = read.delim(args$input, stringsAsFactors=FALSE, header = TRUE, sep='\t')
-  
+word_matrix = data.frame()
+
 text_cols_index <- grep(c("ABSTRACT|TEXT"), names(data))
-                          
-wordcount_matrix = data.frame()
+id_col_index <- grep("ID_", names(data))
 
 for(row in 1:nrow(data)){
     top_words = cleanAbstracts(abstracts= data[row,text_cols_index], 
@@ -64,7 +68,7 @@ for(row in 1:nrow(data)){
     
     top_words$word <- as.character(top_words$word)
     
-    cat("Top words for ", data$ID[row], " are extracted.", "\n")
+    cat("Top words for ", data[row,id_col_index], " are extracted.", "\n")
     
       if(args$plurals == TRUE){
         top_words$word <- sapply(top_words$word, function(x){singularize(x)})
@@ -74,13 +78,13 @@ for(row in 1:nrow(data)){
     top_words = top_words[order(top_words$freq, decreasing = TRUE), ]
     top_words$word = as.character(top_words$word)
     
-    wordcount_matrix[row,sapply(1:args$number, function(x){paste0(top_words$word[x])})] <- top_words$freq[1:args$number]
+    word_matrix[row,sapply(1:args$number, function(x){paste0(top_words$word[x])})] <- top_words$freq[1:args$number]
   }
 
-  wordcount_matrix <- as.matrix(wordcount_matrix)
-  wordcount_matrix[is.na(wordcount_matrix)] <- 0
-  
+  word_matrix <- as.matrix(word_matrix)
+  word_matrix[is.na(word_matrix)] <- 0
+  word_matrix <- word_matrix>0 *1  #transform matrix to binary matrix
 
-cat("A wordcount matrix with ", nrow(wordcount_matrix), " rows and ", ncol(wordcount_matrix), "columns is generated.", "\n")
+cat("A word matrix with ", nrow(word_matrix), " rows and ", ncol(word_matrix), "columns is generated.", "\n")
   
-write.table(wordcount_matrix, args$output, sep = '\t')
+write.table(word_matrix, args$output, sep = '\t')

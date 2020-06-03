@@ -1,13 +1,15 @@
 #!/usr/bin/env Rscript
 ### SimText App ###
-
+#
 #Input: 
-#1) A tab delimited table (--input) with at least two columns: one column named "ID" containing all objects and one or 
-#   more columns starting with "GROUPING_" e.g."GROUPING_Disease". In this case the app will show Disease as a grouping variable.
-#2) A matrix with rows = IDs (--matrix) and columns = words/terms. When a word/term is associated with an ID, the value is >0 
-#   (if binary=1 or absolute count) and otherwise the value in the matrix is 0. The matrix is transformed into a binary matrix 
-#   (based on >0) before analysis in the app.
-
+#1) Tab-delimited table (--input) with entities in column called “ID_<name>”, e.g. “ID_genes” if entities are genes, 
+#   and column(s) with grouping factor, eg. column containing information to which diseases the genes are associated with. 
+#   The names of grouping columns should start with “GROUPING_”. If the column is called “GROUPING_Disease”, the app will show “Disease” as a grouping variable.
+#2) A binary matrix (--matrix) as tab delimited table with rows = entities and columns = words (eg. output of tool 3 and tool 4).
+#
+#Output: 
+#Shiny app with word clouds, dimensionality reduction plot, dendrogram of hierarchical clustering and table with words and their frequency among the entities.
+#
 #Packages
 if (!require('shiny')) install.packages('shiny'); suppressPackageStartupMessages(library("shiny"))
 if (!require('plotly')) install.packages('plotly'); suppressPackageStartupMessages(library("plotly"))
@@ -35,7 +37,14 @@ parser$add_argument("-i", "--input",
                     help = "input file name. add path if file is not in working directory")
 parser$add_argument("-m", "--matrix", default= NULL,
                     help = "matrix file name. add path if file is not in working directory")
+parser$add_argument("-p", "--port", type="integer", default=NULL,
+                    help="Specify port, otherwise randomly select")
 args <- parser$parse_args()
+
+# Set port
+if(!is.null(args$port)){
+  options(shiny.port = args$port)
+}
 
 #load data
 data = read.delim(args$input, stringsAsFactors=FALSE)

@@ -1,18 +1,24 @@
 #!/usr/bin/env Rscript
-#TOOL3:pmids_to_pubtator_matrix
+#TOOL4 pmids_to_pubtator_matrix
 #
-# The tool takes all PMIDs per ID and uses pubtator to extract all "Genes", "Diseases", "Mutations", "Chemicals", "Species" terms of the abstracts. 
-# The user can choose if terms of all, some or one of the aforementioned categories should be used.
-# All terms that occured for all IDs are used to generate a matrix with rows= IDs and columns= terms.
-# The resulting matrix is binary with 0= did not occur and 1= did occur. 
-
-# usage: T3_pmids_to_pubtator_matrix.R [-h] [-i INPUT] [-o OUTPUT]
+#This tool takes all PMIDs per entity and uses PubTator to extract all "Genes", "Diseases", "Mutations", "Chemicals" 
+#and "Species" terms of the corresponding abstracts. The user can choose if terms of all, 
+#some or one of the aforementioned categories should be extracted. All extracted terms are used 
+#to generate a word matrix with rows = entities and columns = extracted words. 
+#The resulting matrix is binary with 0= word not present in abstracts of entity and 1= word present in abstracts of entity.
+#
+#Input: Output of tool 2 or tab-delimited table with entities in column called “ID_<name>” 
+#and columns containing PMIDs. The names of the PMID columns should start with “PMID”, e.g. “PMID_1”, “PMID_2” etc.
+#
+#Output: Binary matrix with rows = entities and columns = extracted words.
+#
+# usage: T4_pmids_to_pubtator_matrix.R [-h] [-i INPUT] [-o OUTPUT]
 # [-c {Genes,Diseases,Mutations,Chemicals,Species} [{Genes,Diseases,Mutations,Chemicals,Species} ...]]
 # 
 # optional arguments:
 #   -h, --help                 show this help message and exit
 #   -i INPUT, --input INPUT    input fie name. add path if file is not in workind directory
-#   -o OUTPUT, --output OUTPUT output file name. [default "T3_result"]
+#   -o OUTPUT, --output OUTPUT output file name. [default "T4_output"]
 #   -c {Genes,Diseases,Mutations,Chemicals,Species} [{Genes,Diseases,Mutations,Chemicals,Species} ...], --categories {Genes,Diseases,Mutations,Chemicals,Species} [{Genes,Diseases,Mutations,Chemicals,Species} ...]
 #      Pubtator categories that should be considered.  [default "('Genes', 'Diseases', 'Mutations','Chemicals')"]
 
@@ -24,7 +30,7 @@ parser <- ArgumentParser()
 
 parser$add_argument("-i", "--input", 
                     help = "input fie name. add path if file is not in workind directory")
-parser$add_argument("-o", "--output", default="T3_result",
+parser$add_argument("-o", "--output", default="T4_output",
                     help = "output file name. [default \"%(default)s\"]")
 parser$add_argument("-c", "--categories", choices=c("Genes", "Diseases", "Mutations", "Chemicals", "Species"), nargs="+", 
                     default= c("Genes", "Diseases", "Mutations", "Chemicals"),
@@ -72,7 +78,7 @@ for (i in 1:nrow(data)){
           Sys.sleep(1)}
   
   if(round(i/5) == i/5){
-    Sys.sleep(5)}
+    Sys.sleep(10)}
   
   cat("Pubtator found", length(terms), "terms for", data[i,"ID"],'\n')
 }
