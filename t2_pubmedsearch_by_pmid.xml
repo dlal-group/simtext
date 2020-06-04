@@ -1,0 +1,38 @@
+<tool id="t2_pubmedsearch_by_pmid" name="T2_pubmedsearch_by_pmid" version="@VERSION@">
+    <description>[description]</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <expand macro="stdio"/>
+    <command><![CDATA[Rscript 
+      '${__tool_directory__}/T2_pubmedsearch_by_pmid.R'
+      --input '$input'
+      --output '$output'
+      ]]>
+    </command>
+    <inputs>
+      <param argument="--input" label="Input file" name="input" optional="false" type="data" format="tabular" help="input"/>
+    </inputs>
+    <outputs>
+      <data format="tabular" name="output" />
+    </outputs>
+    <tests>
+        <test>
+          <param name="input" value="test_data" ftype="tabular"/>
+          <param name="output" value="T1_result" ftype="tabular"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+parser <- ArgumentParser()
+parser$add_argument("-i", "--input", 
+                    help = "input fie name. add path if file is not in workind directory")
+parser$add_argument("-o", "--output", default="T2_result",
+                    help = "output file name. [default \"%(default)s\"]")
+
+args <- parser$parse_args()
+
+
+        ]]></help>
+</tool>

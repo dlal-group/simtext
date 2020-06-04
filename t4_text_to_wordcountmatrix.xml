@@ -1,0 +1,66 @@
+<tool id="t4_text_to_wordcountmatrix" name="T4_text_to_wordcountmatrix" version="@VERSION@">
+    <description>[description]</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <expand macro="stdio"/>
+    <command><![CDATA[Rscript 
+      '${__tool_directory__}/T4_text_to_wordcountmatrix.R'
+      --input '$input'
+      --output '$output'
+      --number '$number'
+      $remove_num
+      $lower_case
+      $remove_stopwords
+      $stemDoc
+      $plurals
+      ]]>
+    </command>
+    <inputs>
+      <param argument="--input" label="Input file" name="input" optional="false" type="data" format="tabular" help="input"/>
+      <param argument="--number" label="Number of mostfrequent words used per ID in wordcount matrix" name="number" optional="false" type="integer" help="number" value="50" min="1" max="500"/>
+      <param argument="--remove_num" label="Remove any numbers in text" name="remove_num" type="boolean" truevalue="--remove_num" falsevalue="" help="remove_num" checked="false"/>
+      <param argument="--lower_case" label="By default all characters are translated to lower case. Use -l if unwanted." name="lower_case" type="boolean" truevalue="--lower_case" falsevalue="" help="lower_case" checked="false"/>
+      <param argument="--remove_stopwords" label="By default a set of English stopwords (e.g., 'the' or 'not') are removed. Use -s if unwanted." name="remove_stopwords" type="boolean" truevalue="--remove_stopwords" falsevalue="" help="remove_stopwords" checked="false"/>
+      <param argument="--stemDoc" label="Apply Porter's stemming algorithm: collapsing words to a common root to aid comparison of vocabulary" name="stemDoc" type="boolean" truevalue="--stemDoc" falsevalue="" help="stemDoc" checked="false"/>
+      <param argument="--plurals" label="By default words in plural and singular are merged to the singular form. Use -p if unwanted" name="plurals" type="boolean" truevalue="--plurals" falsevalue="" help="plurals" checked="false"/>
+    </inputs>
+    <outputs>
+      <data format="tabular" name="output" />
+    </outputs>
+    <tests>
+        <test>
+          <param name="input" value="test_data" ftype="tabular"/>
+          <param name="output" value="T1_result" ftype="tabular"/>
+          <param name="number" value="50"/>
+          <param name="abstract" value=""/>
+          <param name="key" value=""/>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+parser <- ArgumentParser()
+parser$add_argument("-i", "--input", 
+                    help = "input fie name. add path if file is not in workind directory")
+parser$add_argument("-o", "--output", default="T4_result",
+                    help = "output file name. [default \"%(default)s\"]")
+parser$add_argument("-n", "--number", type="integer", default=50, choices=seq(1, 500), metavar="{0..500}",
+                    help="Number of mostfrequent words used per ID in wordcount matrix [default \"%(default)s\"]")
+parser$add_argument("-r", "--remove_num", action="store_true", default=FALSE,
+                    help= "Remove any numbers in text.")
+parser$add_argument("-l", "--lower_case", action="store_false", default=TRUE,
+                    help="By default all characters are translated to lower case. Use -l if unwanted.")
+parser$add_argument("-w", "--remove_stopwords", action="store_false", default=TRUE,
+                    help="By default a set of English stopwords (e.g., 'the' or 'not') are removed. Use -s if unwanted.")
+parser$add_argument("-s", "--stemDoc", action="store_true", default=FALSE,
+                    help="Apply Porter's stemming algorithm: collapsing words to a common root to aid comparison of vocabulary")
+parser$add_argument("-p", "--plurals", action="store_false", default=TRUE,
+                    help="By default words in plural and singular are merged to the singular form. Use -p if unwanted")
+
+
+args <- parser$parse_args()
+
+
+        ]]></help>
+</tool>

@@ -1,0 +1,52 @@
+  <tool id="t3_pmids_to_pubtator_matrix" name="T3_pmids_to_pubtator_matrix" version="@VERSION@">
+    <description>[description]</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <expand macro="stdio"/>
+    <command><![CDATA[Rscript 
+      '${__tool_directory__}/T3_pmids_to_pubtator_matrix.R'
+      --input '$input'
+      --output '$output'
+      #for $category in $categories:
+          --categories '$category'
+      #end for
+      ]]>
+    </command>
+    <inputs>
+      <param argument="--input" label="Input file" name="input" optional="false" type="data" format="tabular" help="input"/>
+      <param name="categories" type="select" label="categories" multiple="true" >
+        <option value="Genes">Genes</option>
+        <option value="Diseases">Diseases</option>
+        <option value="Mutations">Mutations</option>
+        <option value="Chemicals">Chemicals</option>
+      </param>
+    </inputs>
+    <outputs>
+      <data format="tabular" name="output" />
+    </outputs>
+    <tests>
+        <test>
+          <param name="input" value="test_data" ftype="tabular"/>
+          <param name="output" value="T1_result" ftype="tabular"/>
+          <param name="categories" value="Genes"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+parser <- ArgumentParser()
+
+parser$add_argument("-i", "--input", 
+                    help = "input fie name. add path if file is not in workind directory")
+parser$add_argument("-o", "--output", default="T3_result",
+                    help = "output file name. [default \"%(default)s\"]")
+parser$add_argument("-c", "--categories", choices=c("Genes", "Diseases", "Mutations", "Chemicals", "Species"), nargs="+", 
+                    default= c("Genes", "Diseases", "Mutations", "Chemicals"),
+                    help = "Pubtator categories that should be considered. [default \"%(default)s\"]")
+
+args <- parser$parse_args()
+
+
+        ]]></help>
+</tool>

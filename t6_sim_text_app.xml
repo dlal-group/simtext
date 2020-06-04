@@ -1,0 +1,43 @@
+<tool id="t6_simtextapp" name="T6_SimTextApp" version="@VERSION@">
+    <description>[description]</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <expand macro="stdio"/>
+    <command><![CDATA[Rscript 
+      '${__tool_directory__}/T6_SimTextApp.R'
+      --input '$input'
+      --matrix '$matrix'
+      --port '8888'
+      ]]>
+    </command>
+    <inputs>
+      <param argument="--input" label="Input file" name="input" optional="false" type="data" format="tabular" help="input"/>
+      <param argument="--matrix" label="matrix file" name="matrix" optional="false" type="data" format="tabular" help="matrix"/>
+    </inputs>
+    <outputs>
+      <data format="tabular" name="output" />
+    </outputs>
+    <tests>
+        <test>
+          <param name="input" value="test_data" ftype="tabular"/>
+          <param name="output" value="T1_result" ftype="tabular"/>
+          <param name="number" value="1"/>
+          <param name="abstract" value=""/>
+          <param name="key" value=""/>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+parser <- ArgumentParser()
+parser$add_argument("-i", "--input", 
+                    help = "input file name. add path if file is not in working directory")
+parser$add_argument("-m", "--matrix", default= NULL,
+                    help = "matrix file name. add path if file is not in working directory")
+args <- parser$parse_args()
+
+
+
+        ]]></help>
+</tool>

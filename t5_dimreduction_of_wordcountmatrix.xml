@@ -1,0 +1,59 @@
+<tool id="t5_dimreduction_of_wordcountmatrix" name="T5_dimreduction_of_wordcountmatrix" version="@VERSION@">
+    <description>[description]</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <expand macro="stdio"/>
+    <command><![CDATA[Rscript 
+      '${__tool_directory__}/T5_dimreduction_of_wordcountmatrix.R'
+      --input '$input'
+      --matrix '$matrix'
+      --output '$output'
+      --perplexity '$perplexity'
+      --textsize '$textsize'
+      --plot '$plot'
+      ]]>
+    </command>
+    <inputs>
+      <param argument="--input" label="Input file" name="input" optional="false" type="data" format="tabular" help="input"/>
+      <param argument="--matrix" label="input file name of wordcont matrix (rows= ID, columns=words)." name="matrix" optional="false" type="data" format="tabular" help="matrix"/>
+
+      <param argument="--perplexity" label="Numeric perplexity value for T-SNE Perplexity parameter (should not be bigger than 3 * perplexity &lt; nrow(X) - 1)" name="perplexity" optional="false" type="integer" help="perplexity" value="2" min="0" max="50"/>
+      <param argument="--textsize" label="Textsize of labels in output plot" name="textsize" optional="false" type="integer" help="textsize" value="1" min="1"/>
+    </inputs>
+    <outputs>
+      <data format="tabular" name="output" />
+      <data format="png" name="plot" />
+    </outputs>
+    <tests>
+        <test>
+          <param name="input" value="test_data" ftype="tabular"/>
+          <param name="output" value="T1_result" ftype="tabular"/>
+          <param name="number" value="1"/>
+          <param name="abstract" value=""/>
+          <param name="key" value=""/>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+parser <- ArgumentParser()
+parser$add_argument("-i", "--input", 
+                    help = "input fie name of dataframe with ID and GROUPING column(s). add path if file is not in working directory")
+parser$add_argument("-m", "--matrix", 
+                    help = "input file name of wordcont matrix (rows= ID, columns=words). add path if file is not in working directory.")
+parser$add_argument("-o", "--output", default="T5_result",
+                    help = "output file name. [default \"%(default)s\"]")
+parser$add_argument("-p", "--perplexity", type="integer", default=2, choices=seq(0, 50, 0.1), metavar="{0..50}",
+                    help="Numeric perplexity value for T-SNE Perplexity parameter (should not be bigger than 3 * perplexity < nrow(X) - 1) [default \"%(default)s\"]")
+parser$add_argument("-g", "--plot", default="T5_result_plot",
+                    help= "output file name of plot [default \"%(default)s\"]")
+parser$add_argument("-t", "--textsize", default=1, type="integer", 
+                    help= "Textsize of labels in output plot [default \"%(default)s\"]")
+
+args <- parser$parse_args()
+
+
+
+        ]]></help>
+</tool>

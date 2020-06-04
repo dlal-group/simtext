@@ -1,0 +1,17 @@
+<macros>
+    <token name="@VERSION@">0.0.1</token>
+
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="@VERSION@">similarity_app</requirement>
+        </requirements>
+    </xml>
+
+    <xml name="stdio">
+        <stdio>
+             <exit_code level="fatal" range="1:"/>
+        </stdio>
+    </xml>
+
+</macros>
+
