@@ -1,4 +1,4 @@
-<tool id="t4_text_to_wordcountmatrix" name="T4_text_to_wordcountmatrix" version="@VERSION@">
+<tool id="t3_text_to_wordmatrix" name="T3_text_to_wordmatrix" version="@VERSION@">
     <description>[description]</description>
     <macros>
         <import>macros.xml</import>
@@ -6,7 +6,7 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command><![CDATA[Rscript 
-      '${__tool_directory__}/T4_text_to_wordcountmatrix.R'
+      '${__tool_directory__}/T3_text_to_wordmatrix.R'
       --input '$input'
       --output '$output'
       --number '$number'

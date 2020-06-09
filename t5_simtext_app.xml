@@ -1,4 +1,4 @@
-<tool id="t6_simtextapp" name="T6_SimTextApp" version="@VERSION@">
+<tool id="t5_simtext_app" name="T5_simtext_app" version="@VERSION@">
     <description>[description]</description>
     <macros>
         <import>macros.xml</import>
@@ -6,7 +6,7 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command><![CDATA[Rscript 
-      '${__tool_directory__}/T6_SimTextApp.R'
+      '${__tool_directory__}/T5_simtext_app.R'
       --input '$input'
       --matrix '$matrix'
       --port '8888'

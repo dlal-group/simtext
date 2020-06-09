@@ -1,4 +1,4 @@
-<tool id="t1_pubmedsearch_by_keyword" name="T1_pubmedsearch_by_keyword" version="@VERSION@">
+<tool id="t1_pubmed_by_queries" name="T1_pubmed_by_queries" version="@VERSION@">
     <description>[description]</description>
     <macros>
         <import>macros.xml</import>
@@ -6,7 +6,7 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command><![CDATA[Rscript 
-      '${__tool_directory__}/T1_pubmedsearch_by_keyword.R'
+      '${__tool_directory__}/T1_pubmed_by_queries.R'
       --input '$input'
       --output '$output'
       --number '$number'

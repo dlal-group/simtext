@@ -2,7 +2,6 @@
 
 ####Usecase 1#####
 cd <path>/SimText
-#e.g: $cd Dropbox/LAL_PROJECTS/RESEARCH_PORTAL/SimText
 
 $RScript T2_pubmedsearch_by_pmid.R \
  --input "tutorial_usecases/data/1/Researcher_testdata.txt" \

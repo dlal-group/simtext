@@ -1,4 +1,4 @@
-  <tool id="t3_pmids_to_pubtator_matrix" name="T3_pmids_to_pubtator_matrix" version="@VERSION@">
+  <tool id="t4_pmids_to_pubtator_matrix" name="T4_pmids_to_pubtator_matrix" version="@VERSION@">
     <description>[description]</description>
     <macros>
         <import>macros.xml</import>
@@ -6,7 +6,7 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command><![CDATA[Rscript 
-      '${__tool_directory__}/T3_pmids_to_pubtator_matrix.R'
+      '${__tool_directory__}/T4_pmids_to_pubtator_matrix.R'
       --input '$input'
       --output '$output'
       #for $category in $categories:

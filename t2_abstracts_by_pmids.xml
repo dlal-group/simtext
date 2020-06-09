@@ -1,4 +1,4 @@
-<tool id="t2_pubmedsearch_by_pmid" name="T2_pubmedsearch_by_pmid" version="@VERSION@">
+<tool id="t2_abstracts_by_pmids" name="T2_abstracts_by_pmids" version="@VERSION@">
     <description>[description]</description>
     <macros>
         <import>macros.xml</import>
@@ -6,7 +6,7 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command><![CDATA[Rscript 
-      '${__tool_directory__}/T2_pubmedsearch_by_pmid.R'
+      '${__tool_directory__}/T2_abstracts_by_pmids.R'
       --input '$input'
       --output '$output'
       ]]>
