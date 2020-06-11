@@ -68,7 +68,7 @@ for(row in 1:nrow(data)){
     
     top_words$word <- as.character(top_words$word)
     
-    cat("Top words for ", data[row,id_col_index], " are extracted.", "\n")
+    #cat("Top words for ", data[row,id_col_index], " are extracted.", "\n")
     
       if(args$plurals == TRUE){
         top_words$word <- sapply(top_words$word, function(x){singularize(x)})

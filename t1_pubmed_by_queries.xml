@@ -1,10 +1,18 @@
 <tool id="t1_pubmed_by_queries" name="T1_pubmed_by_queries" version="@VERSION@">
     <description>[description]</description>
+    
+    <requirements>             
+      <requirement type="package" version="2.0.1">r-argparse</requirement>             
+      <requirement type="package" version="2.13">r-easypubmed</requirement> 
+    </requirements>
+    
     <macros>
         <import>macros.xml</import>
     </macros>
+    
     <expand macro="requirements"/>
     <expand macro="stdio"/>
+    
     <command><![CDATA[Rscript 
       '${__tool_directory__}/T1_pubmed_by_queries.R'
       --input '$input'
@@ -16,15 +24,18 @@
       #end if
       ]]>
     </command>
+    
     <inputs>
       <param argument="--input" label="Input file" name="input" optional="false" type="data" format="tabular" help="input"/>
       <param argument="--number" label="Number of PMIDs (or abstracts) to save per  ID." name="number" optional="false" type="integer" help="number" value="5"/>
       <param argument="--abstract" label="Instead of PMIDs, abstracts are saved." name="abstract" type="boolean" truevalue="--abstract" falsevalue="" help="abstract" checked="false"/>
       <param argument="--key" label="key" name="key" optional="true" type="text" help="key"/>
     </inputs>
+    
     <outputs>
       <data format="tabular" name="output" />
     </outputs>
+    
     <tests>
         <test>
           <param name="input" value="test_data" ftype="tabular"/>
@@ -34,7 +45,14 @@
           <param name="key" value=""/>
         </test>
     </tests>
+    
     <help><![CDATA[
+
+Input: Table with entities in column called “ID_<name>”, e.g. “ID_genes” if entities are genes.
+The entities are successively used as search query in PubMed.
+
+Output: Input table with additional columns containing PMIDs or abstracts from PubMed.
+
 
 parser <- ArgumentParser()
 parser$add_argument("-i", "--input", 

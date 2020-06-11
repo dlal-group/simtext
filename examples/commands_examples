@@ -1,0 +1,82 @@
+#Commands to reproduce use-case examples
+
+
+#### Use-case 1a #####
+
+$ cd <path>/SimText
+
+$ RScript T1_pubmed_by_queries.R \
+ --input "examples/data/1a/clingen_data" \
+ --output "examples/data/1a/T1_output" \
+ --number 20 \
+ --key "15f2fa5c9d427fd88d53b5041002aeabd309" \
+ --abstract 
+
+$ RScript T3_text_to_wordmatrix.R \
+ --input "examples/data/1a/T1_output" \
+ --output "examples/data/1a/clingen_data_matrix" \
+ --number 50 \
+ --stemDoc
+
+$ RScript T5_simtext_app.R \
+ --input "examples/data/1a/clingen_data" \
+ --matrix "examples/data/1a/clingen_data_matrix"
+
+
+
+#### Use-case 1b #####
+
+$ cd <path>/SimText
+
+$ RScript T1_pubmed_by_queries.R \
+ --input "examples/data/1b/clingen_data" \
+ --output "examples/data/1b/T1_output" \
+ --number 10 \
+ --key "15f2fa5c9d427fd88d53b5041002aeabd309"
+
+$ RScript T4_pmids_to_pubtator_matrix.R \
+ --input "examples/data/1b/T1_output"  \
+ --output "examples/data/1b/clingen_data_matrix" \
+ --categories Diseases Genes
+
+$ RScript T5_simtext_app.R \
+ --input "examples/data/1b/clingen_data" \
+ --matrix "examples/data/1b/clingen_data_matrix"
+
+
+
+#### Use-case 2 #####
+
+cd <path>/SimText
+
+$ RScript T2_abstracts_by_pmids.R \
+ --input "examples/data/2/researcher_data.txt" \
+ --output "examples/data/2/T2_output"
+
+$ RScript T3_text_to_wordmatrix.R \
+ --input "examples/data/2/T2_output" \
+ --output "examples/data/2/researcher_data_matrix" \
+ --number 100
+
+$ RScript T5_simtext_app.R \
+ --input "examples/data/2/researcher_data.txt" \
+ --matrix "examples/data/2/researcher_data_matrix"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

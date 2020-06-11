@@ -1,0 +1,16 @@
+#commands to test the tools with "test_data" 
+
+ $ RScript ../T1_pubmed_by_queries.R --input "test_data" 
+ #output: data/T1_output
+
+ $ RScript ../T2_abstracts_by_pmids.R --input "T1_output"
+ #output: data/T2_output
+
+ $ RScript ../T3_text_to_wordmatrix.R --input "T2_output"
+ #output: data/T3_output
+ 
+  $ RScript ../T4_pmids_to_pubtator_matrix.R --input "T1_output" 
+ #output: data/T4_output
+
+ $ RScript ../T5_simtext_app.R -i "test_data" -m "T3_output" 
+ #output: ShinyApp

@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 #TOOL1 pubmed_by_queries
 
-#Input: Tab-delimited table with entities in column called “ID_<name>”, e.g. “ID_genes” if entities are are genes.
+#Input: Tab-delimited table with entities in column called “ID_<name>”, e.g. “ID_genes” if entities are genes.
 #The entities are successively used as search query in PubMed.
 #
 #Output: Input table with additional columns containing PMIDs or abstracts from Pubmed.
