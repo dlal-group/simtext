@@ -18,16 +18,26 @@ Input:
 Tab-delimited table with entities in a column called “ID_<name>”, e.g. “ID_gene” if entities are genes. The entities are successively used as search query in PubMed.
 
 Usage:
+```
+{
 $ T1_pubmed_by_queries.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-a] [-k KEY]
+}
+```
 
 Optional arguments: 
+
+```
+{
  -i INPUT, --input INPUT     input file name. add path if file is not in working directory
  -o OUTPUT, --output OUTPUT  output file name [default "T1_output"]
  -n NUMBER, --number NUMBER  number of PMIDs or abstracts to save per ID [default "5"]
  -a, --abstract              if abstracts instead of PMIDs should be retrieved use --abstracts 
  -k KEY, --key KEY           if API key is available, add it to speed up the download of PubMed data
+}
+```
 
 Output: 
+
 Input table with additional columns with PMIDs or abstracts (--abstracts) from PubMed.
 
 ## T2_abstracts_by_pmids
