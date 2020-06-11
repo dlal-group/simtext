@@ -12,12 +12,12 @@
 #
 #Output: Binary matrix with rows = entities and columns = extracted words.
 #
-# usage: T4_pmids_to_pubtator_matrix.R [-h] [-i INPUT] [-o OUTPUT]
+# usage: $ T4_pmids_to_pubtator_matrix.R [-h] [-i INPUT] [-o OUTPUT]
 # [-c {Genes,Diseases,Mutations,Chemicals,Species} [{Genes,Diseases,Mutations,Chemicals,Species} ...]]
 # 
 # optional arguments:
-#   -h, --help                 show this help message and exit
-#   -i INPUT, --input INPUT    input fie name. add path if file is not in workind directory
+#   -h, --help                 show help message
+#   -i INPUT, --input INPUT    input file name. add path if file is not in workind directory
 #   -o OUTPUT, --output OUTPUT output file name. [default "T4_output"]
 #   -c {Genes,Diseases,Mutations,Chemicals,Species} [{Genes,Diseases,Mutations,Chemicals,Species} ...], --categories {Genes,Diseases,Mutations,Chemicals,Species} [{Genes,Diseases,Mutations,Chemicals,Species} ...]
 #      Pubtator categories that should be considered.  [default "('Genes', 'Diseases', 'Mutations','Chemicals')"]

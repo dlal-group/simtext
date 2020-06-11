@@ -7,6 +7,14 @@
 #   The names of grouping columns should start with “GROUPING_”. If the column is called “GROUPING_Disease”, the app will show “Disease” as a grouping variable.
 #2) A binary matrix (--matrix) as tab delimited table with rows = entities and columns = words (eg. output of tool 3 and tool 4).
 #
+# Usage: $ T5_simtext_app.R [-h] [-i INPUT] [-m MATRIX] [-p PORT] 
+# 
+# optional arguments:
+# -h, --help                    show help message
+# -i INPUT, --input INPUT       input file name. add path if file is not in working directory
+# -m MATRIX, --matrix MATRIX    matrix file name. add path if file is not in working directory
+# -p PORT, --port PORT          specify port, otherwise randomly selected
+#
 #Output: 
 #Shiny app with word clouds, dimensionality reduction plot, dendrogram of hierarchical clustering and table with words and their frequency among the entities.
 #

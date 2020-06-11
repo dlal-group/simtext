@@ -15,37 +15,57 @@
 ## T1_pubmed_by_queries
 
 Input:
-Tab-delimited table with entities in a column called “ID_<name>”, e.g. “ID_genes” if entities are genes. The entities are successively used as search query in PubMed.
-Settings:
--	Save abstracts or PMIDs
--	Number of abstracts or PMIDs that should be retrieved per entity
--	NCBI API key if applicable
--	Name of the output file
+Tab-delimited table with entities in a column called “ID_<name>”, e.g. “ID_gene” if entities are genes. The entities are successively used as search query in PubMed.
+
+Usage:
+$ T1_pubmed_by_queries.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-a] [-k KEY]
+
+Optional arguments: 
+ -i INPUT, --input INPUT     input file name. add path if file is not in working directory
+ -o OUTPUT, --output OUTPUT  output file name [default "T1_output"]
+ -n NUMBER, --number NUMBER  number of PMIDs or abstracts to save per ID [default "5"]
+ -a, --abstract              if abstracts instead of PMIDs should be retrieved use --abstracts 
+ -k KEY, --key KEY           if API key is available, add it to speed up the download of PubMed data
+
 Output: 
-Input table with additional columns containing PMIDs or abstracts from PubMed.
+Input table with additional columns with PMIDs or abstracts (--abstracts) from PubMed.
 
 ## T2_abstracts_by_pmids
 
 Input:
 Tab-delimited table with entities in a column called “ID_<name>” and columns containing PMIDs. The names of the PMID columns should start with “PMID”, e.g. “PMID_1”, “PMID_2” etc.
-Settings:
--	Name of the output file
+
+Usage: 
+$ T2_abstracts_by_pmid.R [-h] [-i INPUT] [-o OUTPUT]
+
+Optional arguments: 
+ -i INPUT, --input INPUT    input file name. add path if file is not in working directory
+ -o OUTPUT, --output OUTPUT output file name [default "T2_output"]
+
 Output: 
 Input table with additional columns containing abstracts corresponding to the PMIDs from PubMed.
 
 ## T3_text_to_wordmatrix
 
-The tool extracts the most frequent words per entity (per row). Text of columns starting with "ABSTRACT" or "TEXT" are considered. The most frequent words are used to generate a word matrix with rows = entities and columns = extracted words. The resulting matrix is binary with 0= word not frequently occurring in abstracts/text of entity and 1= word frequently present in abstracts/text of entity.
+The tool extracts the most frequent words per entity (per row). Text of columns starting with "ABSTRACT" or "TEXT" are considered. The most frequent words are used to generate a binary matrix with rows = entities and columns = extracted words, with 0= word not frequently occurring in abstracts/text of entity and 1= word frequently present in abstracts/text of entity.
 
-Input: Output of tool 1 or tool 2, or tab-delimited table with entities in column called “ID_<name>”, e.g. “ID_genes” and text in columns starting with "ABSTRACT" or "TEXT".
-Settings:
--	Number most frequent words that should be extracted (default: top 50 words)
--	All characters translated to lower case (default)
--	A set of English stop words (e.g., 'the' or 'not') are removed (default)
--	Remove any numbers in text 
--	Apply Porter's stemming algorithm: collapsing words to a common root to aid comparison of vocabulary
--	Transform words in plural to their singular form (default)
--	Name of the output file
+Input: 
+Output of tool 1 or tool 2, or tab-delimited table with entities in column called “ID_<name>”, e.g. “ID_genes” and text in columns starting with "ABSTRACT" or "TEXT".
+
+Usage:
+$ T3_text_to_wordmatrix.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-r] [-l] [-w] [-s] [-p]
+
+Optional arguments: 
+ -h, --help                    show this help message and exit
+ -i INPUT, --input INPUT       input file name. add path if file is not in working directory
+ -o OUTPUT, --output OUTPUT    output file name. [default "T3_output"]
+ -n NUMBER, --number NUMBER    number of most frequent words that should be extracted [default "50"]
+ -r, --remove_num              remove any numbers in text
+ -l, --lower_case              by default all characters are translated to lower case. otherwise use -l
+ -w, --remove_stopwords        by default a set of english stopwords (e.g., 'the' or 'not') are removed. otherwise use -w
+ -s, --stemDoc                 apply Porter's stemming algorithm: collapsing words to a common root to aid comparison of vocabulary
+ -p, --plurals                 by default words in plural and singular are merged to the singular form. otherwise use -p
+
 Output: 
 Binary matrix with rows = entities and columns = extracted words.
 
@@ -55,18 +75,33 @@ This tool takes all PMIDs per entity (per row) and uses PubTator to extract all 
 
 Input: 
 Output of tool 2 or tab-delimited table with entities in column called “ID_<name>” and columns containing PMIDs. The names of the PMID columns should start with “PMID”, e.g. “PMID_1”, “PMID_2” etc.
-Settings:
--	Name of the output file
--	PubTator categories that should be considered (options: Genes, Diseases, Mutations, Chemicals, Species)
+
+Usage: 
+$ T4_pmids_to_pubtator_matrix.R [-h] [-i INPUT] [-o OUTPUT] [-c {Genes,Diseases,Mutations,Chemicals,Species} [{Genes,Diseases,Mutations,Chemicals,Species} ...]]
+ 
+Optional arguments:
+ -h, --help                    show this help message and exit
+ -i INPUT, --input INPUT       input file name. add path if file is not in workind directory
+ -o OUTPUT, --output OUTPUT    output file name. [default "T4_output"]
+ -c [...], --categories [...]  PubTator categories that should be considered [default "('Genes', 'Diseases', 'Mutations','Chemicals')"]
+
 Output: 
 Binary matrix with rows = entities and columns = extracted words
 
 ## T5_simtext_app
 
 Input:
-Input 1: Tab-delimited table with entities in column called “ID_<name>”, e.g. “ID_gene” if entities are genes and column(s) with grouping factor, e.g. column containing information to which diseases the genes are associated with. The names of grouping columns should start with “GROUPING_”. If the column is called “GROUPING_disease”, the app will show “disease” as a grouping variable.
-Input 2: Binary word matrix (or output of tool 3 or tool 4).
-Settings: 
-The user can choose different settings interactively within the app.
+- Input 1: Tab-delimited table with entities in column called “ID_<name>”, e.g. “ID_gene” if entities are genes and column(s) with grouping factor, e.g. column containing information with which disorder the genes are associated with. The names of grouping columns should start with “GROUPING_”. If the column is called “GROUPING_disease”, the app will show “disease” as a grouping variable.
+- Input 2: Binary word matrix (or output of tool 3 or tool 4).
+
+Usage:
+$ T5_simtext_app.R [-h] [-i INPUT] [-m MATRIX] [-p PORT] 
+
+Optional arguments:
+ -h, --help                    show help message
+ -i INPUT, --input INPUT       input file name. add path if file is not in working directory
+ -m MATRIX, --matrix MATRIX    matrix file name. add path if file is not in working directory
+ -p PORT, --port PORT          specify port, otherwise randomly selected
+   
 Output: 
-Shiny app with word clouds, dimensionality reduction plot, dendrogram of hierarchical clustering and table with extracted words and their frequency among the entities.
+Shiny app with word clouds of entities, dimensionality reduction plot, dendrogram of hierarchical clustering and table with extracted words and their frequency among the entities.

@@ -11,8 +11,8 @@
 # usage: T2_abstracts_by_pmid.R [-h] [-i INPUT] [-o OUTPUT]
 # 
 # optional arguments:
-# -h, --help                 show this help message and exit
-# -i INPUT, --input INPUT    input fie name. add path if file is not in working directory
+# -h, --help                 show help message
+# -i INPUT, --input INPUT    input file name. add path if file is not in working directory
 # -o OUTPUT, --output OUTPUT output file name. [default "T2_output"]
 
 

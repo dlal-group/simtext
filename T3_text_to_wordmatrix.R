@@ -12,18 +12,18 @@
 #
 #packages: r-argparse-2.0.1, r-textclean-0.9.3, r-snowballc-0.6.0,  r-pubmedwordcloud-0.3.3, ("SemNetCleaner" not found in anaconda cloud)
 #
-#usage: T3_text_to_wordmatrix.R [-h] [-i INPUT] [-o OUTPUT]
+#usage: T3_text_to_wordmatrix.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-r] [-l] [-w] [-s] [-p]
 # 
 # optional arguments:
-# -h, --help                    show this help message and exit
-# -i INPUT, --input INPUT       input fie name. add path if file is not in working directory
+# -h, --help                    show help message
+# -i INPUT, --input INPUT       input file name. add path if file is not in working directory
 # -o OUTPUT, --output OUTPUT    output file name. [default "T3_output"]
-# -n {1:500}, --number {1:500}  Number of most frequent words used per ID in word matrix. [default "50"]
-# -r, --remove_num              Remove any numbers in text.
-# -l, --lower_case              By default all characters are translated to lower case. Use -l if this should not be done.
-# -w, --remove_stopwords        By default a set of English stopwords (e.g., 'the' or 'not') are removed. Use -s if unwanted.
-# -s, --stemDoc                 Apply Porter's stemming algorithm: collapsing words to a common root to aid comparison of vocabulary
-# -p, --plurals                 By default words in plural and singular are merged to the singular form. Use -p if unwanted
+# -n NUMBER, --number NUMBER    number of most frequent words that should be extracted [default "50"]
+# -r, --remove_num              remove any numbers in text
+# -l, --lower_case              by default all characters are translated to lower case. otherwise use -l
+# -w, --remove_stopwords        by default a set of english stopwords (e.g., 'the' or 'not') are removed. otherwise use -w
+# -s, --stemDoc                 apply Porter's stemming algorithm: collapsing words to a common root to aid comparison of vocabulary
+# -p, --plurals                 by default words in plural and singular are merged to the singular form. otherwise use -p
 
 if (!require('argparse')) install.packages('argparse'); suppressPackageStartupMessages(library("argparse"))
 if (!require("PubMedWordcloud")) install.packages("PubMedWordcloud"); library("PubMedWordcloud") 

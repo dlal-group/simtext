@@ -12,7 +12,7 @@
 # 
 # optional arguments:
 # -h, --help                  show this help message and exit
-# -i INPUT, --input INPUT     input fie name. add path if file is not in working directory
+# -i INPUT, --input INPUT     input file name. add path if file is not in working directory
 # -o OUTPUT, --output OUTPUT  output file name. [default "T1_output"]
 # -n {1,20}, --number {1,20}  Number of PMIDs or abstracts to save per ID [default "5"]
 # -a, --abstract              Instead of PMIDs, abstracts are saved.
@@ -29,7 +29,7 @@ parser$add_argument("-i", "--input",
                     help = "input fie name. add path if file is not in workind directory")
 parser$add_argument("-o", "--output", default="T1_output",
                     help = "output file name. [default \"%(default)s\"]")
-parser$add_argument("-n", "--number", type="integer", default=5, choices=seq(1, 20), metavar="{0..20}",
+parser$add_argument("-n", "--number", type="integer", default=5, #choices=seq(1, 20), metavar="{0..20}",
                     help="Number of PMIDs (or abstracts) to save per  ID. [default \"%(default)s\"]")
 parser$add_argument("-a", "--abstract", action="store_true", default=FALSE,
                     help="Instead of PMIDs, abstracts are saved.")
