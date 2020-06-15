@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 #TOOL4 pmids_to_pubtator_matrix
 #
-#This tool takes all PMIDs per entity and uses PubTator to extract all "Genes", "Diseases", "Mutations", "Chemicals" 
+#The tool takes all PMIDs per entity and uses PubTator to extract all "Genes", "Diseases", "Mutations", "Chemicals" 
 #and "Species" terms of the corresponding abstracts. The user can choose if terms of all, 
 #some or one of the aforementioned categories should be extracted. All extracted terms are used 
 #to generate a word matrix with rows = entities and columns = extracted words. 
@@ -11,6 +11,8 @@
 #and columns containing PMIDs. The names of the PMID columns should start with “PMID”, e.g. “PMID_1”, “PMID_2” etc.
 #
 #Output: Binary matrix with rows = entities and columns = extracted words.
+#
+# r-stringr 1.4.0, r-argparse-2.0.1
 #
 # usage: $ T4_pmids_to_pubtator_matrix.R [-h] [-i INPUT] [-o OUTPUT]
 # [-c {Genes,Diseases,Mutations,Chemicals,Species} [{Genes,Diseases,Mutations,Chemicals,Species} ...]]
@@ -80,7 +82,7 @@ for (i in 1:nrow(data)){
   if(round(i/5) == i/5){
     Sys.sleep(10)}
   
-  cat("Pubtator found", length(terms), "terms for", data[i,"ID"],'\n')
+  cat("Pubtator found", length(terms), "terms for row", i,'\n')
 }
 
 word_matrix <- as.matrix(word_matrix)

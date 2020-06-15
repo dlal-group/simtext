@@ -28,7 +28,6 @@
 if (!require('argparse')) install.packages('argparse'); suppressPackageStartupMessages(library("argparse"))
 if (!require("PubMedWordcloud")) install.packages("PubMedWordcloud"); library("PubMedWordcloud") 
 if (!require('SnowballC')) install.packages('SnowballC'); suppressPackageStartupMessages(library("SnowballC"))
-if (!require('textclean')) install.packages('textclean'); suppressPackageStartupMessages(library("textclean"))
 if (!require('SemNetCleaner')) install.packages('SemNetCleaner'); suppressPackageStartupMessages(library("SemNetCleaner"))
 
 parser <- ArgumentParser()
@@ -37,17 +36,17 @@ parser$add_argument("-i", "--input",
 parser$add_argument("-o", "--output", default="T3_output",
                     help = "output file name. [default \"%(default)s\"]")
 parser$add_argument("-n", "--number", type="integer", default=50, choices=seq(1, 500), metavar="{0..500}",
-                    help="Number of most frequent words used per ID in word matrix [default \"%(default)s\"]")
+                    help="number of most frequent words used per ID in word matrix [default \"%(default)s\"]")
 parser$add_argument("-r", "--remove_num", action="store_true", default=FALSE,
-                    help= "Remove any numbers in text.")
+                    help= "remove any numbers in text")
 parser$add_argument("-l", "--lower_case", action="store_false", default=TRUE,
-                    help="By default all characters are translated to lower case. Use -l if unwanted.")
+                    help="by default all characters are translated to lower case. otherwise use -l")
 parser$add_argument("-w", "--remove_stopwords", action="store_false", default=TRUE,
-                    help="By default a set of English stopwords (e.g., 'the' or 'not') are removed. Use -s if unwanted.")
+                    help="by default a set of English stopwords (e.g., 'the' or 'not') are removed. otherwise use -s")
 parser$add_argument("-s", "--stemDoc", action="store_true", default=FALSE,
-                    help="Apply Porter's stemming algorithm: collapsing words to a common root to aid comparison of vocabulary")
+                    help="apply Porter's stemming algorithm: collapsing words to a common root to aid comparison of vocabulary")
 parser$add_argument("-p", "--plurals", action="store_false", default=TRUE,
-                    help="By default words in plural and singular are merged to the singular form. Use -p if unwanted")
+                    help="by default words in plural and singular are merged to the singular form. otherwise use -p")
 
 
 args <- parser$parse_args()
@@ -57,7 +56,6 @@ data = read.delim(args$input, stringsAsFactors=FALSE, header = TRUE, sep='\t')
 word_matrix = data.frame()
 
 text_cols_index <- grep(c("ABSTRACT|TEXT"), names(data))
-id_col_index <- grep("ID_", names(data))
 
 for(row in 1:nrow(data)){
     top_words = cleanAbstracts(abstracts= data[row,text_cols_index], 
@@ -68,7 +66,7 @@ for(row in 1:nrow(data)){
     
     top_words$word <- as.character(top_words$word)
     
-    #cat("Top words for ", data[row,id_col_index], " are extracted.", "\n")
+    cat("Top words for row", row, " are extracted.", "\n")
     
       if(args$plurals == TRUE){
         top_words$word <- sapply(top_words$word, function(x){singularize(x)})
@@ -78,13 +76,14 @@ for(row in 1:nrow(data)){
     top_words = top_words[order(top_words$freq, decreasing = TRUE), ]
     top_words$word = as.character(top_words$word)
     
-    word_matrix[row,sapply(1:args$number, function(x){paste0(top_words$word[x])})] <- top_words$freq[1:args$number]
+    number_extract = min(args$number, nrow(top_words))
+    word_matrix[row,sapply(1:number_extract, function(x){paste0(top_words$word[x])})] <- top_words$freq[1:number_extract]
   }
 
   word_matrix <- as.matrix(word_matrix)
   word_matrix[is.na(word_matrix)] <- 0
-  word_matrix <- word_matrix>0 *1  #transform matrix to binary matrix
+  word_matrix <- word_matrix>0 *1  #binary matrix
 
-cat("A word matrix with ", nrow(word_matrix), " rows and ", ncol(word_matrix), "columns is generated.", "\n")
+cat("A matrix with ", nrow(word_matrix), " rows and ", ncol(word_matrix), "columns is generated.", "\n")
   
 write.table(word_matrix, args$output, sep = '\t')

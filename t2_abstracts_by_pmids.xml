@@ -1,5 +1,15 @@
 <tool id="t2_abstracts_by_pmids" name="T2_abstracts_by_pmids" version="@VERSION@">
-    <description>[description]</description>
+    <description>For all PMIDs in each row of a table save the according abstracts in additional columns.</description>
+    
+    <requirements>
+            
+      <requirement type="package" version="2.0.1">r-argparse</requirement>
+      <requirement type="package" version="0.2.3">r-reutils</requirement>
+      <requirement type="package" version="2.13">r-easypubmed</requirement>
+      <requirement type="package" version="0.9.3">r-textclean</requirement>
+
+    </requirements>
+    
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -20,19 +30,19 @@
     <tests>
         <test>
           <param name="input" value="test_data" ftype="tabular"/>
-          <param name="output" value="T1_result" ftype="tabular"/>
+          <param name="output" value="T1_output" ftype="tabular"/>
         </test>
     </tests>
     <help><![CDATA[
 
-parser <- ArgumentParser()
-parser$add_argument("-i", "--input", 
-                    help = "input fie name. add path if file is not in workind directory")
-parser$add_argument("-o", "--output", default="T2_result",
-                    help = "output file name. [default \"%(default)s\"]")
+This tool retrieves for all PMIDs in each row of a table the according abstracts and saves them in additional columns.
 
-args <- parser$parse_args()
+Input: 
+Table with columns containing PMIDs. The names of the PMID columns should start with “PMID”, e.g. “PMID_1”, “PMID_2” etc.
 
+Output: 
+Input table with additional columns containing abstracts corresponding to the PMIDs from PubMed. 
+The abstract columns are called "ABSTRACT_1", "ABSTARCT_2" etc. 
 
         ]]></help>
 </tool>

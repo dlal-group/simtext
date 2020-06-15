@@ -1,14 +1,16 @@
 #!/usr/bin/env Rscript
 #TOOL2 abstracts_by_pmid
 #
+#This tool retrieves for all PMIDs in each row of a table the according abstracts and saves them in additional columns.
+#
 #Input: Tab-delimited table with columns containing PMIDs. The names of the PMID columns should start with “PMID”, e.g. “PMID_1”, “PMID_2” etc.
 #
 #Output: Input table with additional columns containing abstracts corresponding to the PMIDs from PubMed. 
 #The abstract columns are called "ABSTRACT_1", "ABSTARCT_2" etc. 
 #
-#packages: r-argparse-2.0.1, r-reutils-0.2.3, r-easypubmed-2.13, r-textclean-0.9.3
+# packages: r-argparse-2.0.1, r-reutils-0.2.3, r-easypubmed-2.13, r-textclean-0.9.3
 #
-# usage: T2_abstracts_by_pmid.R [-h] [-i INPUT] [-o OUTPUT]
+# Usage: $ T2_abstracts_by_pmid.R [-h] [-i INPUT] [-o OUTPUT]
 # 
 # optional arguments:
 # -h, --help                 show help message

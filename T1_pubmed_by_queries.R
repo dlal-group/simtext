@@ -1,22 +1,24 @@
 #!/usr/bin/env Rscript
 #TOOL1 pubmed_by_queries
-
+#
+#This tool uses a set of entities as queries to download a defined number of abstracts or PMIDs from PubMed.
+#
 #Input: Tab-delimited table with entities in column called “ID_<name>”, e.g. “ID_genes” if entities are genes.
 #The entities are successively used as search query in PubMed.
 #
-#Output: Input table with additional columns containing PMIDs or abstracts from Pubmed.
+#Output: Input table with additional columns containing PMIDs or abstracts from PubMed.
 #
 #packages: r-easypubmed-2.13, r-argparse-2.0.1
 #
-#Usage: T1_pubmed_by_queries.R [-h] [-i INPUT] [-o OUTPUT] [-n {1,20}] [-a] [-k KEY]
+#Usage: $ T1_pubmed_by_queries.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-a] [-k KEY]
 # 
 # optional arguments:
 # -h, --help                  show this help message and exit
 # -i INPUT, --input INPUT     input file name. add path if file is not in working directory
 # -o OUTPUT, --output OUTPUT  output file name. [default "T1_output"]
-# -n {1,20}, --number {1,20}  Number of PMIDs or abstracts to save per ID [default "5"]
-# -a, --abstract              Instead of PMIDs, abstracts are saved.
-# -k KEY, --key KEY           If API key is available, add it to speed up the fetching of pubmed data.
+# -n NUMBER, --number NUMBER  number of PMIDs or abstracts to save per ID [default "5"]
+# -a, --abstract              if abstracts instead of PMIDs should be retrieved use --abstracts 
+# -k KEY, --key KEY           if NCBI API key is available, add it to speed up the fetching of pubmed data
 
 if (!require('argparse')) install.packages('argparse');
 suppressPackageStartupMessages(library("argparse"))
@@ -26,15 +28,15 @@ suppressPackageStartupMessages(library("easyPubMed"))
 
 parser <- ArgumentParser()
 parser$add_argument("-i", "--input", 
-                    help = "input fie name. add path if file is not in workind directory")
+                    help = "input fie name. add path if file is not in working directory")
 parser$add_argument("-o", "--output", default="T1_output",
                     help = "output file name. [default \"%(default)s\"]")
-parser$add_argument("-n", "--number", type="integer", default=5, #choices=seq(1, 20), metavar="{0..20}",
+parser$add_argument("-n", "--number", type="integer", default=5, 
                     help="Number of PMIDs (or abstracts) to save per  ID. [default \"%(default)s\"]")
 parser$add_argument("-a", "--abstract", action="store_true", default=FALSE,
-                    help="Instead of PMIDs, abstracts are saved.")
+                    help="if abstracts instead of PMIDs should be retrieved use --abstracts ")
 parser$add_argument("-k", "--key", type="character", 
-                    help="If ncbi API key is available, add it to speed up the download of pubmed data.")
+                    help="if ncbi API key is available, add it to speed up the download of pubmed data")
 args <- parser$parse_args()
 
 
@@ -68,11 +70,7 @@ pubmedsearch_by_keyword <- function(data, row, query, number, key, abstract){
             }
             return(data)
           }
-    }
-    }
-
-
-
+    }}
 
 for(i in 1:nrow(data)){
   data= pubmedsearch_by_keyword(data= data,
