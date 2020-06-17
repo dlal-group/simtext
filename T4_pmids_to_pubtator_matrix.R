@@ -132,7 +132,6 @@ for (i in 1:nrow(data)){
   print(paste("Row", i))
   pmids = as.character(data[i,pmid_cols_index])
   pmids = pmids[!pmids == "NA"]
-  pmids = pmids[1:10]
   pmids_count_total = pmids_count_total + length(pmids)
   
     if(pmids_count_total > 1000){
