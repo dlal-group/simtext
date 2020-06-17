@@ -2,7 +2,7 @@
 
 ## Brief overview of tools:
 
- - T1_pubmed_by_queries: Pubmed searches by queries. For each query save PMIDs or abstracts in additional columns.
+ - T1_pubmed_by_queries: Pubmed searches by queries. For each query, PMIDs or abstracts are saved in additional columns.
 
  - T2_abstracts_by_pmids: For all PMIDs in each row of a table save the according abstracts in additional columns.
 
@@ -26,7 +26,7 @@ Tab-delimited table with entities in a column starting with "ID_", e.g. "ID_gene
 
 Usage:
 ```
-$ T1_pubmed_by_queries.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-a] [-k KEY]
+$ RScript T1_pubmed_by_queries.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-a] [-k KEY]
 ```
 
 Optional arguments: 
@@ -53,7 +53,7 @@ Tab-delimited table with columns containing PMIDs. The names of the PMID columns
 
 Usage:
 ```
-$ T2_abstracts_by_pmid.R [-h] [-i INPUT] [-o OUTPUT]
+$ RScript T2_abstracts_by_pmid.R [-h] [-i INPUT] [-o OUTPUT]
 ```
 
 Optional arguments: 
@@ -77,7 +77,7 @@ Output of T1_pubmed_by_queries or T2_abstracts_by_pmids, or tab-delimited table 
 
 Usage:
 ```
-$ T3_text_to_wordmatrix.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-r] [-l] [-w] [-s] [-p]
+$ RScript T3_text_to_wordmatrix.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-r] [-l] [-w] [-s] [-p]
 ```
 
 Optional arguments: 
@@ -99,7 +99,7 @@ Binary matrix with rows = entities and columns = extracted words.
 
 ## T4_pmids_to_pubtator_matrix
 
-The tool takes all PMIDs per entity (per row) and uses PubTator to extract all "Genes", "Diseases", "Mutations", "Chemicals" and "Species" terms of the corresponding abstracts. The user can choose if terms of all, some or one of the aforementioned categories should be extracted. All extracted terms are used to generate a matrix with rows = entities and columns = extracted words. The resulting matrix is binary with 0= word not present in abstracts of entity and 1= word present in abstracts of entity.
+The tool takes all PMIDs per entity (per row) and uses PubTator to extract all "Genes", "Disease", "Mutation", "Chemical" and "Species" terms of the corresponding abstracts. The user can choose if terms of all, some or one of the aforementioned categories should be extracted. All extracted terms are used to generate a matrix with rows = entities and columns = extracted words. The resulting matrix is binary with 0= word not present in abstracts of entity and 1= word present in abstracts of entity.
 
 Input: 
 
@@ -107,7 +107,7 @@ Output of T2_abstracts_by_pmids or tab-delimited table with entities in column s
 
 Usage:
 ```
-$ T4_pmids_to_pubtator_matrix.R [-h] [-i INPUT] [-o OUTPUT] [-c {Genes,Diseases,Mutations,Chemicals,Species} [{Genes,Diseases,Mutations,Chemicals,Species} ...]]
+$ RScript T4_pmids_to_pubtator_matrix.R [-h] [-i INPUT] [-o OUTPUT] [-c {Gene,Disease,Mutation,Chemical,Species} [{Gene,Disease,Mutation,Chemical,Species} ...]]
 ```
  
 Optional arguments:
@@ -115,7 +115,7 @@ Optional arguments:
  -h, --help                    show help message
  -i INPUT, --input INPUT       input file name. add path if file is not in workind directory
  -o OUTPUT, --output OUTPUT    output file name. [default "T4_output"]
- -c [...], --categories [...]  PubTator categories that should be considered [default "('Genes', 'Diseases', 'Mutations','Chemicals')"]
+ -c [...], --categories [...]  PubTator categories that should be considered [default "('Gene', 'Disease', 'Mutation','Chemical')"]
 ```
 
 Output: 
@@ -131,7 +131,7 @@ Input:
 
 Usage:
 ```
-$ T5_simtext_app.R [-h] [-i INPUT] [-m MATRIX] [-p PORT] 
+$ RScript T5_simtext_app.R [-h] [-i INPUT] [-m MATRIX] [-p PORT] 
 ```
 
 Optional arguments:

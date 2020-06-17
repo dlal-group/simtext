@@ -2,10 +2,8 @@
     <description>Per row, extract scientific terms from PMIDs susing PubTator and generate a binary matrix. </description>
     
     <requirements>
-            
       <requirement type="package" version="2.0.1">r-argparse</requirement>
       <requirement type="package" version="1.4.0">r-stringr</requirement>
-
     </requirements>
     
     
@@ -26,10 +24,10 @@
     <inputs>
       <param argument="--input" label="Input file" name="input" optional="false" type="data" format="tabular" help="input"/>
       <param name="categories" type="select" label="categories" multiple="true" >
-        <option value="Genes">Genes</option>
-        <option value="Diseases">Diseases</option>
-        <option value="Mutations">Mutations</option>
-        <option value="Chemicals">Chemicals</option>
+        <option value="Gene">Genes</option>
+        <option value="Disease">Diseases</option>
+        <option value="Mutation">Mutations</option>
+        <option value="Chemical">Chemicals</option>
         <option value="Species">Species</option>
       </param>
     </inputs>
@@ -45,7 +43,7 @@
     </tests>
     <help><![CDATA[
 
-The tool takes all PMIDs per entity (per row) and uses PubTator to extract all "Genes", "Diseases", "Mutations", "Chemicals" and "Species" terms of the corresponding abstracts. The user can choose if terms of all, some or one of the aforementioned categories should be extracted. All extracted terms are used to generate a matrix with rows = entities and columns = extracted words. The resulting matrix is binary with 0= word not present in abstracts of entity and 1= word present in abstracts of entity.
+The tool takes all PMIDs per entity (per row) and uses PubTator to extract all "Gene", "Disease", "Mutation", "Chemical" and "Species" terms of the corresponding abstracts. The user can choose if terms of all, some or one of the aforementioned categories should be extracted. All extracted terms are used to generate a matrix with rows = entities and columns = extracted words. The resulting matrix is binary with 0= word not present in abstracts of entity and 1= word present in abstracts of entity.
 
 Input: 
 Output of T2_abstracts_by_pmids or table with columns containing PMIDs. The names of the PMID columns should start with "PMID", e.g. "PMID_1", "PMID_2" etc.

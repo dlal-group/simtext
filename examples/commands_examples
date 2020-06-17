@@ -5,12 +5,13 @@
 
 $ cd <path>/SimText
 
-$ RScript T1_pubmed_by_queries.R \
- --input "examples/data/1a/clingen_data" \
- --output "examples/data/1a/T1_output" \
- --number 20 \
+RScript T1_pubmed_by_queries.R \
+ --input examples/data/1a/clingen_data \
+ --output examples/data/1a/T1_output \
+ --number 100 \
  --key "15f2fa5c9d427fd88d53b5041002aeabd309" \
- --abstract 
+ --abstract
+
 
 $ RScript T3_text_to_wordmatrix.R \
  --input "examples/data/1a/T1_output" \
@@ -31,13 +32,13 @@ $ cd <path>/SimText
 $ RScript T1_pubmed_by_queries.R \
  --input "examples/data/1b/clingen_data" \
  --output "examples/data/1b/T1_output" \
- --number 10 \
+ --number 100 \
  --key "15f2fa5c9d427fd88d53b5041002aeabd309"
 
 $ RScript T4_pmids_to_pubtator_matrix.R \
  --input "examples/data/1b/T1_output"  \
  --output "examples/data/1b/clingen_data_matrix" \
- --categories Diseases Genes
+ --categories Disease Gene
 
 $ RScript T5_simtext_app.R \
  --input "examples/data/1b/clingen_data" \
