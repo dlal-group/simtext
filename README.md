@@ -2,15 +2,15 @@
 
 ## Brief overview of tools:
 
- - T1_pubmed_by_queries: Pubmed searches by queries. For each query, PMIDs or abstracts are saved in additional columns.
+ - T1_pubmed_by_queries: For each search query, PMIDs or abstracts from PubMed are saved.
 
- - T2_abstracts_by_pmids: For all PMIDs in each row of a table save the according abstracts in additional columns.
+ - T2_abstracts_by_pmids: For all PMIDs in each row of a table the according abstracts are saved in additional columns.
 
- - T3_text_to_wordmatrix: Textmining of abstracts/text of each row. Extraction of most frequent words. Generation of binary matrix (rows= entities, columns= words).
+ - T3_text_to_wordmatrix: The most frequent words of text from each row are extracted and united in one large binary matrix. 
  
- - T4_pmids_to_pubtator_matrix: PubTator search for specific scientific words from PMIDs. Generation of binary matrix (rows= entities, columns= words). 
+ - T4_pmids_to_pubtator_matrix: For PMIDs of each row, scientific words are extracted using PubTator annotations and subsequently united in one large binary matrix. 
 
- - T5_simtext_app: Shiny app with word clouds, dimensionality reduction plot, dendrogram of hierarchical clustering and table with words and their frequency among the entities.
+ - T5_simtext_app: Shiny app with word clouds, dimensionality reduction plot, dendrogram of hierarchical clustering and table with words and their frequency among the search queries.
 
 ## Requirements
 
@@ -18,11 +18,11 @@
 
 ## T1_pubmed_by_queries
 
-This tool uses a set of entities as queries to download a defined number of abstracts or PMIDs from PubMed.
+This tool uses a set of search queries to download a defined number of abstracts or PMIDs for search query from PubMed. PubMed's search rules and syntax apply.
 
 Input:
 
-Tab-delimited table with entities in a column starting with "ID_", e.g. "ID_gene" if entities are genes. The entities are successively used as search query in PubMed.
+Tab-delimited table with search queries in a column starting with "ID_", e.g. "ID_gene" if search queries are genes. 
 
 Usage:
 ```
@@ -45,7 +45,7 @@ Input table with additional columns with PMIDs or abstracts (--abstracts) from P
 
 ## T2_abstracts_by_pmids
 
-This tool retrieves for all PMIDs in each row of a table the according abstracts and saves them in additional columns.
+For PMIDs of each row, this tool retrieves the according abstracts and saves them in additional columns.
 
 Input:
 
@@ -65,11 +65,11 @@ Optional arguments:
 
 Output: 
 
-Input table with additional columns containing abstracts corresponding to the PMIDs from PubMed.
+Input table with additional columns containing abstracts. 
 
 ## T3_text_to_wordmatrix
 
-The tool extracts the most frequent words per entity (per row). Text of columns starting with "ABSTRACT" or "TEXT" are considered. The most frequent words are used to generate a binary matrix with rows = entities and columns = extracted words, with 0= word not frequently occurring in abstracts/text of entity and 1= word frequently present in abstracts/text of entity.
+Per row, the tool extracts the most frequent words from text in columns starting with "ABSTRACT" or "TEXT. The extracted words of each row are united in one large binary matrix, with 0= word not frequently occurring in text of that row and 1= word frequently present in text of that row.
 
 Input: 
 
@@ -85,7 +85,7 @@ Optional arguments:
  -h, --help                    show help message
  -i INPUT, --input INPUT       input file name. add path if file is not in working directory
  -o OUTPUT, --output OUTPUT    output file name. [default "T3_output"]
- -n NUMBER, --number NUMBER    number of most frequent words that should be extracted [default "50"]
+ -n NUMBER, --number NUMBER    number of most frequent words that should be extracted per row [default "50"]
  -r, --remove_num              remove any numbers in text
  -l, --lower_case              by default all characters are translated to lower case. otherwise use -l
  -w, --remove_stopwords        by default a set of english stopwords (e.g., 'the' or 'not') are removed. otherwise use -w
@@ -95,15 +95,15 @@ Optional arguments:
 
 Output: 
 
-Binary matrix with rows = entities and columns = extracted words.
+Binary matrix in that each column represents one of the extracted words.
 
 ## T4_pmids_to_pubtator_matrix
 
-The tool takes all PMIDs per entity (per row) and uses PubTator to extract all "Genes", "Disease", "Mutation", "Chemical" and "Species" terms of the corresponding abstracts. The user can choose if terms of all, some or one of the aforementioned categories should be extracted. All extracted terms are used to generate a matrix with rows = entities and columns = extracted words. The resulting matrix is binary with 0= word not present in abstracts of entity and 1= word present in abstracts of entity.
+The tool uses all PMIDs per row and extracts "Gene", "Disease", "Mutation", "Chemical" and "Species" terms of the corresponding abstracts, using PubTator annotations. The user can choose from which categories terms should be extracted. The extracted terms are united in one large binary matrix, with 0= term not present in abstracts of that row and 1= term present in abstracts of that row.
 
 Input: 
 
-Output of T2_abstracts_by_pmids or tab-delimited table with entities in column starting with "ID_" and columns containing PMIDs. The names of the PMID columns should start with "PMID", e.g. "PMID_1", "PMID_2" etc.
+Output of T2_abstracts_by_pmids or tab-delimited table with columns containing PMIDs. The names of the PMID columns should start with "PMID", e.g. "PMID_1", "PMID_2" etc.
 
 Usage:
 ```
@@ -120,14 +120,20 @@ Optional arguments:
 
 Output: 
 
-Binary matrix with rows = entities and columns = extracted words.
+Binary matrix in that each column represents one of the extracted terms.
 
 ## T5_simtext_app
 
+The tool enables the exploration of data generated by text_to_wordmatrix or pmids_to_pubtator_matrix in a locally run ShinyApp. Features are word clouds for each initial search query, dimension reduction and hierarchical clustering of the binary matrix, and a table with words and their frequency among the search queries. 
+
 Input:
 
-- Input 1: Tab-delimited table with entities in column starting with "ID_", e.g. "ID_gene" if entities are genes and column(s) with grouping factor, e.g. column containing information with which disorders the genes are associated with. The names of grouping columns should start with "GROUPING_". If the column is called "GROUPING_disorder", the app will show "disorder" as a grouping variable.
-- Input 2: Binary word matrix (or output of T3_text_to_wordmatrix or T4_pmids_to_pubtator_matrix).
+1)	Input 1: 
+Tab-delimited table with 
+- column with search queries starting with "ID_", e.g. "ID_gene" if initial search queries were genes 
+- column(s) with grouping factor(s) to compare pre-existing categories of the initial search queries with the grouping based on text. The column names should start with "GROUPING_". If the column name is "GROUPING_disorder", "disorder" will be shown as a grouping variable in the app.
+2)	Input 2: 
+Output of text_to_wordmatrix or pmids_to_pubtator_matrix, or binary matrix.
 
 Usage:
 ```
@@ -144,4 +150,4 @@ Optional arguments:
 
 Output: 
 
-Shiny app with word clouds of entities, dimensionality reduction plot, dendrogram of hierarchical clustering and table with extracted words and their frequency among the entities.
+SimText app
