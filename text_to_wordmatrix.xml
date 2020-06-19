@@ -1,4 +1,4 @@
-<tool id="t3_text_to_wordmatrix" name="T3_text_to_wordmatrix" version="@VERSION@">
+<tool id="text_to_wordmatrix" name="text_to_wordmatrix" version="@VERSION@">
     <description> Extract most frequent words from each row in a table and generate binary word matrix.</description>
 
     <requirements>
@@ -13,7 +13,7 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command><![CDATA[Rscript 
-      '${__tool_directory__}/T3_text_to_wordmatrix.R'
+      '${__tool_directory__}/text_to_wordmatrix.R'
       --input '$input'
       --output '$output'
       --number '$number'
@@ -39,7 +39,7 @@
     <tests>
         <test>
           <param name="input" value="test_data" ftype="tabular"/>
-          <param name="output" value="T3_output" ftype="tabular"/>
+          <param name="output" value="text_to_wordmatrix_output" ftype="tabular"/>
           <param name="number" value="50"/>
         </test>
     </tests>
@@ -48,7 +48,7 @@
 This tool extracts the most frequent words per entity (per row). Text of columns starting with "ABSTRACT" or "TEXT" are considered. The most frequent words are used to generate a binary matrix with rows = entities and columns = extracted words, with 0= word not frequently occurring in abstracts/text of entity and 1= word frequently present in abstracts/text of entity.
 
 Input: 
-Output of T1_pubmed_by_queries or T2_abstracts_by_pmids, or table with text in columns starting with "ABSTRACT" or "TEXT".
+Output of 'pubmed_by_queries' or 'abstracts_by_pmids', or table with text in columns starting with "ABSTRACT" or "TEXT".
 
 Output: 
 Binary matrix with rows = entities and columns = extracted words.

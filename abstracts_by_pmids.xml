@@ -1,4 +1,4 @@
-<tool id="t2_abstracts_by_pmids" name="T2_abstracts_by_pmids" version="@VERSION@">
+<tool id="abstracts_by_pmids" name="abstracts_by_pmids" version="@VERSION@">
     <description>For all PMIDs in each row of a table save the according abstracts in additional columns.</description>
     
     <requirements>
@@ -16,7 +16,7 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command><![CDATA[Rscript 
-      '${__tool_directory__}/T2_abstracts_by_pmids.R'
+      '${__tool_directory__}/abstracts_by_pmids.R'
       --input '$input'
       --output '$output'
       ]]>
@@ -29,8 +29,8 @@
     </outputs>
     <tests>
         <test>
-          <param name="input" value="test_data" ftype="tabular"/>
-          <param name="output" value="T1_output" ftype="tabular"/>
+          <param name="input" value="pubmed_by_queries" ftype="tabular"/>
+          <param name="output" value="abstracts_by_pmids_output" ftype="tabular"/>
         </test>
     </tests>
     <help><![CDATA[

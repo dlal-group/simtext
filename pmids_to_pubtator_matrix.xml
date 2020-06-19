@@ -1,4 +1,4 @@
-  <tool id="t4_pmids_to_pubtator_matrix" name="T4_pmids_to_pubtator_matrix" version="@VERSION@">
+  <tool id="pmids_to_pubtator_matrix" name="pmids_to_pubtator_matrix" version="@VERSION@">
     <description>Per row, extract scientific terms from PMIDs susing PubTator and generate a binary matrix. </description>
     
     <requirements>
@@ -13,7 +13,7 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command><![CDATA[Rscript 
-      '${__tool_directory__}/T4_pmids_to_pubtator_matrix.R'
+      '${__tool_directory__}/pmids_to_pubtator_matrix.R'
       --input '$input'
       --output '$output'
       #for $category in $categories:
@@ -37,7 +37,7 @@
     <tests>
         <test>
           <param name="input" value="test_data" ftype="tabular"/>
-          <param name="output" value="T4_output" ftype="tabular"/>
+          <param name="output" value="pmids_to_pubtator_matrix_output" ftype="tabular"/>
           <param name="categories" value="Genes"/>
         </test>
     </tests>
@@ -46,7 +46,7 @@
 The tool takes all PMIDs per entity (per row) and uses PubTator to extract all "Gene", "Disease", "Mutation", "Chemical" and "Species" terms of the corresponding abstracts. The user can choose if terms of all, some or one of the aforementioned categories should be extracted. All extracted terms are used to generate a matrix with rows = entities and columns = extracted words. The resulting matrix is binary with 0= word not present in abstracts of entity and 1= word present in abstracts of entity.
 
 Input: 
-Output of T2_abstracts_by_pmids or table with columns containing PMIDs. The names of the PMID columns should start with "PMID", e.g. "PMID_1", "PMID_2" etc.
+Output of 'abstracts_by_pmids' or table with columns containing PMIDs. The names of the PMID columns should start with "PMID", e.g. "PMID_1", "PMID_2" etc.
 
 
         ]]></help>

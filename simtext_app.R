@@ -5,9 +5,9 @@
 #1) Tab-delimited table (--input) with entities in column called “ID_<name>”, e.g. “ID_genes” if entities are genes, 
 #   and column(s) with grouping factor, eg. column containing information to which diseases the genes are associated with. 
 #   The names of grouping columns should start with “GROUPING_”. If the column is called “GROUPING_Disease”, the app will show “Disease” as a grouping variable.
-#2) A binary matrix (--matrix) as tab delimited table with rows = entities and columns = words (or output of T3_text_to_wordmatrix or T4_pmids_to_pubtator_matrix).
+#2) A binary matrix (--matrix) as tab delimited table with rows = entities and columns = words (or output of 'text_to_wordmatrix' or 'pmids_to_pubtator_matrix').
 #
-# Usage: $ T5_simtext_app.R [-h] [-i INPUT] [-m MATRIX] [-p PORT] 
+# Usage: $ simtext_app.R [-h] [-i INPUT] [-m MATRIX] [-p PORT] 
 # 
 # optional arguments:
 # -h, --help                    show help message

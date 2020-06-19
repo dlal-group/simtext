@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-#TOOL4 pmids_to_pubtator_matrix
+#tool: pmids_to_pubtator_matrix
 #
 #The tool takes all PMIDs per entity and uses PubTator to extract all "Genes", "Diseases", "Mutations", "Chemicals" 
 #and "Species" terms of the corresponding abstracts. The user can choose if terms of all, 
@@ -14,26 +14,25 @@
 #
 # r-stringr 1.4.0, r-argparse-2.0.1, r-rcurl 1.95_4.12
 #
-# usage: $ T4_pmids_to_pubtator_matrix.R [-h] [-i INPUT] [-o OUTPUT]
+# usage: $ pmids_to_pubtator_matrix.R [-h] [-i INPUT] [-o OUTPUT]
 # [-c {Genes,Diseases,Mutations,Chemicals,Species} [{Genes,Diseases,Mutations,Chemicals,Species} ...]]
 # 
 # optional arguments:
 #   -h, --help                 show help message
 #   -i INPUT, --input INPUT    input file name. add path if file is not in workind directory
-#   -o OUTPUT, --output OUTPUT output file name. [default "T4_output"]
+#   -o OUTPUT, --output OUTPUT output file name. [default "pmids_to_pubtator_matrix_output"]
 #   -c {Gene,Disease,Mutation,Chemical,Species} [{Genes,Diseases,Mutations,Chemicals,Species} ...], --categories {Gene,Disease,Mutation,Chemical,Species} [{Gene,Disease,Mutation,Chemical,Species} ...]
 #      Pubtator categories that should be considered.  [default "('Gene', 'Disease', 'Mutation','Chemical')"]
 
 if (!require('argparse')) install.packages('argparse'); suppressPackageStartupMessages(library("argparse"))
 if (!require('stringr')) install.packages('stringr'); library('stringr')
-#if (!require('pubmed.mineR')) install.packages('pubmed.mineR'); library('pubmed.mineR')
 if (!require('RCurl')) install.packages('RCurl'); library('RCurl')
 
 parser <- ArgumentParser()
 
 parser$add_argument("-i", "--input", 
                     help = "input fie name. add path if file is not in workind directory")
-parser$add_argument("-o", "--output", default="T4_output",
+parser$add_argument("-o", "--output", default="pmids_to_pubtator_matrix_output",
                     help = "output file name. [default \"%(default)s\"]")
 parser$add_argument("-c", "--categories", choices=c("Gene", "Disease", "Mutation", "Chemical", "Species"), nargs="+", 
                     default= c("Gene", "Disease", "Mutation", "Chemical"),

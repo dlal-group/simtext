@@ -1,23 +1,23 @@
 #!/usr/bin/env Rscript
-# TOOL3 text_to_wordmatrix
+# tool: text_to_wordmatrix
 #
 #The tool extracts the most frequent words per entity (per row). Text of columns starting with "ABSTRACT" or "TEXT" are considered. 
 #All extracted terms are used to generate a word matrix with rows = entities and columns = extracted words. 
 #The resulting matrix is binary with 0= word not present in abstracts of entity and 1= word present in abstracts of entity.
 #
-#Input: Output of tool 1 or 2, or tab-delimited table with entities in column called “ID_<name>”, 
+#Input: Output of 'pubmed_by_queries' or 'abstracts_by_pmids', or tab-delimited table with entities in column called “ID_<name>”, 
 #e.g. “ID_genes” and text in columns starting with "ABSTRACT" or "TEXT".
 #
 #Output: Binary matrix with rows = entities and columns = extracted words.
 #
 #packages: r-argparse-2.0.1, r-textclean-0.9.3, r-snowballc-0.6.0,  r-pubmedwordcloud-0.3.3, ("SemNetCleaner" not found in anaconda cloud)
 #
-#usage: T3_text_to_wordmatrix.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-r] [-l] [-w] [-s] [-p]
+#usage: text_to_wordmatrix.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-r] [-l] [-w] [-s] [-p]
 # 
 # optional arguments:
 # -h, --help                    show help message
 # -i INPUT, --input INPUT       input file name. add path if file is not in working directory
-# -o OUTPUT, --output OUTPUT    output file name. [default "T3_output"]
+# -o OUTPUT, --output OUTPUT    output file name. [default "text_to_wordmatrix_output"]
 # -n NUMBER, --number NUMBER    number of most frequent words that should be extracted [default "50"]
 # -r, --remove_num              remove any numbers in text
 # -l, --lower_case              by default all characters are translated to lower case. otherwise use -l
@@ -33,7 +33,7 @@ if (!require('SemNetCleaner')) install.packages('SemNetCleaner'); suppressPackag
 parser <- ArgumentParser()
 parser$add_argument("-i", "--input", 
                     help = "input fie name. add path if file is not in workind directory")
-parser$add_argument("-o", "--output", default="T3_output",
+parser$add_argument("-o", "--output", default="text_to_wordmatrix_output",
                     help = "output file name. [default \"%(default)s\"]")
 parser$add_argument("-n", "--number", type="integer", default=50, choices=seq(1, 500), metavar="{0..500}",
                     help="number of most frequent words used per ID in word matrix [default \"%(default)s\"]")

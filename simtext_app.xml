@@ -1,4 +1,4 @@
-<tool id="t5_simtext_app" name="T5_simtext_app" version="@VERSION@">
+<tool id="simtext_app" name="simtext_app" version="@VERSION@">
     <description>Interactive shiny app to explore SimText output data.</description>
     
     <requirements>
@@ -30,7 +30,7 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command><![CDATA[Rscript 
-      '${__tool_directory__}/T5_simtext_app.R'
+      '${__tool_directory__}/simtext_app.R'
       --input '$input'
       --matrix '$matrix'
       --port '8888'
@@ -46,17 +46,17 @@
     <tests>
         <test>
           <param name="input" value="test_data" ftype="tabular"/>
-          <param name="matrix" value="T3_output" ftype="tabular"/>
+          <param name="matrix" value="text_to_wordmatrix_output" ftype="tabular"/>
         </test>
     </tests>
     <help><![CDATA[
-Shiny app with word clouds, dimensionality reduction plot, dendrogram of hierarchical clustering and table of words and their frequency among the entities.
+Shiny app with word clouds, dimension reduction plot, dendrogram of hierarchical clustering and table of words and their frequency among the entities.
 
 Input: 
 1) Table with entities in column called “ID_<name>”, e.g. “ID_genes” if entities are genes, 
    and column(s) with grouping factor, eg. column containing information to which diseases the genes are associated with. 
    The names of grouping columns should start with “GROUPING_”. If the column is called “GROUPING_Disease”, the app will show “Disease” as a grouping variable.
-2) A binary matrix as table with rows = entities and columns = words (or output of T3_text_to_wordmatrix or T4_pmids_to_pubtator_matrix).
+2) A binary matrix as table with rows = entities and columns = words (or output of 'text_to_wordmatrix' or 'pmids_to_pubtator_matrix').
 
         ]]></help>
 </tool>

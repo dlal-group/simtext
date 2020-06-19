@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-#TOOL1 pubmed_by_queries
+#tool: pubmed_by_queries
 #
 #This tool uses a set of entities as queries to download a defined number of abstracts or PMIDs from PubMed.
 #
@@ -10,12 +10,12 @@
 #
 #packages: r-easypubmed-2.13, r-argparse-2.0.1
 #
-#Usage: $ T1_pubmed_by_queries.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-a] [-k KEY]
+#Usage: $ pubmed_by_queries.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-a] [-k KEY]
 # 
 # optional arguments:
 # -h, --help                  show this help message and exit
 # -i INPUT, --input INPUT     input file name. add path if file is not in working directory
-# -o OUTPUT, --output OUTPUT  output file name. [default "T1_output"]
+# -o OUTPUT, --output OUTPUT  output file name. [default "pubmed_by_queries_output"]
 # -n NUMBER, --number NUMBER  number of PMIDs or abstracts to save per ID [default "5"]
 # -a, --abstract              if abstracts instead of PMIDs should be retrieved use --abstracts 
 # -k KEY, --key KEY           if NCBI API key is available, add it to speed up the fetching of pubmed data
@@ -29,7 +29,7 @@ suppressPackageStartupMessages(library("easyPubMed"))
 parser <- ArgumentParser()
 parser$add_argument("-i", "--input", 
                     help = "input fie name. add path if file is not in working directory")
-parser$add_argument("-o", "--output", default="T1_output",
+parser$add_argument("-o", "--output", default="pubmed_by_queries_output",
                     help = "output file name. [default \"%(default)s\"]")
 parser$add_argument("-n", "--number", type="integer", default=5, 
                     help="Number of PMIDs (or abstracts) to save per  ID. [default \"%(default)s\"]")
