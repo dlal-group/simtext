@@ -2,20 +2,20 @@
 
  $ cd <path>/SimText/test
 
- $ RScript ../T1_pubmed_by_queries.R --input "data/test_data" --output "data/T1_output_pmids"
- #output: data/T1_output
+ $ RScript ../pubmed_by_queries.R --input "data/test_data" --output "data/pubmed_by_queries_output"
+ #output: data/pubmed_by_queries_output
 
- $ RScript ../T1_pubmed_by_queries.R --input "data/test_data" --abstract --output "data/T1_output_abstracts"
- #output: data/T1_output
+ $ RScript ../pubmed_by_queries.R --input "data/test_data" --abstract --output "data/pubmed_by_queries_output_abstracts"
+ #output: data/pubmed_by_queries_output_abstracts
 
- $ RScript ../T2_abstracts_by_pmids.R --input "data/T1_output" --output "data/T2_output"
- #output: data/T2_output
+ $ RScript ../abstracts_by_pmids.R --input "data/pubmed_by_queries_output" --output "data/abstracts_by_pmids_output"
+ #output: data/abstracts_by_pmids_output
 
- $ RScript ../T3_text_to_wordmatrix.R --input "data/T2_output" --output "data/T3_output"
- #output: data/T3_output
+ $ RScript ../text_to_wordmatrix.R --input "data/pubmed_by_queries_output_abstracts" --output "data/text_to_wordmatrix_output"
+ #output: data/text_to_wordmatrix_output
  
-  $ RScript ../T4_pmids_to_pubtator_matrix.R --input "data/T1_output" --output "data/T4_output"
- #output: data/T4_output
+  $ RScript ../pmids_to_pubtator_matrix.R --input "data/pubmed_by_queries_output" --output "data/pmids_to_pubtator_matrix_output"
+ #output: data/pmids_to_pubtator_matrix
 
- $ RScript ../T5_simtext_app.R -i "test_data" -m "data/T3_output" 
+ $ RScript ../simtext_app.R -i "test_data" -m "data/text_to_wordmatrix_output" 
  #output: ShinyApp
