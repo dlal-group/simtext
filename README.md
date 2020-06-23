@@ -29,6 +29,7 @@
 ## Installation
 
 ```
+$ mkdir -p <path>/simtext
 $ cd <path>/simtext
 $ git clone https://github.com/mgramm1/simtext
 ```

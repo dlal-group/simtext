@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-#TOOL2 abstracts_by_pmid
+#TOOL2 abstracts_by_pmids
 #
 #This tool retrieves for all PMIDs in each row of a table the according abstracts and saves them in additional columns.
 #
@@ -34,33 +34,110 @@ suppressPackageStartupMessages(library("textclean"))
 parser <- ArgumentParser()
 parser$add_argument("-i", "--input", 
                     help = "input fie name. add path if file is not in workind directory")
-parser$add_argument("-o", "--output", default="T2_output",
+parser$add_argument("-o", "--output", default="abstracts_by_pmids_output",
                     help = "output file name. [default \"%(default)s\"]")
 
 args <- parser$parse_args()
+#args$input= "examples/data/1B/pubmed_by_queries_output"
 
 data = read.delim(args$input, stringsAsFactors=FALSE, header= TRUE, sep='\t')
 pmids_cols_index <- grep("PMID", names(data))
 
+fetch_abstracts = function(PMIDs, row){
+  
+  efetch_result <- NULL
+  try_num <- 1
+  t_0 <- Sys.time()
+  
+  while(is.null(efetch_result)) {
+    
+    # Timing check: kill at 3 min
+    if (try_num > 1){
+      Sys.sleep(time = 1*try_num)
+      cat("Problem to receive PubMed data or error is received. Please wait. Try number: ",try_num,"\n") 
+    }
+    
+    t_1 <- Sys.time()
+    
+    if(as.numeric(difftime(t_1, t_0, units = "mins")) > 3){
+      message("Killing the request! Something is not working. Please, try again later","\n")
+      return(data)
+    }
+
+    efetch_result <- tryCatch({    
+      suppressWarnings(efetch(uid=PMIDs, db="pubmed", retmode = "xml"))
+    }, error = function(e) {
+      NULL
+    })
+    
+    if(!is.null(as.list(efetch_result$errors)$error)){
+      if (as.list(efetch_result$errors)$error == "HTTP error: Status 400; Bad Request") {
+        efetch_result <- NULL
+      }
+    }
+      
+    try_num <- try_num + 1
+    
+  } #while loop end
+
+  # articles to list
+  xml_data <- strsplit(efetch_result$content, "<PubmedArticle(>|[[:space:]]+?.*>)")[[1]][-1]
+  xml_data <- sapply(xml_data, function(x) {
+    #trim extra stuff at the end of the record
+    if (!grepl("</PubmedArticle>$", x))
+      x <- sub("(^.*</PubmedArticle>).*$", "\\1", x) 
+    # Rebuid XML structure and proceed
+    x <- paste("<PubmedArticle>", x)
+    gsub("[[:space:]]{2,}", " ", x)}, 
+    USE.NAMES = FALSE, simplify = TRUE)
+  
+  abstract.text = sapply(xml_data, function(x){
+    custom_grep(x, tag="AbstractText", format="char")}, 
+    USE.NAMES = FALSE, simplify = TRUE)
+  
+  abstracts <- sapply(abstract.text, function(x){
+    if (length(x) > 1){
+      x <- paste(x, collapse = " ", sep = " ")
+      x <- gsub("</{0,1}i>", "", x, ignore.case = T)
+      x <- gsub("</{0,1}b>", "", x, ignore.case = T)
+      x <- gsub("</{0,1}sub>", "", x, ignore.case = T)
+      x <- gsub("</{0,1}exp>", "", x, ignore.case = T)
+    } else if (length(x) < 1) {
+      x <- NA
+    } else {
+      x <- gsub("</{0,1}i>", "", x, ignore.case = T)
+      x <- gsub("</{0,1}b>", "", x, ignore.case = T)
+      x <- gsub("</{0,1}sub>", "", x, ignore.case = T)
+      x <- gsub("</{0,1}exp>", "", x, ignore.case = T)
+    }
+    x
+  }, 
+  USE.NAMES = FALSE, simplify = TRUE)
+  
+  abstracts = as.character(abstracts)
+  
+  if(length(abstracts)>0){
+    data[row,sapply(1:length(abstracts),function(i){paste0("ABSTRACT_",i)})] <- abstracts
+    cat(length(abstracts)," abstracts for PMIDs of row ", row, " are added in the table.","\n")
+  }
+  
+  return(data)
+}
+    
+
 for(row in 1:nrow(data)){
-  PMIDs=as.character(unique(data[row, pmids_cols_index]))
+  PMIDs= as.character(unique(data[row, pmids_cols_index]))
+  PMIDs = PMIDs[!PMIDs=="NA"]
   
   if(length(PMIDs) > 0){
-    efetch_result = try(efetch(uid=PMIDs, db="pubmed", retmode = "xml"),silent=TRUE)
-    abstracts= custom_grep(efetch_result$content, tag = "Abstract", format = "char")
-    cat(length(abstracts), " abstracts were found for PMIDs of row", row, "\n")
-    abstracts= sapply(1:length(abstracts), function(i){paste(custom_grep(abstracts[i], tag="AbstractText", format="char"),collapse="")})
-    abstracts = sapply(1:length(abstracts), function(x){replace_html(abstracts[x])})
-    data[row, sapply(seq_along(abstracts),function(x){as.character(paste0("ABSTRACT_",x))})] <- abstracts
-    Sys.sleep(0.75) #sys.sleep in order to avoid curl error of fetching abstracts
-    
-    if(round(row/10) == row/10){
-      Sys.sleep(5)
-    }
+    data = tryCatch(fetch_abstracts(PMIDs, row),
+                    error=function(e){ 
+                      Sys.sleep(3)
+                      })
+  } else {
+    print(paste("No PMIDs in row", row))
   }
 }
 
 write.table(data, args$output, sep = '\t', row.names = FALSE, col.names = TRUE)
-
-
 

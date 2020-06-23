@@ -196,7 +196,7 @@ pubmed_data_in_table <- function(data, row, query, number, key, abstract){
           }
 
           if(length(abstracts)>0){
-            data[row,sapply(1:length(abstracts),function(i){paste0("ABSTRACT_",i)})] <- abstracts #paste(titles,abstracts)
+            data[row,sapply(1:length(abstracts),function(i){paste0("ABSTRACT_",i)})] <- abstracts
             cat(length(abstracts)," abstracts for ",query, " are added in the table.",  "\n")
           }
           
