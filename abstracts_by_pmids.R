@@ -38,7 +38,6 @@ parser$add_argument("-o", "--output", default="abstracts_by_pmids_output",
                     help = "output file name. [default \"%(default)s\"]")
 
 args <- parser$parse_args()
-#args$input= "examples/data/1B/pubmed_by_queries_output"
 
 data = read.delim(args$input, stringsAsFactors=FALSE, header= TRUE, sep='\t')
 pmids_cols_index <- grep("PMID", names(data))

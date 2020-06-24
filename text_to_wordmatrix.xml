@@ -45,13 +45,12 @@
     </tests>
     <help><![CDATA[
 
-This tool extracts the most frequent words per entity (per row). Text of columns starting with "ABSTRACT" or "TEXT" are considered. The most frequent words are used to generate a binary matrix with rows = entities and columns = extracted words, with 0= word not frequently occurring in abstracts/text of entity and 1= word frequently present in abstracts/text of entity.
+Per row, the tool extracts the most frequent words from text in columns starting with "ABSTRACT" or "TEXT. The extracted words of each row are united in one large binary matrix, with 0= word not frequently occurring in text of that row and 1= word frequently present in text of that row.
 
 Input: 
-Output of 'pubmed_by_queries' or 'abstracts_by_pmids', or table with text in columns starting with "ABSTRACT" or "TEXT".
-
+Output of pubmed_by_queries or abstracts_by_pmids, or table with text in columns starting with "ABSTRACT" or "TEXT".
 Output: 
-Binary matrix with rows = entities and columns = extracted words.
+Binary matrix in that each column represents one of the extracted words.
 
         ]]></help>
 </tool>

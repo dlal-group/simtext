@@ -1,12 +1,16 @@
 #!/usr/bin/env Rscript
 #tool: pubmed_by_queries
 #
-#This tool uses a set of entities as queries to download a defined number of abstracts or PMIDs from PubMed.
 #
-#Input: Tab-delimited table with entities in column called “ID_<name>”, e.g. “ID_genes” if entities are genes.
-#The entities are successively used as search query in PubMed.
+# This tool uses a set of search queries to download a defined number of abstracts or PMIDs for search query from PubMed. PubMed's search rules and syntax apply.
+# 
+# Input:
+# 
+# Tab-delimited table with search queries in a column starting with "ID_", e.g. "ID_gene" if search queries are genes. 
 #
-#Output: Input table with additional columns containing PMIDs or abstracts from PubMed.
+# Output: 
+#
+# Input table with additional columns with PMIDs or abstracts (--abstracts) from PubMed.
 #
 #packages: r-easypubmed-2.13, r-argparse-2.0.1
 #
@@ -40,7 +44,6 @@ parser$add_argument("-k", "--key", type="character",
 args <- parser$parse_args()
 
 data = read.delim(args$input, stringsAsFactors=FALSE)
-#args$key = "f0cebb57593e4a6b82b345321814fca8bf08"
 
 id_col_index <- grep("ID_", names(data))
 

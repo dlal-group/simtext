@@ -15,7 +15,10 @@
  #output: data/text_to_wordmatrix_output
  
   $ RScript ../pmids_to_pubtator_matrix.R --input "data/pubmed_by_queries_output" --output "data/pmids_to_pubtator_matrix_output"
- #output: data/pmids_to_pubtator_matrix
+ #output: data/pmids_to_pubtator_matrix_output
 
- $ RScript ../simtext_app.R -i "test_data" -m "data/text_to_wordmatrix_output" 
+ $ RScript ../simtext_app.R -i "data/test_data" -m "data/text_to_wordmatrix_output" 
+ #output: ShinyApp
+
+ $ RScript ../simtext_app.R -i "data/test_data" -m "data/pmids_to_pubtator_matrix_output" 
  #output: ShinyApp

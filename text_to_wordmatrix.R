@@ -66,7 +66,7 @@ for(row in 1:nrow(data)){
     
     top_words$word <- as.character(top_words$word)
     
-    cat("Top words for row", row, " are extracted.", "\n")
+    cat("Most frequent words for row", row, " are extracted.", "\n")
     
       if(args$plurals == TRUE){
         top_words$word <- sapply(top_words$word, function(x){singularize(x)})
@@ -82,7 +82,7 @@ for(row in 1:nrow(data)){
 
   word_matrix <- as.matrix(word_matrix)
   word_matrix[is.na(word_matrix)] <- 0
-  word_matrix <- word_matrix>0 *1  #binary matrix
+  word_matrix <- (word_matrix>0) *1  #binary matrix
 
 cat("A matrix with ", nrow(word_matrix), " rows and ", ncol(word_matrix), "columns is generated.", "\n")
   

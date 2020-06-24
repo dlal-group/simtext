@@ -36,7 +36,7 @@ $ git clone https://github.com/mgramm1/simtext
 
 ## pubmed_by_queries
 
-This tool uses a set of search queries to download a defined number of abstracts or PMIDs for search query from PubMed. PubMed's search rules and syntax apply.
+This tool uses a set of search queries to download a defined number of abstracts or PMIDs for search query from PubMed. PubMed's search rules and syntax apply. Users can obtain an API key from the Settings page of their NCBI account (to create an account, visit http://www.ncbi.nlm.nih.gov/account/).
 
 Input:
 

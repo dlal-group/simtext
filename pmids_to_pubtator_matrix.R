@@ -1,16 +1,15 @@
 #!/usr/bin/env Rscript
 #tool: pmids_to_pubtator_matrix
 #
-#The tool takes all PMIDs per entity and uses PubTator to extract all "Genes", "Diseases", "Mutations", "Chemicals" 
-#and "Species" terms of the corresponding abstracts. The user can choose if terms of all, 
-#some or one of the aforementioned categories should be extracted. All extracted terms are used 
-#to generate a word matrix with rows = entities and columns = extracted words. 
-#The resulting matrix is binary with 0= word not present in abstracts of entity and 1= word present in abstracts of entity.
+# The tool uses all PMIDs per row and extracts "Gene", "Disease", "Mutation", "Chemical" and "Species" terms of the 
+# corresponding abstracts, using PubTator annotations. The user can choose from which categories terms should be extracted. 
+# The extracted terms are united in one large binary matrix, with 0= term not present in abstracts of 
+# that row and 1= term present in abstracts of that row.
 #
-#Input: Output of tool 2 or tab-delimited table with entities in column called “ID_<name>” 
-#and columns containing PMIDs. The names of the PMID columns should start with “PMID”, e.g. “PMID_1”, “PMID_2” etc.
+#Input: Output of abstracts_by_pmids or tab-delimited table with columns containing PMIDs. 
+#The names of the PMID columns should start with "PMID", e.g. "PMID_1", "PMID_2" etc.
 #
-#Output: Binary matrix with rows = entities and columns = extracted words.
+#Output: Binary matrix in that each column represents one of the extracted terms.
 #
 # r-stringr 1.4.0, r-argparse-2.0.1, r-rcurl 1.95_4.12
 #
