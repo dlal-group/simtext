@@ -43,14 +43,16 @@ parser$add_argument("-k", "--key", type="character",
                     help="if ncbi API key is available, add it to speed up the download of pubmed data")
 args <- parser$parse_args()
 
+MAX_WEB_TRIES = 100
+
 data = read.delim(args$input, stringsAsFactors=FALSE)
 
 id_col_index <- grep("ID_", names(data))
 
 pubmed_data_in_table <- function(data, row, query, number, key, abstract){
-
+if (is.null(query)){print(data)}
     pubmed_search <- get_pubmed_ids(query, api_key = key)
-  
+
     if(as.numeric(pubmed_search$Count) == 0){
       cat("No PubMed result for the following query: ", query, "\n")
       return(data)
@@ -59,9 +61,20 @@ pubmed_data_in_table <- function(data, row, query, number, key, abstract){
           
             myPubmedURL <- paste("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?", 
                                  "db=pubmed&retmax=", number, "&term=", pubmed_search$OriginalQuery, "&usehistory=n", sep = "")
-            IDconnect <- url(myPubmedURL, open = "rb", encoding = "UTF8")
-            on.exit(close(IDconnect))
-            idXML <- readLines(IDconnect, warn = FALSE, encoding = "UTF8") 
+            # get ids
+            idXML <- c()
+            for (i in 1:MAX_WEB_TRIES){
+              tryCatch({
+                IDconnect <- suppressWarnings(url(myPubmedURL, open = "rb", encoding = "UTF8"))
+                idXML <- suppressWarnings(readLines(IDconnect, warn = FALSE, encoding = "UTF8"))
+                suppressWarnings(close(IDconnect))
+                break
+              }, error = function(e) {
+                print(paste('Error getting URL, sleeping',2*i,'seconds.'))
+                print(e)
+                Sys.sleep(time = 2*i)
+              })
+          }
 
             PMIDs = c()
             
@@ -86,12 +99,12 @@ pubmed_data_in_table <- function(data, row, query, number, key, abstract){
                              "db=pubmed&WebEnv=", pubmed_search$WebEnv, "&query_key=", pubmed_search$QueryKey, 
                              "&retstart=", 0, "&retmax=", number, 
                              "&rettype=", "null","&retmode=", "xml", sep = "")
-          
+
           api_key <- pubmed_search$APIkey
           if (!is.null(api_key)) {
             efetch_url <- paste(efetch_url, "&api_key=", api_key, sep = "")
           }
-          
+
           # initialize
           out.data <- NULL
           try_num <- 1
@@ -118,7 +131,7 @@ pubmed_data_in_table <- function(data, row, query, number, key, abstract){
                 tmpConnect <- suppressWarnings(url(efetch_url, open = "rb", encoding = "UTF8"))
                 suppressWarnings(readLines(tmpConnect, warn = FALSE, encoding = "UTF8"))
               }, error = function(e) {
-                NULL
+                print(e)
               }, finally = {
                 try(suppressWarnings(close(tmpConnect)), silent = TRUE)
               })  
@@ -207,7 +220,6 @@ pubmed_data_in_table <- function(data, row, query, number, key, abstract){
         }
     }
 
-
 for(i in 1:nrow(data)){
     print(paste("Fetching PubMed data for",data[i,id_col_index]))
     data = tryCatch(pubmed_data_in_table(data= data, 
@@ -216,6 +228,8 @@ for(i in 1:nrow(data)){
                            number= args$number,
                            key= args$key,
                            abstract= args$abstract), error=function(e){
+                             print('main error')
+                             print(e)
                              Sys.sleep(5)
                              })
     }
