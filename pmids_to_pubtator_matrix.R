@@ -23,9 +23,16 @@
 #   -c {Gene,Disease,Mutation,Chemical,Species} [{Genes,Diseases,Mutations,Chemicals,Species} ...], --categories {Gene,Disease,Mutation,Chemical,Species} [{Gene,Disease,Mutation,Chemical,Species} ...]
 #      Pubtator categories that should be considered.  [default "('Gene', 'Disease', 'Mutation','Chemical')"]
 
-if (!require('argparse')) install.packages('argparse'); suppressPackageStartupMessages(library("argparse"))
-if (!require('stringr')) install.packages('stringr'); library('stringr')
-if (!require('RCurl')) install.packages('RCurl'); library('RCurl')
+if ( '--install_packages' %in% commandArgs()) {
+  print('Installing packages')
+  if (!require('argparse')) install.packages('argparse');
+  if (!require('stringr')) install.packages('stringr');
+  if (!require('RCurl')) install.packages('RCurl');
+}
+
+suppressPackageStartupMessages(library("argparse"))
+library('stringr')
+library('RCurl')
 
 parser <- ArgumentParser()
 
@@ -36,6 +43,8 @@ parser$add_argument("-o", "--output", default="pmids_to_pubtator_matrix_output",
 parser$add_argument("-c", "--categories", choices=c("Gene", "Disease", "Mutation", "Chemical", "Species"), nargs="+", 
                     default= c("Gene", "Disease", "Mutation", "Chemical"),
                     help = "Pubtator categories that should be considered. [default \"%(default)s\"]")
+parser$add_argument("--install_packages", action="store_true", default=FALSE,
+                    help="If you want to auto install missing required packages.")
 
 args <- parser$parse_args()
 
