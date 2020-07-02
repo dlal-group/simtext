@@ -44,7 +44,7 @@ Tab-delimited table with search queries in a column starting with "ID_", e.g. "I
 
 Usage:
 ```
-$ RScript pubmed_by_queries.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-a] [-k KEY]
+$ Rscript pubmed_by_queries.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-a] [-k KEY]
 ```
 
 Optional arguments: 
@@ -71,7 +71,7 @@ Tab-delimited table with columns containing PMIDs. The names of the PMID columns
 
 Usage:
 ```
-$ RScript abstracts_by_pmid.R [-h] [-i INPUT] [-o OUTPUT]
+$ Rscript abstracts_by_pmid.R [-h] [-i INPUT] [-o OUTPUT]
 ```
 
 Optional arguments: 
@@ -95,7 +95,7 @@ Output of pubmed_by_queries or abstracts_by_pmids, or tab-delimited table with t
 
 Usage:
 ```
-$ RScript text_to_wordmatrix.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-r] [-l] [-w] [-s] [-p]
+$ Rscript text_to_wordmatrix.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-r] [-l] [-w] [-s] [-p]
 ```
 
 Optional arguments: 
@@ -125,7 +125,7 @@ Output of abstracts_by_pmids or tab-delimited table with columns containing PMID
 
 Usage:
 ```
-$ RScript pmids_to_pubtator_matrix.R [-h] [-i INPUT] [-o OUTPUT] [-c {Gene,Disease,Mutation,Chemical,Species} [{Gene,Disease,Mutation,Chemical,Species} ...]]
+$ Rscript pmids_to_pubtator_matrix.R [-h] [-i INPUT] [-o OUTPUT] [-c {Gene,Disease,Mutation,Chemical,Species} [{Gene,Disease,Mutation,Chemical,Species} ...]]
 ```
  
 Optional arguments:
@@ -155,7 +155,7 @@ Output of text_to_wordmatrix or pmids_to_pubtator_matrix, or binary matrix.
 
 Usage:
 ```
-$ RScript simtext_app.R [-h] [-i INPUT] [-m MATRIX] [-p PORT] 
+$ Rscript simtext_app.R [-h] [-i INPUT] [-m MATRIX] [-p PORT]
 ```
 
 Optional arguments:

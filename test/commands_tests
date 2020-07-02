@@ -2,23 +2,23 @@
 
  $ cd <path>/SimText/test
 
- $ RScript ../pubmed_by_queries.R --input "data/test_data" --output "data/pubmed_by_queries_output"
+ $ Rscript ../pubmed_by_queries.R --input "data/test_data" --output "data/pubmed_by_queries_output"
  #output: data/pubmed_by_queries_output
 
- $ RScript ../pubmed_by_queries.R --input "data/test_data" --abstract --output "data/pubmed_by_queries_output_abstracts"
+ $ Rscript ../pubmed_by_queries.R --input "data/test_data" --abstract --output "data/pubmed_by_queries_output_abstracts"
  #output: data/pubmed_by_queries_output_abstracts
 
- $ RScript ../abstracts_by_pmids.R --input "data/pubmed_by_queries_output" --output "data/abstracts_by_pmids_output"
+ $ Rscript ../abstracts_by_pmids.R --input "data/pubmed_by_queries_output" --output "data/abstracts_by_pmids_output"
  #output: data/abstracts_by_pmids_output
 
- $ RScript ../text_to_wordmatrix.R --input "data/pubmed_by_queries_output_abstracts" --output "data/text_to_wordmatrix_output"
+ $ Rscript ../text_to_wordmatrix.R --input "data/pubmed_by_queries_output_abstracts" --output "data/text_to_wordmatrix_output"
  #output: data/text_to_wordmatrix_output
  
-  $ RScript ../pmids_to_pubtator_matrix.R --input "data/pubmed_by_queries_output" --output "data/pmids_to_pubtator_matrix_output"
+  $ Rscript ../pmids_to_pubtator_matrix.R --input "data/pubmed_by_queries_output" --output "data/pmids_to_pubtator_matrix_output"
  #output: data/pmids_to_pubtator_matrix_output
 
- $ RScript ../simtext_app.R -i "data/test_data" -m "data/text_to_wordmatrix_output" 
+ $ Rscript ../simtext_app.R -i "data/test_data" -m "data/text_to_wordmatrix_output"
  #output: ShinyApp
 
- $ RScript ../simtext_app.R -i "data/test_data" -m "data/pmids_to_pubtator_matrix_output" 
+ $ Rscript ../simtext_app.R -i "data/test_data" -m "data/pmids_to_pubtator_matrix_output"
  #output: ShinyApp

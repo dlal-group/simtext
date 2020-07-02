@@ -5,7 +5,7 @@
 
 $ cd <path>/SimText
 
-RScript pubmed_by_queries.R \
+Rscript pubmed_by_queries.R \
  --input examples/data/1a/clingen_data \
  --output examples/data/1a/pubmed_by_queries_output \
  --number 100 \
@@ -13,13 +13,13 @@ RScript pubmed_by_queries.R \
  --abstract
 
 
-$ RScript text_to_wordmatrix.R \
+$ Rscript text_to_wordmatrix.R \
  --input "examples/data/1a/pubmed_by_queries_output" \
  --output "examples/data/1a/clingen_data_matrix" \
  --number 50 \
  --stemDoc
 
-$ RScript simtext_app.R \
+$ Rscript simtext_app.R \
  --input "examples/data/1a/clingen_data" \
  --matrix "examples/data/1a/clingen_data_matrix"
 
@@ -29,18 +29,18 @@ $ RScript simtext_app.R \
 
 $ cd <path>/SimText
 
-$ RScript pubmed_by_queries.R \
+$ Rscript pubmed_by_queries.R \
  --input "examples/data/1b/clingen_data" \
  --output "examples/data/1b/pubmed_by_queries_output" \
  --number 100 \
  --key "15f2fa5c9d427fd88d53b5041002aeabd309"
 
-$ RScript pmids_to_pubtator_matrix.R \
+$ Rscript pmids_to_pubtator_matrix.R \
  --input "examples/data/1b/pubmed_by_queries_output"  \
  --output "examples/data/1b/clingen_data_matrix" \
  --categories Disease Gene
 
-$ RScript simtext_app.R \
+$ Rscript simtext_app.R \
  --input "examples/data/1b/clingen_data" \
  --matrix "examples/data/1b/clingen_data_matrix"
 
@@ -50,16 +50,16 @@ $ RScript simtext_app.R \
 
 cd <path>/SimText
 
-$ RScript abstracts_by_pmids.R \
+$ Rscript abstracts_by_pmids.R \
  --input "examples/data/2/researcher_data.txt" \
  --output "examples/data/2/abstracts_by_pmids_output"
 
-$ RScript text_to_wordmatrix.R \
+$ Rscript text_to_wordmatrix.R \
  --input "examples/data/2/abstracts_by_pmids_output" \
  --output "examples/data/2/researcher_data_matrix" \
  --number 100
 
-$ RScript simtext_app.R \
+$ Rscript simtext_app.R \
  --input "examples/data/2/researcher_data.txt" \
  --matrix "examples/data/2/researcher_data_matrix"
 
