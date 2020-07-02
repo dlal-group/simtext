@@ -48,6 +48,9 @@ parser$add_argument("--install_packages", action="store_true", default=FALSE,
 
 args <- parser$parse_args()
 
+PMID_SLEEP_COUNT = 1000
+PUBTATOR_MAX_IDS = 100
+
 #args$input = "~/Dropbox/LAL_PROJECTS/RESEARCH_PORTAL/SimText/examples/data/1b/T1_output"
 data = read.delim(args$input, stringsAsFactors=FALSE, header = TRUE, sep='\t')
 
@@ -59,19 +62,19 @@ pmids_count_total <- 0
 get_pubtator_terms = function(pmids, categories){
 
   cat(1)
-      out.data = NULL
       table = NULL
-      try_num <- 1
-      t_0 <- Sys.time()
-
-      
-      while(is.null(out.data)) {
+      for (pmid_split in split(pmids, ceiling(seq_along(pmids)/PUBTATOR_MAX_IDS))){
+        out.data = NULL
+        try_num <- 1
+        t_0 <- Sys.time()
+        while(TRUE) {
         
         # Timing check: kill at 3 min
         if (try_num > 1){
-          Sys.sleep(time = 2*try_num)
           cat("Connection problem. Please wait. Try number:",try_num,"\n") 
+          Sys.sleep(time = 2*try_num)
         }
+        try_num <- try_num + 1
 
         t_1 <- Sys.time()
         
@@ -79,36 +82,37 @@ get_pubtator_terms = function(pmids, categories){
           message("Killing the request! Something is not working. Please, try again later","\n")
           return(table)
         }
-
       out.data <- tryCatch({    
-          getURL(paste("https://www.ncbi.nlm.nih.gov/research/pubtator-api/publications/export/pubtator?pmids=", pmids, sep = ""))
+          getURL(paste("https://www.ncbi.nlm.nih.gov/research/pubtator-api/publications/export/pubtator?pmids=", paste(pmid_split, collapse=","), sep = ""))
         }, error = function(e) {
-          NULL
+          print(e)
+          next
         }, finally = {
             Sys.sleep(0)
         })
-      
+
       if(!is.null(out.data)){
         out.data = unlist(strsplit(out.data, "\n", fixed = T))
         
+        # skip first few lines, is this needed?
         for (i in 3:length(out.data)) {
           temps = unlist(strsplit(out.data[i], "\t", fixed = T))
           if (length(temps) == 5) {
+            # make 5 be 6
             temps = c(temps, NA)
           }
-          table = rbind(table, temps)
+          if (length(temps) == 6) {
+            # keep only 6
+            table = rbind(table, temps)
+          }
         }
+        break
       }
       
-      # Check if error
-      if (!is.null(out.data) && ncol(table) != 6) {
-        out.data <- NULL
-      }
       
-      try_num <- try_num + 1
       
     } #end while loop
-    
+    }
     index.categories = c()
     categories = as.character(unlist(categories))
     
@@ -139,14 +143,17 @@ for (i in 1:nrow(data)){
   print(paste("Row", i))
   pmids = as.character(data[i,pmid_cols_index])
   pmids = pmids[!pmids == "NA"]
-  pmids_count_total = pmids_count_total + length(pmids)
   
-    if(pmids_count_total > 1000){
+
+    if ( (pmids_count_total > 0) & !(pmids_count_total %% PMID_SLEEP_COUNT) ){
+      # 60 seconds seems long, I did test data without any wait here
+      # Not sure it is required
       cat("Break (60s) to avoid killing of requests. Please wait.",'\n')
       Sys.sleep(60)
-      pmids_count_total = c()
     }
-    
+
+  pmids_count_total = pmids_count_total + length(pmids)
+
     #get_pubtator_terms function
     if (length(pmids) >0){
       table = get_pubtator_terms(pmids, args$categories)
@@ -177,7 +184,7 @@ colnames(word_matrix) = dict.table[index_names,1]
 #binary matrix
 word_matrix <- as.matrix(word_matrix)
 word_matrix[is.na(word_matrix)] <- 0
-
+cat("Processed", pmids_count_total, "PMID queries.\n")
 cat("Matrix with ",nrow(word_matrix)," rows and ",ncol(word_matrix)," columns generated.","\n")
 write.table(word_matrix, args$output, row.names = FALSE, sep = '\t')
 
