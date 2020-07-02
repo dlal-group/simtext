@@ -89,6 +89,7 @@ if(!is.null(args$port)){
 data = read.delim(args$input, stringsAsFactors=FALSE)
 index_grouping = grep("GROUPING_", names(data))
 names(data)[index_grouping] = sub(".*_", "",names(data)[index_grouping])
+colindex_id = grep("ID_", names(data))
 
 matrix = read.delim(args$matrix, stringsAsFactors=FALSE)
 matrix =  (as.matrix(matrix)>0) *1 #transform matrix to binary matrix
@@ -110,7 +111,7 @@ ui <- shinyUI(fluidPage(
                             box-shadow: 0px 0px 0px white;
                             padding:3px;
                             width: 100%"),
-                  selectInput('ID', 'Select ID:', paste0(data$ID," (",seq(1,length(data$ID)),")"))),
+                  selectInput('ID', 'Select ID:', paste0(data[[colindex_id]]," (",seq(1,length(data[[colindex_id]])),")"))),
            column(width = 3,  style = "padding-right: 0px",
                   wellPanel(h5(strong("Color settings")),
                             style = "background-color:white;
@@ -243,20 +244,21 @@ ui <- shinyUI(fluidPage(
 server <- function(input, output, session) {
 
   ##### Global ##### 
-  IDs = reactive(paste0(data$ID," (",seq(1,length(data$ID)),")"))
+  IDs = reactive(paste0(data[[colindex_id]]," (",seq(1,length(data[[colindex_id]])),")"))
   index_ID = reactive({which(IDs() == input$ID)})
 
   ##### Wordcloud plot and download  ######
   
   output$ID <- renderText({
-    paste("Wordcloud of",data$ID[index_ID()])
+    paste("Wordcloud of",data[[colindex_id]][index_ID()])
   })
   
   output$WordcloudPlot <- renderPlot({
     ID_matrix = matrix[index_ID(),]
-    ID_matrix = data.frame(word= names(ID_matrix), freq= t(ID_matrix))
+    ID_matrix = data.frame(word= as.character(names(ID_matrix)), freq= ID_matrix)
     colnames(ID_matrix) = c("word", "freq")
-    ID_matrix = ID_matrix[ID_matrix$freq > 0,]
+    ID_matrix = ID_matrix[ID_matrix$freq == 1,]
+    
     if(nrow(ID_matrix) < 51){
       fontsize = c(1,1)
     } else {
@@ -267,13 +269,14 @@ server <- function(input, output, session) {
   
   output$downloadWordcloud <- downloadHandler(
     filename = function() {
-      paste0(paste0("Wordcloudof",data$ID[index_ID()]),".pdf", sep="")
+      paste0(paste0("Wordcloudof",data[[colindex_id]][index_ID()]),".pdf", sep="")
     },
     content = function(file) {
       ID_matrix = matrix[index_ID(),]
-      ID_matrix = data.frame(word= names(ID_matrix), freq= t(ID_matrix))
+      ID_matrix = data.frame(word= names(ID_matrix), freq= ID_matrix)
       colnames(ID_matrix) = c("word", "freq")
-      ID_matrix = ID_matrix[ID_matrix$freq > 0,]
+      ID_matrix = ID_matrix[ID_matrix$freq == 1,]
+      
       if(nrow(ID_matrix) < 51){
         fontsize = c(1,1)
       } else {
@@ -331,6 +334,7 @@ server <- function(input, output, session) {
     if(input$colour == "Grouping variable"){
       return(as.factor(data[,input$colour_select]))
   } else {
+      matrix = as.data.frame(matrix)
       colour_byword = matrix[[input$colour_select]]
       colour_byword = ifelse(colour_byword > 0,"Selected word associated with ID","Selected word not associated with ID")
       return(as.factor(colour_byword))
@@ -365,7 +369,7 @@ server <- function(input, output, session) {
     if (input$label == "Index") {
         labeling = as.character(seq(1,nrow(data)))
     } else if (input$label == "IDs") {
-        labeling= as.character(data$ID)
+        labeling= as.character(data[[colindex_id]])
     }
     
     p = plot_ly(colors = color_palette()) %>%
@@ -389,7 +393,7 @@ server <- function(input, output, session) {
                 type="scatter", 
                 mode="markers",
                 opacity=0,
-                text= paste0( "ID: ",data$ID, "\n",
+                text= paste0( "ID: ",data[[colindex_id]], "\n",
                               "Index: ",seq(1,nrow(data)), "\n",
                               "Grouping: ", paste(data[,index_grouping])),
                 hoverinfo = "text",
@@ -449,7 +453,7 @@ server <- function(input, output, session) {
     palette(color_palette())
     par(mar = rep(0, 4))
     myplclust(clustering, 
-              labels=paste(data$ID), 
+              labels=paste(data[[colindex_id]]), 
               lab.col=as.fumeric(as.character(colour_choice()), levels = sort(unique(as.character(colour_choice())))), 
               cex=as.numeric(input$labelsize_hc/10),
               main="",
