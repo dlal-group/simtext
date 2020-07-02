@@ -18,24 +18,26 @@
 # -o OUTPUT, --output OUTPUT output file name. [default "T2_output"]
 
 
-if (!require('argparse')) install.packages('argparse');
+if ( '--install_packages' %in% commandArgs()) {
+  print('Installing packages')
+  if (!require('argparse')) install.packages('argparse');
+  if (!require("reutils")) install.packages("reutils");
+  if (!require('easyPubMed')) install.packages('easyPubMed');
+  if (!require('textclean')) install.packages('textclean');
+}
+
 suppressPackageStartupMessages(library("argparse"))
-
-if (!require("reutils")) install.packages("reutils"); 
-library("reutils") 
-
-if (!require('easyPubMed')) install.packages('easyPubMed');
+library("reutils")
 suppressPackageStartupMessages(library("easyPubMed"))
-
-if (!require('textclean')) install.packages('textclean');
 suppressPackageStartupMessages(library("textclean"))
-
 
 parser <- ArgumentParser()
 parser$add_argument("-i", "--input", 
                     help = "input fie name. add path if file is not in workind directory")
 parser$add_argument("-o", "--output", default="abstracts_by_pmids_output",
                     help = "output file name. [default \"%(default)s\"]")
+parser$add_argument("--install_packages", action="store_true", default=FALSE,
+                    help="If you want to auto install missing required packages.")
 
 args <- parser$parse_args()
 

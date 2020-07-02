@@ -24,25 +24,49 @@
 #Shiny app with word clouds, dimensionality reduction plot, dendrogram of hierarchical clustering and table with words and their frequency among the entities.
 #
 #Packages
-if (!require('shiny')) install.packages('shiny'); suppressPackageStartupMessages(library("shiny"))
-if (!require('plotly')) install.packages('plotly'); suppressPackageStartupMessages(library("plotly"))
-if (!require('DT')) install.packages('DT'); suppressPackageStartupMessages(library("DT"))
-if (!require('shinycssloaders')) install.packages('shinycssloaders'); suppressPackageStartupMessages(library("shinycssloaders"))
-if (!require('shinythemes')) install.packages('shinythemes'); suppressPackageStartupMessages(library("shinythemes"))
-if (!require('tableHTML')) install.packages('tableHTML'); suppressPackageStartupMessages(library("tableHTML"))
-if (!require('argparse')) install.packages('argparse');suppressPackageStartupMessages(library("argparse"))
-if (!require('PubMedWordcloud')) install.packages('PubMedWordcloud'); suppressPackageStartupMessages(library("PubMedWordcloud"))
-if (!require('ggplot2')) install.packages('ggplot2'); suppressPackageStartupMessages(library("ggplot2"))
-if (!require('stringr')) install.packages('stringr'); suppressPackageStartupMessages(library("stringr"))
-if (!require('tidyr')) install.packages('tidyr'); suppressPackageStartupMessages(library("tidyr"))
-if (!require('magrittr')) install.packages('magrittr'); suppressPackageStartupMessages(library("magrittr"))
-if (!require('plyr')) install.packages('plyr'); suppressPackageStartupMessages(library("plyr"))
-if (!require('ggpubr')) install.packages('ggpubr'); suppressPackageStartupMessages(library("ggpubr")) 
-if (!require('rafalib')) install.packages('rafalib'); suppressPackageStartupMessages(library("rafalib")) 
-if (!require('RColorBrewer')) install.packages('RColorBrewer'); suppressPackageStartupMessages(library("RColorBrewer")) 
-if (!require('dendextend')) install.packages('dendextend'); suppressPackageStartupMessages(library("dendextend")) 
-if (!require('Rtsne')) install.packages('Rtsne'); suppressPackageStartupMessages(library("Rtsne")) 
-if (!require('umap')) install.packages('umap'); suppressPackageStartupMessages(library("umap")) 
+
+if ( '--install_packages' %in% commandArgs()) {
+  print('Installing packages')
+  if (!require('shiny')) install.packages('shiny');
+  if (!require('plotly')) install.packages('plotly');
+  if (!require('DT')) install.packages('DT');
+  if (!require('shinycssloaders')) install.packages('shinycssloaders');
+  if (!require('shinythemes')) install.packages('shinythemes');
+  if (!require('tableHTML')) install.packages('tableHTML');
+  if (!require('argparse')) install.packages('argparse');
+  if (!require('PubMedWordcloud')) install.packages('PubMedWordcloud');
+  if (!require('ggplot2')) install.packages('ggplot2');
+  if (!require('stringr')) install.packages('stringr');
+  if (!require('tidyr')) install.packages('tidyr');
+  if (!require('magrittr')) install.packages('magrittr');
+  if (!require('plyr')) install.packages('plyr');
+  if (!require('ggpubr')) install.packages('ggpubr');
+  if (!require('rafalib')) install.packages('rafalib');
+  if (!require('RColorBrewer')) install.packages('RColorBrewer');
+  if (!require('dendextend')) install.packages('dendextend');
+  if (!require('Rtsne')) install.packages('Rtsne');
+  if (!require('umap')) install.packages('umap');
+}
+
+suppressPackageStartupMessages(library("shiny"))
+suppressPackageStartupMessages(library("plotly"))
+suppressPackageStartupMessages(library("DT"))
+suppressPackageStartupMessages(library("shinycssloaders"))
+suppressPackageStartupMessages(library("shinythemes"))
+suppressPackageStartupMessages(library("tableHTML"))
+suppressPackageStartupMessages(library("argparse"))
+suppressPackageStartupMessages(library("PubMedWordcloud"))
+suppressPackageStartupMessages(library("ggplot2"))
+suppressPackageStartupMessages(library("stringr"))
+suppressPackageStartupMessages(library("tidyr"))
+suppressPackageStartupMessages(library("magrittr"))
+suppressPackageStartupMessages(library("plyr"))
+suppressPackageStartupMessages(library("ggpubr"))
+suppressPackageStartupMessages(library("rafalib"))
+suppressPackageStartupMessages(library("RColorBrewer"))
+suppressPackageStartupMessages(library("dendextend"))
+suppressPackageStartupMessages(library("Rtsne"))
+suppressPackageStartupMessages(library("umap"))
 
 #command arguments
 parser <- ArgumentParser()
@@ -52,6 +76,8 @@ parser$add_argument("-m", "--matrix", default= NULL,
                     help = "matrix file name. add path if file is not in working directory")
 parser$add_argument("-p", "--port", type="integer", default=NULL,
                     help="Specify port, otherwise randomly select")
+parser$add_argument("--install_packages", action="store_true", default=FALSE,
+                    help="If you want to auto install missing required packages.")
 args <- parser$parse_args()
 
 # Set port

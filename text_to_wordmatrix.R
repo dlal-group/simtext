@@ -25,10 +25,18 @@
 # -s, --stemDoc                 apply Porter's stemming algorithm: collapsing words to a common root to aid comparison of vocabulary
 # -p, --plurals                 by default words in plural and singular are merged to the singular form. otherwise use -p
 
-if (!require('argparse')) install.packages('argparse'); suppressPackageStartupMessages(library("argparse"))
-if (!require("PubMedWordcloud")) install.packages("PubMedWordcloud"); library("PubMedWordcloud") 
-if (!require('SnowballC')) install.packages('SnowballC'); suppressPackageStartupMessages(library("SnowballC"))
-if (!require('SemNetCleaner')) install.packages('SemNetCleaner'); suppressPackageStartupMessages(library("SemNetCleaner"))
+if ( '--install_packages' %in% commandArgs()) {
+  print('Installing packages')
+  if (!require('argparse')) install.packages('argparse');
+  if (!require("PubMedWordcloud")) install.packages("PubMedWordcloud");
+  if (!require('SnowballC')) install.packages('SnowballC');
+  if (!require('SemNetCleaner')) install.packages('SemNetCleaner');
+}
+
+suppressPackageStartupMessages(library("argparse"))
+library("PubMedWordcloud")
+suppressPackageStartupMessages(library("SnowballC"))
+suppressPackageStartupMessages(library("SemNetCleaner"))
 
 parser <- ArgumentParser()
 parser$add_argument("-i", "--input", 
@@ -47,7 +55,8 @@ parser$add_argument("-s", "--stemDoc", action="store_true", default=FALSE,
                     help="apply Porter's stemming algorithm: collapsing words to a common root to aid comparison of vocabulary")
 parser$add_argument("-p", "--plurals", action="store_false", default=TRUE,
                     help="by default words in plural and singular are merged to the singular form. otherwise use -p")
-
+parser$add_argument("--install_packages", action="store_true", default=FALSE,
+                    help="If you want to auto install missing required packages.")
 
 args <- parser$parse_args()
 
