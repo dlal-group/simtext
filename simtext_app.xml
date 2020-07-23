@@ -14,6 +14,7 @@
       '${__tool_directory__}/simtext_app.R'
       --input '$input'
       --matrix '$matrix'
+      --host '0.0.0.0'
       --port '8888'
       ]]>
     </command>
