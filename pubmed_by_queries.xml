@@ -1,4 +1,4 @@
-<tool id="t1_pubmed_by_queries" name="T1_pubmed_by_queries" version="@VERSION@">
+<tool id="pubmed_by_queries" name="pubmed_by_queries" version="@VERSION@">
     <description>Download a defined number of abstracts or PMIDs from PubMed for a set of search queries.</description>
     
     <requirements>
@@ -16,7 +16,7 @@
     <expand macro="stdio"/>
     
     <command><![CDATA[Rscript 
-      '${__tool_directory__}/T1_pubmed_by_queries.R'
+      '${__tool_directory__}/pubmed_by_queries.R'
       --input '$input'
       --output '$output'
       --number '$number'
