@@ -1,16 +1,14 @@
 <tool id="simtext_app" name="simtext_app" tool_type="interactive" version="@VERSION@">
     <description>Interactive shiny app to explore SimText output data</description>
-    
+    <macros>
+        <import>macros.xml</import>
+    </macros>
     <expand macro="requirements"/>
     <entry_points>
         <entry_point name="SimText App" requires_domain="true">
             <port>8888</port>
         </entry_point>
     </entry_points>
-    <macros>
-        <import>macros.xml</import>
-    </macros>
-    <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command><![CDATA[Rscript 
       '${__tool_directory__}/simtext_app.R'
@@ -26,11 +24,11 @@
     <outputs>
       <data format="tabular" name="output" />
     </outputs>
-    <tests>
+    <tests><!-- cannot test interactive tools yet
         <test>
           <param name="input" value="test_data" ftype="tabular"/>
-          <param name="matrix" value="text_to_wordmatrix_output" ftype="tabular"/>
-        </test>
+          <param name="matrix" value="text_to_wordmatrix_output"/>
+        </test>-->
     </tests>
     <help><![CDATA[
 
@@ -46,4 +44,5 @@ Output of text_to_wordmatrix or pmids_to_pubtator_matrix, or binary matrix.
 
 
         ]]></help>
+    <expand macro="citations"/>
 </tool>

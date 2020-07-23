@@ -1,18 +1,13 @@
 <tool id="pubmed_by_queries" name="pubmed_by_queries" version="@VERSION@">
     <description>Download a defined number of abstracts or PMIDs from PubMed for a set of search queries</description>
-    
+    <macros>
+        <import>macros.xml</import>
+    </macros>
     <expand macro="requirements">
       <requirement type="package" version="2.0.1">r-argparse</requirement>
       <requirement type="package" version="2.13">r-easypubmed</requirement>
     </expand>
-    
-    <macros>
-        <import>macros.xml</import>
-    </macros>
-    
-    <expand macro="requirements"/>
     <expand macro="stdio"/>
-    
     <command><![CDATA[Rscript 
       '${__tool_directory__}/pubmed_by_queries.R'
       --input '$input'
@@ -39,19 +34,18 @@
     <tests>
         <test>
           <param name="input" value="test_data" ftype="tabular"/>
-          <param name="output" value="T1_output" ftype="tabular"/>
           <param name="number" value="1"/>
           <param name="abstract" value=""/>
           <param name="key" value=""/>
+          <output name="output" value="pubmed_by_queries_output"/>
         </test>
     </tests>
-    
     <help><![CDATA[
 
 This tool uses a set of search queries to download a defined number of abstracts or PMIDs for search query from PubMed. PubMed's search rules and syntax apply.
  
 Input:
-Table with search queries in a column starting with "ID_", e.g. "ID_gene" if search queries are genes. 
+Table with search queries in a column starting with "ID\_", e.g. "ID_gene" if search queries are genes. 
 
 Output: 
 Input table with additional columns with PMIDs or abstracts (--abstracts) from PubMed.
@@ -59,4 +53,5 @@ Input table with additional columns with PMIDs or abstracts (--abstracts) from P
 Users can obtain an API key from the Settings page of their NCBI account (to create an account, visit http://www.ncbi.nlm.nih.gov/account/).
 
         ]]></help>
+    <expand macro="citations"/>
 </tool>

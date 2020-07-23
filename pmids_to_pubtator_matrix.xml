@@ -1,17 +1,13 @@
   <tool id="pmids_to_pubtator_matrix" name="pmids_to_pubtator_matrix" version="@VERSION@">
     <description>Per row, extract scientific terms from PMIDs susing PubTator and generate a binary matrix</description>
-    
+    <macros>
+        <import>macros.xml</import>
+    </macros>
     <expand macro="requirements">
       <requirement type="package" version="2.0.1">r-argparse</requirement>
       <requirement type="package" version="1.4.0">r-stringr</requirement>
       <requirement type="package" version="1.95_4.12">r-rcurl</requirement>
     </expand>
-    
-    
-    <macros>
-        <import>macros.xml</import>
-    </macros>
-    <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command><![CDATA[Rscript 
       '${__tool_directory__}/pmids_to_pubtator_matrix.R'
@@ -37,8 +33,8 @@
     </outputs>
     <tests>
         <test>
-          <param name="input" value="test_data" ftype="tabular"/>
-          <param name="output" value="pmids_to_pubtator_matrix_output" ftype="tabular"/>
+          <param name="input" value="pubmed_by_queries_output" ftype="tabular"/>
+          <output name="output" value="pmids_to_pubtator_matrix_output"/>
           <param name="categories" value="Genes"/>
         </test>
     </tests>
@@ -55,4 +51,5 @@ Output: Binary matrix in that each column represents one of the extracted terms.
 
 
         ]]></help>
+    <expand macro="citations"/>
 </tool>
