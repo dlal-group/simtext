@@ -4,7 +4,7 @@
     <xml name="requirements">
         <requirements>
             <yield/>
-            <container type="docker">lalgroup/simtext:@VERSION@"</container>
+            <container type="docker">lalgroup/simtext:@VERSION@</container>
         </requirements>
     </xml>
 
