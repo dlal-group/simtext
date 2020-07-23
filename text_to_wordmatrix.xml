@@ -1,11 +1,11 @@
 <tool id="text_to_wordmatrix" name="text_to_wordmatrix" version="@VERSION@">
-    <description> Extract most frequent words from each row in a table and generate binary word matrix.</description>
+    <description>Extract most frequent words from each row in a table and generate binary word matrix</description>
 
-    <requirements>
+    <expand macro="requirements">
       <requirement type="package" version="2.0.1">r-argparse</requirement>
       <requirement type="package" version="0.6.0">r-snowballc</requirement>
       <requirement type="package" version="0.3.6">r-pubmedwordcloud</requirement>
-    </requirements>
+    </expand>
     
     <macros>
         <import>macros.xml</import>

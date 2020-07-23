@@ -1,12 +1,10 @@
 <tool id="pubmed_by_queries" name="pubmed_by_queries" version="@VERSION@">
-    <description>Download a defined number of abstracts or PMIDs from PubMed for a set of search queries.</description>
+    <description>Download a defined number of abstracts or PMIDs from PubMed for a set of search queries</description>
     
-    <requirements>
-            
+    <expand macro="requirements">
       <requirement type="package" version="2.0.1">r-argparse</requirement>
       <requirement type="package" version="2.13">r-easypubmed</requirement>
-
-    </requirements>
+    </expand>
     
     <macros>
         <import>macros.xml</import>

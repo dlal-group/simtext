@@ -3,7 +3,8 @@
 
     <xml name="requirements">
         <requirements>
-            <requirement type="package" version="@VERSION@">similarity_app</requirement>
+            <container type="docker">lalgroup/simtext:@VERSION@"</container>
+            <yield/>
         </requirements>
     </xml>
 

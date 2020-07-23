@@ -1,9 +1,7 @@
 <tool id="simtext_app" name="simtext_app" tool_type="interactive" version="@VERSION@">
     <description>Interactive shiny app to explore SimText output data</description>
     
-    <requirements>
-      <container type="docker">lalgroup/simtext:latest</container>
-    </requirements>
+    <expand macro="requirements"/>
     <entry_points>
         <entry_point name="SimText App" requires_domain="true">
             <port>8888</port>

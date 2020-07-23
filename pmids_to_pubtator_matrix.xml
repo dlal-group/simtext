@@ -1,11 +1,11 @@
   <tool id="pmids_to_pubtator_matrix" name="pmids_to_pubtator_matrix" version="@VERSION@">
-    <description>Per row, extract scientific terms from PMIDs susing PubTator and generate a binary matrix. </description>
+    <description>Per row, extract scientific terms from PMIDs susing PubTator and generate a binary matrix</description>
     
-    <requirements>
+    <expand macro="requirements">
       <requirement type="package" version="2.0.1">r-argparse</requirement>
       <requirement type="package" version="1.4.0">r-stringr</requirement>
       <requirement type="package" version="1.95_4.12">r-rcurl</requirement>
-    </requirements>
+    </expand>
     
     
     <macros>
