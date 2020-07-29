@@ -3,7 +3,8 @@
 
     <xml name="requirements">
         <requirements>
-            <requirement type="package" version="@VERSION@">similarity_app</requirement>
+            <yield/>
+            <container type="docker">lalgroup/simtext:@VERSION@</container>
         </requirements>
     </xml>
 
@@ -11,6 +12,12 @@
         <stdio>
              <exit_code level="fatal" range="1:"/>
         </stdio>
+    </xml>
+
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1101/2020.07.06.190629</citation>
+        </citations>
     </xml>
 
 </macros>

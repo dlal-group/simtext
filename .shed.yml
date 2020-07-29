@@ -1,0 +1,18 @@
+name: simtext
+owner: lalgroup
+description: "SimText"
+homepage_url: https://github.com/mgramm1/simtext
+long_description: |
+    SimText is a ...
+remote_repository_url: https://github.com/mgramm1/simtext
+type: unrestricted
+categories:
+- Text Manipulation
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "Wrapper for the SimText suite: {{ tool_name }}"
+suite:
+  name: "suite_simtext"
+  description: "SimText suite description"
+  long_description: |
+    SimText is a ...

@@ -74,11 +74,18 @@ parser$add_argument("-i", "--input",
                     help = "input file name. add path if file is not in working directory")
 parser$add_argument("-m", "--matrix", default= NULL,
                     help = "matrix file name. add path if file is not in working directory")
+parser$add_argument("--host", default=NULL,
+                    help="Specify host")
 parser$add_argument("-p", "--port", type="integer", default=NULL,
                     help="Specify port, otherwise randomly select")
 parser$add_argument("--install_packages", action="store_true", default=FALSE,
                     help="If you want to auto install missing required packages.")
 args <- parser$parse_args()
+
+# Set host
+if(!is.null(args$host)){
+  options(shiny.host = args$host)
+}
 
 # Set port
 if(!is.null(args$port)){
