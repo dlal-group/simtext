@@ -1,16 +1,14 @@
 <tool id="text_to_wordmatrix" name="text_to_wordmatrix" version="@VERSION@">
-    <description> Extract most frequent words from each row in a table and generate binary word matrix.</description>
-
-    <requirements>
-      <requirement type="package" version="2.0.1">r-argparse</requirement>
-      <requirement type="package" version="0.6.0">r-snowballc</requirement>
-      <requirement type="package" version="0.3.3">r-pubmedwordcloud</requirement>
-    </requirements>
-    
+    <description>Extract most frequent words from each row in a table and generate binary word matrix</description>
     <macros>
         <import>macros.xml</import>
     </macros>
-    <expand macro="requirements"/>
+    <expand macro="requirements">
+      <requirement type="package" version="2.0.1">r-argparse</requirement>
+      <requirement type="package" version="0.6.0">r-snowballc</requirement>
+      <requirement type="package" version="0.3.6">r-pubmedwordcloud</requirement>
+      <requirement type="package" version="1.2.0">r-semnetcleaner</requirement>
+    </expand>
     <expand macro="stdio"/>
     <command><![CDATA[Rscript 
       '${__tool_directory__}/text_to_wordmatrix.R'
@@ -38,8 +36,8 @@
     </outputs>
     <tests>
         <test>
-          <param name="input" value="test_data" ftype="tabular"/>
-          <param name="output" value="text_to_wordmatrix_output" ftype="tabular"/>
+          <param name="input" value="pubmed_by_queries_output_abstracts" ftype="tabular"/>
+          <output name="output" value="text_to_wordmatrix_output"/>
           <param name="number" value="50"/>
         </test>
     </tests>
@@ -53,4 +51,5 @@ Output:
 Binary matrix in that each column represents one of the extracted words.
 
         ]]></help>
+    <expand macro="citations"/>
 </tool>

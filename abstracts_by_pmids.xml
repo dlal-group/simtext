@@ -1,19 +1,13 @@
 <tool id="abstracts_by_pmids" name="abstracts_by_pmids" version="@VERSION@">
-    <description>For all PMIDs in each row of a table save the according abstracts in additional columns.</description>
-    
-    <requirements>
-            
+    <description>For all PMIDs in each row of a table save the according abstracts in additional columns</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>    <expand macro="requirements">
       <requirement type="package" version="2.0.1">r-argparse</requirement>
       <requirement type="package" version="0.2.3">r-reutils</requirement>
       <requirement type="package" version="2.13">r-easypubmed</requirement>
       <requirement type="package" version="0.9.3">r-textclean</requirement>
-
-    </requirements>
-    
-    <macros>
-        <import>macros.xml</import>
-    </macros>
-    <expand macro="requirements"/>
+    </expand>
     <expand macro="stdio"/>
     <command><![CDATA[Rscript 
       '${__tool_directory__}/abstracts_by_pmids.R'
@@ -29,8 +23,8 @@
     </outputs>
     <tests>
         <test>
-          <param name="input" value="pubmed_by_queries" ftype="tabular"/>
-          <param name="output" value="abstracts_by_pmids_output" ftype="tabular"/>
+          <param name="input" value="pubmed_by_queries_output" ftype="tabular"/>
+          <output name="output" value="abstracts_by_pmids_output"/>
         </test>
     </tests>
     <help><![CDATA[
@@ -45,4 +39,5 @@ Input table with additional columns containing abstracts corresponding to the PM
 The abstract columns are called "ABSTRACT_1", "ABSTARCT_2" etc. 
 
         ]]></help>
+    <expand macro="citations"/>
 </tool>
