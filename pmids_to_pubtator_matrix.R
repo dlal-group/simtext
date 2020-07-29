@@ -61,12 +61,12 @@ pmids_count_total <- 0
 
 get_pubtator_terms = function(pmids, categories){
 
-  cat(1)
       table = NULL
       for (pmid_split in split(pmids, ceiling(seq_along(pmids)/PUBTATOR_MAX_IDS))){
         out.data = NULL
         try_num <- 1
         t_0 <- Sys.time()
+        
         while(TRUE) {
         
         # Timing check: kill at 3 min
@@ -82,8 +82,9 @@ get_pubtator_terms = function(pmids, categories){
           message("Killing the request! Something is not working. Please, try again later","\n")
           return(table)
         }
-      out.data <- tryCatch({    
-          getURL(paste("https://www.ncbi.nlm.nih.gov/research/pubtator-api/publications/export/pubtator?pmids=", paste(pmid_split, collapse=","), sep = ""))
+        out.data <- tryCatch({    
+          getURL(paste("https://www.ncbi.nlm.nih.gov/research/pubtator-api/publications/export/pubtator?pmids=", 
+                       paste(pmid_split, collapse=","), sep = ""))
         }, error = function(e) {
           print(e)
           next
@@ -110,7 +111,6 @@ get_pubtator_terms = function(pmids, categories){
       }
       
       
-      
     } #end while loop
     }
     index.categories = c()
@@ -118,29 +118,31 @@ get_pubtator_terms = function(pmids, categories){
     
     if(ncol(table) == 6){
       
-      for(i in categories){
-        tmp.index = grep(TRUE, i == as.character(table[,5]))
+          for(i in categories){
+            tmp.index = grep(TRUE, i == as.character(table[,5]))
+            
+            if(length(tmp.index) > 0){
+              index.categories = c(index.categories,tmp.index)
+            } 
+          }
         
-        if(length(tmp.index) > 0){
-          index.categories = c(index.categories,tmp.index)
-        }
-
         table = as.data.frame(table, stringsAsFactors=FALSE)
         table = table[index.categories,c(4,6)]
         table = table[!is.na(table[,2]),]
         table = table[!duplicated(table[,2]),]
-        
-        return(table)
-      }
-    } else {
+          
+      return(table)
+       
+      } else {
       return(NULL)
+      }
     }
-}
+
 
 #for all PMIDs of a row get PubTator terms and add them to the matrix
 for (i in 1:nrow(data)){
   
-  print(paste("Row", i))
+  #print(paste("Row", i))
   pmids = as.character(data[i,pmid_cols_index])
   pmids = pmids[!pmids == "NA"]
   
@@ -171,6 +173,8 @@ for (i in 1:nrow(data)){
         # add data in dictionnary
         dict.table = rbind(dict.table, table)
         dict.table = dict.table[!duplicated(as.character(dict.table[,2])),]
+        
+        #merge columns with same name!!
       }
     } else {
       cat("No terms for PMIDs of row", i," were found.",'\n')

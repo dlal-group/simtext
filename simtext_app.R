@@ -85,6 +85,9 @@ if(!is.null(args$port)){
   options(shiny.port = args$port)
 }
 
+args$input = "~/Dropbox/LAL_PROJECTS/RESEARCH_PORTAL/SimText/examples/data/1b/clingen_data"  
+args$matrix = "~/Dropbox/LAL_PROJECTS/RESEARCH_PORTAL/SimText/examples/data/1b/clingen_data_matrix"   
+  
 #load data
 data = read.delim(args$input, stringsAsFactors=FALSE)
 index_grouping = grep("GROUPING_", names(data))
