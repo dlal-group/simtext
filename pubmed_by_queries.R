@@ -1,18 +1,12 @@
 #!/usr/bin/env Rscript
 #tool: pubmed_by_queries
 #
-#
-# This tool uses a set of search queries to download a defined number of abstracts or PMIDs for search query from PubMed. PubMed's search rules and syntax apply.
+#This tool uses a set of search queries to download a defined number of abstracts or PMIDs for search query from PubMed. 
+#PubMed's search rules and syntax apply.
 # 
-# Input:
-# 
-# Tab-delimited table with search queries in a column starting with "ID_", e.g. "ID_gene" if search queries are genes. 
+#Input: Tab-delimited table with search queries in a column starting with "ID_", e.g. "ID_gene" if search queries are genes. 
 #
-# Output: 
-#
-# Input table with additional columns with PMIDs or abstracts (--abstracts) from PubMed.
-#
-#packages: r-easypubmed-2.13, r-argparse-2.0.1
+# Output: Input table with additional columns with PMIDs or abstracts (--abstracts) from PubMed.
 #
 #Usage: $ pubmed_by_queries.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-a] [-k KEY]
 # 
@@ -23,10 +17,11 @@
 # -n NUMBER, --number NUMBER  number of PMIDs or abstracts to save per ID [default "5"]
 # -a, --abstract              if abstracts instead of PMIDs should be retrieved use --abstracts 
 # -k KEY, --key KEY           if NCBI API key is available, add it to speed up the fetching of pubmed data
+
 if ( '--install_packages' %in% commandArgs()) {
   print('Installing packages')
-  if (!require('argparse')) install.packages('argparse');
-  if (!require('easyPubMed')) install.packages('easyPubMed');
+  if (!require('argparse')) install.packages('argparse',repo="http://cran.rstudio.com/");
+  if (!require('easyPubMed')) install.packages('easyPubMed',repo="http://cran.rstudio.com/");
 }
 
 suppressPackageStartupMessages(library("argparse"))
@@ -152,9 +147,7 @@ if (is.null(query)){print(data)}
           if (is.null(out.data)) {
             message("Killing the request! Something is not working. Please, try again later","\n")
             return(data)
-          } else {
-            cat("Data retrieved from PubMed.", "\n")
-          }
+          } 
       
           # process xml data
           xml_data <- paste(out.data, collapse = "")
@@ -215,6 +208,7 @@ if (is.null(query)){print(data)}
             abstracts = paste(titles,  abstracts)
           }
 
+          #add abstracts to data frame
           if(length(abstracts)>0){
             data[row,sapply(1:length(abstracts),function(i){paste0("ABSTRACT_",i)})] <- abstracts
             cat(length(abstracts)," abstracts for ",query, " are added in the table.",  "\n")
@@ -225,7 +219,6 @@ if (is.null(query)){print(data)}
     }
 
 for(i in 1:nrow(data)){
-    print(paste("Fetching PubMed data for",data[i,id_col_index]))
     data = tryCatch(pubmed_data_in_table(data= data, 
                            row= i,
                            query= data[i,id_col_index],
@@ -237,7 +230,6 @@ for(i in 1:nrow(data)){
                              Sys.sleep(5)
                              })
     }
-
 
 write.table(data, args$output, append = FALSE, sep = '\t', row.names = FALSE, col.names = TRUE)
 

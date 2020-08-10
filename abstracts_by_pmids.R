@@ -8,8 +8,6 @@
 #Output: Input table with additional columns containing abstracts corresponding to the PMIDs from PubMed. 
 #The abstract columns are called "ABSTRACT_1", "ABSTARCT_2" etc. 
 #
-# packages: r-argparse-2.0.1, r-reutils-0.2.3, r-easypubmed-2.13, r-textclean-0.9.3
-#
 # Usage: $ T2_abstracts_by_pmid.R [-h] [-i INPUT] [-o OUTPUT]
 # 
 # optional arguments:
@@ -20,10 +18,10 @@
 
 if ( '--install_packages' %in% commandArgs()) {
   print('Installing packages')
-  if (!require('argparse')) install.packages('argparse');
-  if (!require("reutils")) install.packages("reutils");
-  if (!require('easyPubMed')) install.packages('easyPubMed');
-  if (!require('textclean')) install.packages('textclean');
+  if (!require('argparse')) install.packages('argparse', repo="http://cran.rstudio.com/");
+  if (!require("reutils")) install.packages("reutils", repo="http://cran.rstudio.com/");
+  if (!require('easyPubMed')) install.packages('easyPubMed', repo="http://cran.rstudio.com/" );
+  if (!require('textclean')) install.packages('textclean', repo="http://cran.rstudio.com/");
 }
 
 suppressPackageStartupMessages(library("argparse"))

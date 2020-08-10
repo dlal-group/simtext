@@ -1,5 +1,7 @@
 # SimText
 
+A text mining framework for interactive analysis and visualiza-tion of similarities among biomedical entities.
+
 ## Brief overview of tools:
 
  - pubmed_by_queries: 
@@ -24,27 +26,27 @@
 
 ## Requirements
 
- - R (version X.X)
+ - R (version > 4.0.0)
 
 ## Installation
 
 ```
 $ mkdir -p <path>/simtext
 $ cd <path>/simtext
-$ git clone https://github.com/mgramm1/simtext
+$ git clone https://github.com/dlal-group/simtext
 ```
 
 ## pubmed_by_queries
 
-This tool uses a set of search queries to download a defined number of abstracts or PMIDs for search query from PubMed. PubMed's search rules and syntax apply. Users can obtain an API key from the Settings page of their NCBI account (to create an account, visit http://www.ncbi.nlm.nih.gov/account/).
+This tool uses a set of search queries to download a defined number of abstracts or PMIDs for each search query from PubMed. PubMed's search rules and syntax apply. Users can obtain an API key from the Settings page of their NCBI account (to create an account, visit http://www.ncbi.nlm.nih.gov/account/).
 
 Input:
 
-Tab-delimited table with search queries in a column starting with "ID_", e.g. "ID_gene" if search queries are genes. 
+Tab-delimited table with a list of search queries (biomedical entities of interest) in one column. The column header should start with "ID_" (e.g., "ID_gene" if search queries are genes). 
 
 Usage:
 ```
-$ Rscript pubmed_by_queries.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-a] [-k KEY]
+$ Rscript pubmed_by_queries.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-a] [-k KEY] [--install_packages]
 ```
 
 Optional arguments: 
@@ -55,19 +57,20 @@ Optional arguments:
  -n NUMBER, --number NUMBER  number of PMIDs or abstracts to save per ID [default "5"]
  -a, --abstract              if abstracts instead of PMIDs should be retrieved use --abstracts 
  -k KEY, --key KEY           if NCBI API key is available, add it to speed up the download of PubMed data
+ --install_packages           if you want to auto install missing required packages
 ```
 
 Output: 
 
-Input table with additional columns with PMIDs or abstracts (--abstracts) from PubMed.
+A table with additional columns containing PMIDs or abstracts from PubMed.
 
 ## abstracts_by_pmids
 
-For PMIDs of each row, this tool retrieves the according abstracts and saves them in additional columns.
+This tool retrieves abstracts for a matrix of PMIDs. The abstract text is saved in additional columns.
 
 Input:
 
-Tab-delimited table with columns containing PMIDs. The names of the PMID columns should start with “PMID”, e.g. “PMID_1”, “PMID_2” etc.
+Tab-delimited table with rows representing biomedical entities and columns containing the corresponding PMIDs. The names of the PMID columns should start with “PMID_” (e.g., “PMID_1”, “PMID_2” etc.).
 
 Usage:
 ```
@@ -79,19 +82,20 @@ Optional arguments:
  -h, --help                    show help message
  -i INPUT, --input INPUT    input file name. add path if file is not in working directory
  -o OUTPUT, --output OUTPUT output file name [default "abstracts_by_pmids_output"]
+ --install_packages           if you want to auto install missing required packages
 ```
 
 Output: 
 
-Input table with additional columns containing abstracts. 
+A table with additional columns containing abstract texts.
 
 ## text_to_wordmatrix
 
-Per row, the tool extracts the most frequent words from text in columns starting with "ABSTRACT" or "TEXT. The extracted words of each row are united in one large binary matrix, with 0= word not frequently occurring in text of that row and 1= word frequently present in text of that row.
+The tool extracts for each row the most frequent words from the text in columns starting with "ABSTRACT" or "TEXT. The extracted words from each row are united in one large binary matrix, with 0= word not frequently occurring in text of that row and 1= word frequently present in text of that row.
 
 Input: 
 
-Output of pubmed_by_queries or abstracts_by_pmids, or tab-delimited table with text in columns starting with "ABSTRACT" or "TEXT".
+The output of ‘pubmed_by_queries’ or ‘abstracts_by_pmids’ tools, or a tab-delimited table with text in columns starting with "ABSTRACT" or "TEXT".
 
 Usage:
 ```
@@ -109,23 +113,24 @@ Optional arguments:
  -w, --remove_stopwords        by default a set of english stopwords (e.g., 'the' or 'not') are removed. otherwise use -w
  -s, --stemDoc                 apply Porter's stemming algorithm: collapsing words to a common root to aid comparison of vocabulary
  -p, --plurals                 by default words in plural and singular are merged to the singular form. otherwise use -p
+ -- install_packages           if you want to auto install missing required packages
 ```
 
 Output: 
 
-Binary matrix in that each column represents one of the extracted words.
+A binary matrix in that each column represents one of the extracted words.
 
 ## pmids_to_pubtator_matrix
 
-The tool uses all PMIDs per row and extracts "Gene", "Disease", "Mutation", "Chemical" and "Species" terms of the corresponding abstracts, using PubTator annotations. The user can choose from which categories terms should be extracted. The extracted terms are united in one large binary matrix, with 0= term not present in abstracts of that row and 1= term present in abstracts of that row.
+The tool uses all PMIDs per row and extracts "Gene", "Disease", "Mutation", "Chemical" and "Species" terms of the corresponding abstracts, using PubTator annotations. The user can choose from which categories terms should be extracted. The extracted terms are united in one large binary matrix, with 0= term not present in abstracts of that row and 1= term present in abstracts of that row. The user can decide if the scientific terms should be extracted and used as they are or if they should be grouped by their geneIDs/ meshIDs (several terms are often grouped into one ID). Also, by default all terms are extracted, otherwise the user can specify a number of most frequent words to extract per row.
 
 Input: 
 
-Output of abstracts_by_pmids or tab-delimited table with columns containing PMIDs. The names of the PMID columns should start with "PMID", e.g. "PMID_1", "PMID_2" etc.
+Output of 'abstracts_by_pmids' tool, or tab-delimited table with columns containing PMIDs. The names of the PMID columns should start with "PMID", e.g. "PMID_1", "PMID_2" etc.
 
 Usage:
 ```
-$ Rscript pmids_to_pubtator_matrix.R [-h] [-i INPUT] [-o OUTPUT] [-c {Gene,Disease,Mutation,Chemical,Species} [{Gene,Disease,Mutation,Chemical,Species} ...]]
+$ Rscript pmids_to_pubtator_matrix.R [-h] [-i INPUT] [-o OUTPUT] [-b BYID] [-n NUMBER][-c {Gene,Disease,Mutation,Chemical,Species} [{Gene,Disease,Mutation,Chemical,Species} ...]]
 ```
  
 Optional arguments:
@@ -133,7 +138,10 @@ Optional arguments:
  -h, --help                    show help message
  -i INPUT, --input INPUT       input file name. add path if file is not in workind directory
  -o OUTPUT, --output OUTPUT    output file name. [default "pmids_to_pubtator_matrix_output"]
+ -b, --byid                    if you want to find common gene IDs / mesh IDs instead of specific scientific terms.
+ -n NUMBER, --number NUMBER    number of most frequent terms/IDs to extract. by default all terms/IDs are extracted.
  -c [...], --categories [...]  PubTator categories that should be considered [default "('Gene', 'Disease', 'Mutation','Chemical')"]
+ -- install_packages           if you want to auto install missing required packages
 ```
 
 Output: 
@@ -142,16 +150,16 @@ Binary matrix in that each column represents one of the extracted terms.
 
 ## simtext_app
 
-The tool enables the exploration of data generated by text_to_wordmatrix or pmids_to_pubtator_matrix in a locally run ShinyApp. Features are word clouds for each initial search query, dimension reduction and hierarchical clustering of the binary matrix, and a table with words and their frequency among the search queries. 
+The tool enables the exploration of data generated by ‘text_to_wordmatrix’ or ‘pmids_to_pubtator_matrix’ tools in a Shiny local instance. The following features can be generated: 1) word clouds for each initial search query, 2) dimension reduction and hierarchical clustering of binary matrices, and 3) tables with words and their frequency in the search queries.
 
 Input:
 
 1)	Input 1: 
-Tab-delimited table with 
-- column with search queries starting with "ID_", e.g. "ID_gene" if initial search queries were genes 
-- column(s) with grouping factor(s) to compare pre-existing categories of the initial search queries with the grouping based on text. The column names should start with "GROUPING_". If the column name is "GROUPING_disorder", "disorder" will be shown as a grouping variable in the app.
+Tab-delimited table with
+	- A column with initial search queries starting with "ID_" (e.g., "ID_gene" if initial search queries were genes).
+	- Column(s) with grouping factor(s) to compare pre-existing categories of the initial search queries with the grouping based on text. The column names should start with "GROUPING_". If the column name is "GROUPING_disorder", "disorder" will be shown as a grouping variable in the app.
 2)	Input 2: 
-Output of text_to_wordmatrix or pmids_to_pubtator_matrix, or binary matrix.
+The output of ‘text_to_wordmatrix’ or ‘pmids_to_pubtator_matrix’ tools, or a binary matrix.
 
 Usage:
 ```
@@ -164,6 +172,8 @@ Optional arguments:
  -i INPUT,  --input INPUT      input file name. add path if file is not in working directory
  -m MATRIX, --matrix MATRIX    matrix file name. add path if file is not in working directory
  -p PORT,   --port PORT        specify port, otherwise randomly selected
+ --host						   specify host
+ -- install_packages           if you want to auto install missing required packages
 ```
 
 Output: 

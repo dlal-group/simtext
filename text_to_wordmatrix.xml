@@ -5,9 +5,12 @@
     </macros>
     <expand macro="requirements">
       <requirement type="package" version="2.0.1">r-argparse</requirement>
-      <requirement type="package" version="0.6.0">r-snowballc</requirement>
+      <requirement type="package" version="0.7.0">r-snowballc</requirement>
       <requirement type="package" version="0.3.6">r-pubmedwordcloud</requirement>
       <requirement type="package" version="1.2.0">r-semnetcleaner</requirement>
+      <requirement type="package" version="0.9.3">r-textclean</requirement>
+      <requirement type="package" version="1.4.3">r-stringi</requirement>
+      <requirement type="package" version="1.4.0">r-stringr</requirement>
     </expand>
     <expand macro="stdio"/>
     <command><![CDATA[Rscript 
@@ -29,7 +32,7 @@
       <param argument="--lower_case" label="Translate all characters are to lower case." name="lower_case" type="boolean" truevalue="" falsevalue="--lower_case" help="lower_case" checked="true"/>
       <param argument="--remove_stopwords" label="Remove english stopwords (e.g., 'the' or 'not')." name="remove_stopwords" type="boolean" truevalue="" falsevalue="--remove_stopwords" help="remove_stopwords" checked="true"/>
       <param argument="--stemDoc" label="Apply Porter's stemming algorithm: collapsing words to a common root to aid comparison of vocabulary." name="stemDoc" type="boolean" truevalue="--stemDoc" falsevalue="" help="stemDoc" checked="false"/>
-      <param argument="--plurals" label="Transform words in plural to their singular form." name="plurals" type="boolean" truevalue="" falsevalue="--plurals" help="plurals" checked="false"/>
+      <param argument="--plurals" label="Transform words in plural to their singular form." name="plurals" type="boolean" truevalue="" falsevalue="--plurals" help="plurals" checked="true"/>
     </inputs>
     <outputs>
       <data format="tabular" name="output" />
@@ -38,17 +41,16 @@
         <test>
           <param name="input" value="pubmed_by_queries_output_abstracts" ftype="tabular"/>
           <output name="output" value="text_to_wordmatrix_output"/>
-          <param name="number" value="50"/>
         </test>
     </tests>
     <help><![CDATA[
 
-Per row, the tool extracts the most frequent words from text in columns starting with "ABSTRACT" or "TEXT. The extracted words of each row are united in one large binary matrix, with 0= word not frequently occurring in text of that row and 1= word frequently present in text of that row.
+The tool extracts for each row the most frequent words from the text in columns starting with "ABSTRACT" or "TEXT. The extracted words from each row are united in one large binary matrix, with 0= word not frequently occurring in text of that row and 1= word frequently present in text of that row.
 
 Input: 
-Output of pubmed_by_queries or abstracts_by_pmids, or table with text in columns starting with "ABSTRACT" or "TEXT".
+The output of ‘pubmed_by_queries’ or ‘abstracts_by_pmids’ tools, or a table with text in columns starting with "ABSTRACT" or "TEXT".
 Output: 
-Binary matrix in that each column represents one of the extracted words.
+A binary matrix in that each column represents one of the extracted words.
 
         ]]></help>
     <expand macro="citations"/>

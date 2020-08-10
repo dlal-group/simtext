@@ -11,8 +11,6 @@
 # - column(s) with grouping factor(s) to compare pre-existing categories of the initial search queries with the grouping based on text. The column names should start with "GROUPING_". If the column name is "GROUPING_disorder", "disorder" will be shown as a grouping variable in the app.
 #  2)	Input 2: 
 #   Output of text_to_wordmatrix or pmids_to_pubtator_matrix, or binary matrix.
-#
-# Usage: $ simtext_app.R [-h] [-i INPUT] [-m MATRIX] [-p PORT] 
 # 
 # optional arguments:
 # -h, --help                    show help message
@@ -27,25 +25,25 @@
 
 if ( '--install_packages' %in% commandArgs()) {
   print('Installing packages')
-  if (!require('shiny')) install.packages('shiny');
-  if (!require('plotly')) install.packages('plotly');
-  if (!require('DT')) install.packages('DT');
-  if (!require('shinycssloaders')) install.packages('shinycssloaders');
-  if (!require('shinythemes')) install.packages('shinythemes');
-  if (!require('tableHTML')) install.packages('tableHTML');
-  if (!require('argparse')) install.packages('argparse');
-  if (!require('PubMedWordcloud')) install.packages('PubMedWordcloud');
-  if (!require('ggplot2')) install.packages('ggplot2');
-  if (!require('stringr')) install.packages('stringr');
-  if (!require('tidyr')) install.packages('tidyr');
-  if (!require('magrittr')) install.packages('magrittr');
-  if (!require('plyr')) install.packages('plyr');
-  if (!require('ggpubr')) install.packages('ggpubr');
-  if (!require('rafalib')) install.packages('rafalib');
-  if (!require('RColorBrewer')) install.packages('RColorBrewer');
-  if (!require('dendextend')) install.packages('dendextend');
-  if (!require('Rtsne')) install.packages('Rtsne');
-  if (!require('umap')) install.packages('umap');
+  if (!require('shiny')) install.packages('shiny', repo="http://cran.rstudio.com/");
+  if (!require('plotly')) install.packages('plotly', repo="http://cran.rstudio.com/");
+  if (!require('DT')) install.packages('DT', repo="http://cran.rstudio.com/");
+  if (!require('shinycssloaders')) install.packages('shinycssloaders', repo="http://cran.rstudio.com/");
+  if (!require('shinythemes')) install.packages('shinythemes', repo="http://cran.rstudio.com/");
+  if (!require('tableHTML')) install.packages('tableHTML', repo="http://cran.rstudio.com/");
+  if (!require('argparse')) install.packages('argparse', repo="http://cran.rstudio.com/");
+  if (!require('PubMedWordcloud')) install.packages('PubMedWordcloud', repo="http://cran.rstudio.com/");
+  if (!require('ggplot2')) install.packages('ggplot2', repo="http://cran.rstudio.com/");
+  if (!require('stringr')) install.packages('stringr', repo="http://cran.rstudio.com/");
+  if (!require('tidyr')) install.packages('tidyr', repo="http://cran.rstudio.com/");
+  if (!require('magrittr')) install.packages('magrittr', repo="http://cran.rstudio.com/");
+  if (!require('plyr')) install.packages('plyr', repo="http://cran.rstudio.com/");
+  if (!require('ggpubr')) install.packages('ggpubr', repo="http://cran.rstudio.com/");
+  if (!require('rafalib')) install.packages('rafalib', repo="http://cran.rstudio.com/");
+  if (!require('RColorBrewer')) install.packages('RColorBrewer', repo="http://cran.rstudio.com/");
+  if (!require('dendextend')) install.packages('dendextend', repo="http://cran.rstudio.com/");
+  if (!require('Rtsne')) install.packages('Rtsne', repo="http://cran.rstudio.com/");
+  if (!require('umap')) install.packages('umap', repo="http://cran.rstudio.com/");
 }
 
 suppressPackageStartupMessages(library("shiny"))
@@ -91,20 +89,17 @@ if(!is.null(args$host)){
 if(!is.null(args$port)){
   options(shiny.port = args$port)
 }
-
-args$input = "~/Dropbox/LAL_PROJECTS/RESEARCH_PORTAL/SimText/examples/data/1b/clingen_data"  
-args$matrix = "~/Dropbox/LAL_PROJECTS/RESEARCH_PORTAL/SimText/examples/data/1b/clingen_data_matrix"   
   
 #load data
 data = read.delim(args$input, stringsAsFactors=FALSE)
 index_grouping = grep("GROUPING_", names(data))
 names(data)[index_grouping] = sub(".*_", "",names(data)[index_grouping])
-colindex_id = grep("ID_", names(data))
+colindex_id = grep("^ID_", names(data))
 
-matrix = read.delim(args$matrix, stringsAsFactors=FALSE)
-matrix =  (as.matrix(matrix)>0) *1 #transform matrix to binary matrix
-  
- ##### UI ######
+matrix = read.delim(args$matrix, check.names = FALSE, header = TRUE, sep='\t')
+matrix = (as.matrix(matrix)>0) *1 #transform matrix to binary matrix
+           
+##### UI ######
 ui <- shinyUI(fluidPage(
   navbarPage(theme = shinytheme("flatly"), id = "inTabset",selected = "panel1",
              title = "SimText",
@@ -133,7 +128,6 @@ ui <- shinyUI(fluidPage(
                             padding:3px;
                             width: 100%"),
                   radioButtons('colour', 'Color by:', c("Grouping variable", "Individual word")), 
-                  #conditionalPanel(condition = "input.colour == 'Individual word'",
                   selectInput("colour_select", "Select:",  choices=c(names(data)[index_grouping])))
            ),
     fluidRow(width = 12, offset = 0,
@@ -147,12 +141,20 @@ ui <- shinyUI(fluidPage(
                             box-shadow: 3px 3px 3px #d8d8d8;
                             margin-bottom: 0px;
                             padding:5px"), 
-                  wellPanel(withSpinner(plotOutput("WordcloudPlot",height= "350px")),
-                            downloadLink("downloadWordcloud", "Download"),
+                  wellPanel(
+                    fluidRow(
+                      column(width = 4,
+                             numericInput('fontsize', 'Font size:',value = 7, min=1, max=50)),
+                      column(width = 4,
+                             numericInput('nword', 'Word number:',value = 50, min=1, max=100)),
+                      column(width = 12,
+                            withSpinner(plotOutput("WordcloudPlot",height= "325px"))),
+                      column(width = 12,
+                            downloadLink("downloadWordcloud", "Download"))),
                             style = "background-color: #ffffff;
                             border-bottom-color: #333333;
                             border-left-color: #333333;
-                            height: 400px;
+                            height: 470px;
                             border-right-color: #333333;
                             box-shadow: 3px 3px 3px #d8d8d8;
                             margin-top: 0px"),
@@ -165,12 +167,12 @@ ui <- shinyUI(fluidPage(
                             box-shadow: 3px 3px 3px #d8d8d8;
                             margin-bottom: 0px;
                             padding:5px"),
-                  wellPanel(withSpinner(DT::dataTableOutput("datatable", height= "210px")),
+                  wellPanel(withSpinner(DT::dataTableOutput("datatable", height= "150px")),
                             style = "background-color: #ffffff;
                             border-bottom-color: #333333;
                             border-left-color: #333333;
                             border-right-color: #333333;
-                            height: 245px;
+                            height: 175px;
                             box-shadow: 3px 3px 3px #d8d8d8;
                             margin-top: 0px")
                   ), 
@@ -193,7 +195,7 @@ ui <- shinyUI(fluidPage(
                            column(width = 2,
                                   radioButtons('label', 'Labels:',choices=c("Index","IDs"))),
                            column(width = 2,
-                                  numericInput('labelsize', 'Labelsize:',value = 12, min=1, max=30)),
+                                  numericInput('labelsize', 'Label size:',value = 12, min=1, max=30)),
                            column(width = 8, style='padding:0px;',
                                   withSpinner(plotlyOutput("TsnePlot",height=550))),
                            column(width = 4, style='padding:0px;',
@@ -224,7 +226,7 @@ ui <- shinyUI(fluidPage(
                           column(width = 2,
                                  radioButtons('hcmethod', 'Method:',choices=c("ward.D2","average","complete","single"))),
                           column(width = 2,
-                                 numericInput('labelsize_hc', 'Labelsize:', value = 8, min=1, max=30))
+                                 numericInput('labelsize_hc', 'Label size:', value = 8, min=1, max=30))
                           ),
                       fluidRow(
                           column(width = 9,
@@ -241,9 +243,10 @@ ui <- shinyUI(fluidPage(
                   ,
                   verbatimTextOutput("test")
                 ))
-    )),
-      
-  tabPanel("About", value = "panel2", h3(""))
+    ))
+    
+  #  ,
+  #tabPanel("About", value = "panel2", h3(""))
   
   )))
            
@@ -269,12 +272,10 @@ server <- function(input, output, session) {
     colnames(ID_matrix) = c("word", "freq")
     ID_matrix = ID_matrix[ID_matrix$freq == 1,]
     
-    if(nrow(ID_matrix) < 51){
-      fontsize = c(1,1)
-    } else {
-      fontsize = c(0.5,0.5)
-    }
-    plotWordCloud(ID_matrix, max.words = 100, scale= fontsize, colors= brewer.pal(8,"Greys")[5:8])
+    plotWordCloud(ID_matrix, 
+                  max.words = min(nrow(ID_matrix),input$nword), 
+                  scale= c(input$fontsize/10, input$fontsize/10), 
+                  colors= brewer.pal(8,"Greys")[4:8])
   })
   
   output$downloadWordcloud <- downloadHandler(
@@ -286,14 +287,12 @@ server <- function(input, output, session) {
       ID_matrix = data.frame(word= names(ID_matrix), freq= ID_matrix)
       colnames(ID_matrix) = c("word", "freq")
       ID_matrix = ID_matrix[ID_matrix$freq == 1,]
-      
-      if(nrow(ID_matrix) < 51){
-        fontsize = c(1,1)
-      } else {
-        fontsize = c(0.5,0.5)
-      }
+
       pdf(file)
-      plotWordCloud(ID_matrix, max.words = 100, scale= fontsize, colors= brewer.pal(8,"Greys")[5:8])
+      plotWordCloud(ID_matrix, 
+                    max.words = min(max(nrow(ID_matrix)),input$nword), 
+                    scale= c(input$fontsize/10, input$fontsize/10), 
+                    colors= brewer.pal(8,"Greys")[4:8])
       dev.off()
     }
   )
@@ -318,14 +317,12 @@ server <- function(input, output, session) {
                                  scrollY = min(nrow(colsum_data),500),
                                  scrollX= TRUE,
                                  scroller = TRUE,
+                                 autoWidth = TRUE,
                                  pageLength = nrow(colsum_data),
-                                 columnDefs = list(list(className = 'dt-center', targets = "_all"))))
+                                 columnDefs = list(list(className = 'dt-center', targets = "_all"), 
+                                 list(width = '50%', targets = "_all")))
+                  )
   })
-  
-  #DT::formatStyle(columns=c(1), backgroundColor = "#F7080880")
-  #DT::datatable(colsum_data) %>% 
-  #                           formatStyle(columns=c(1), backgroundColor = "#F7080880")
-  
   
   ##### Colour/Grouping #####
   
@@ -487,11 +484,6 @@ server <- function(input, output, session) {
     
   ##### Test field for development ######
   #output$test <- renderPrint({
-  #print(input$plot1_brush)
-    #print(colour_choice())
-    #print(class(colour_choice()))
-    #print(color_palette())
-   # print(session)
   #})
   
     }

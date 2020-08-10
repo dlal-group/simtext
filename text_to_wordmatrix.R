@@ -10,8 +10,6 @@
 #
 #Output: Binary matrix with rows = entities and columns = extracted words.
 #
-#packages: r-argparse-2.0.1, r-textclean-0.9.3, r-snowballc-0.6.0,  r-pubmedwordcloud-0.3.3, ("SemNetCleaner" not found in anaconda cloud)
-#
 #usage: text_to_wordmatrix.R [-h] [-i INPUT] [-o OUTPUT] [-n NUMBER] [-r] [-l] [-w] [-s] [-p]
 # 
 # optional arguments:
@@ -27,16 +25,22 @@
 
 if ( '--install_packages' %in% commandArgs()) {
   print('Installing packages')
-  if (!require('argparse')) install.packages('argparse');
-  if (!require("PubMedWordcloud")) install.packages("PubMedWordcloud");
-  if (!require('SnowballC')) install.packages('SnowballC');
-  if (!require('SemNetCleaner')) install.packages('SemNetCleaner');
+  if (!require('argparse')) install.packages('argparse', repo="http://cran.rstudio.com/");
+  if (!require("PubMedWordcloud")) install.packages("PubMedWordcloud", repo="http://cran.rstudio.com/");
+  if (!require('SnowballC')) install.packages('SnowballC', repo="http://cran.rstudio.com/");
+  if (!require('textclean')) install.packages('textclean', repo="http://cran.rstudio.com/");
+  if (!require('SemNetCleaner')) install.packages('SemNetCleaner',repo="http://cran.rstudio.com/");
+  if (!require('stringi')) install.packages('stringi',repo="http://cran.rstudio.com/");
+  if (!require('stringr')) install.packages('stringr',repo="http://cran.rstudio.com/");
 }
 
 suppressPackageStartupMessages(library("argparse"))
-library("PubMedWordcloud")
+suppressPackageStartupMessages(library("PubMedWordcloud"))
 suppressPackageStartupMessages(library("SnowballC"))
 suppressPackageStartupMessages(library("SemNetCleaner"))
+suppressPackageStartupMessages(library("textclean"))
+suppressPackageStartupMessages(library("stringi"))
+suppressPackageStartupMessages(library("stringr"))
 
 parser <- ArgumentParser()
 parser$add_argument("-i", "--input", 
@@ -75,12 +79,14 @@ for(row in 1:nrow(data)){
     
     top_words$word <- as.character(top_words$word)
     
+   # δ γ ε
+    
     cat("Most frequent words for row", row, " are extracted.", "\n")
     
-      if(args$plurals == TRUE){
-        top_words$word <- sapply(top_words$word, function(x){singularize(x)})
-        top_words = aggregate(freq~word,top_words,sum)
-      }
+    if(args$plurals == TRUE){
+      top_words$word <- sapply(top_words$word, function(x){singularize(x)})
+      top_words = aggregate(freq~word,top_words,sum)
+    }
     
     top_words = top_words[order(top_words$freq, decreasing = TRUE), ]
     top_words$word = as.character(top_words$word)

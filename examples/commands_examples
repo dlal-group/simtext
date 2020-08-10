@@ -5,23 +5,23 @@
 
 $ cd <path>/SimText
 
-Rscript pubmed_by_queries.R \
+$ Rscript pubmed_by_queries.R \
  --input examples/data/1a/clingen_data \
  --output examples/data/1a/pubmed_by_queries_output \
- --number 100 \
- --key "15f2fa5c9d427fd88d53b5041002aeabd309" \
- --abstract
-
+ --number 500 \
+ --abstract \
+ --install_packages
 
 $ Rscript text_to_wordmatrix.R \
  --input "examples/data/1a/pubmed_by_queries_output" \
  --output "examples/data/1a/clingen_data_matrix" \
- --number 50 \
- --stemDoc
+ --number 100 \
+ --install_packages
 
 $ Rscript simtext_app.R \
  --input "examples/data/1a/clingen_data" \
- --matrix "examples/data/1a/clingen_data_matrix"
+ --matrix "examples/data/1a/clingen_data_matrix" \
+ --install_packages
 
 
 
@@ -32,18 +32,20 @@ $ cd <path>/SimText
 $ Rscript pubmed_by_queries.R \
  --input "examples/data/1b/clingen_data" \
  --output "examples/data/1b/pubmed_by_queries_output" \
- --number 100 \
- --key "15f2fa5c9d427fd88d53b5041002aeabd309"
+ --number 500 \
+ --install_packages
 
 $ Rscript pmids_to_pubtator_matrix.R \
  --input "examples/data/1b/pubmed_by_queries_output"  \
  --output "examples/data/1b/clingen_data_matrix" \
- --categories Disease Gene
+ --categories Disease Gene \
+ --number 100 \
+ --install_packages
 
 $ Rscript simtext_app.R \
  --input "examples/data/1b/clingen_data" \
- --matrix "examples/data/1b/clingen_data_matrix"
-
+ --matrix "examples/data/1b/clingen_data_matrix" \
+ --install_packages
 
 
 #### Use-case 2 #####
@@ -57,12 +59,11 @@ $ Rscript abstracts_by_pmids.R \
 $ Rscript text_to_wordmatrix.R \
  --input "examples/data/2/abstracts_by_pmids_output" \
  --output "examples/data/2/researcher_data_matrix" \
- --number 100
+ --number 50
 
 $ Rscript simtext_app.R \
  --input "examples/data/2/researcher_data.txt" \
  --matrix "examples/data/2/researcher_data_matrix"
-
 
 
 

@@ -32,11 +32,10 @@
 This tool retrieves for all PMIDs in each row of a table the according abstracts and saves them in additional columns.
 
 Input: 
-Table with columns containing PMIDs. The names of the PMID columns should start with “PMID”, e.g. “PMID_1”, “PMID_2” etc.
+able with rows representing biomedical entities and columns containing the corresponding PMIDs. The names of the PMID columns should start with “PMID_” (e.g., “PMID_1”, “PMID_2” etc.).
 
 Output: 
-Input table with additional columns containing abstracts corresponding to the PMIDs from PubMed. 
-The abstract columns are called "ABSTRACT_1", "ABSTARCT_2" etc. 
+A table with additional columns containing abstract texts.
 
         ]]></help>
     <expand macro="citations"/>
