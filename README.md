@@ -1,6 +1,6 @@
 # SimText
 
-A text mining framework for interactive analysis and visualiza-tion of similarities among biomedical entities.
+A text mining framework for interactive analysis and visualization of similarities among biomedical entities.
 
 ## Brief overview of tools:
 

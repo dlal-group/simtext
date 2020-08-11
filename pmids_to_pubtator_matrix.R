@@ -181,7 +181,7 @@ for (i in 1:nrow(data)){
   pmids = pmids[!pmids == "NA"]
   
 
-     if ( (pmids_count > 3000)){
+     if ( (pmids_count > 10000)){
         cat("Break (10s) to avoid killing of requests. Please wait.",'\n')
         Sys.sleep(10)
         pmids_count = 0
