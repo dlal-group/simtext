@@ -1,5 +1,5 @@
 name: simtext
-owner: lalgroup
+owner: dlalgroup
 description: A text mining framework for interactive analysis and visualization of similarities among biomedical entities.
 homepage_url: https://github.com/dlal-group/simtext
 long_description: |
