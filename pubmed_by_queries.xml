@@ -44,7 +44,7 @@
 This tool uses a set of search queries to download a defined number of abstracts or PMIDs for each search query from PubMed. PubMed's search rules and syntax apply.
  
 Input:
-Table with a list of search queries (biomedical entities of interest) in one column. The column header should start with "ID_" (e.g., "ID_gene" if search queries are genes).
+Table with a list of search queries (biomedical entities of interest) in one column. The column header should start with "ID\_" (e.g., "ID_gene" if search queries are genes).
 
 Output: 
 Table with additional columns containing PMIDs or abstracts from PubMed.
