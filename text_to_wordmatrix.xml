@@ -48,7 +48,7 @@
 The tool extracts for each row the most frequent words from the text in columns starting with "ABSTRACT" or "TEXT. The extracted words from each row are united in one large binary matrix, with 0= word not frequently occurring in text of that row and 1= word frequently present in text of that row.
 
 Input: 
-The output of ‘pubmed_by_queries’ or ‘abstracts_by_pmids’ tools, or a table with text in columns starting with "ABSTRACT" or "TEXT".
+The output of "pubmed_by_queries" or "abstracts_by_pmids" tools, or a table with text in columns starting with "ABSTRACT" or "TEXT".
 Output: 
 A binary matrix in that each column represents one of the extracted words.
 

@@ -13,8 +13,8 @@ auto_tool_repositories:
   name_template: "{{ tool_id }}"
   description_template: "Wrapper for the SimText suite: {{ tool_name }}"
 suite:
-  name: "suite_simtext"
+  name: suite_simtext
   description: "A suite of Galaxy tools designed to work with version 1.0 of the SimText package."
   long_description: |
     SimText is a user-friendly toolset that allows users to simultaneously collect text from PubMed and extract associated vocabulary for any given set of entities. 
-    With SimText the user can interactively explore in a locally run web application key characteristics of the entities of interest and the similarities among them. 
+    With SimText the user can interactively explore in a locally run web application key characteristics of the entities of interest and the similarities among them.
