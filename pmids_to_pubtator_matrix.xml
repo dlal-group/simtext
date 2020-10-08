@@ -16,14 +16,15 @@
       --output '$output'
       --number '$number'
       $byid
+      --categories 
       #for $category in $categories:
-      --categories '$category'
+      '$category'
       #end for
       ]]>
     </command>
     <inputs>
       <param argument="--input" label="Input file" name="input" optional="false" type="data" format="tabular" help="input"/>
-      <param argument="--categories" name="categories" type="select" label="categories" multiple="true" >
+      <param argument="--categories" name="categories" type="select" label="categories" multiple="true" display="checkboxes">
         <option value="Gene">Genes</option>
         <option value="Disease">Diseases</option>
         <option value="Mutation">Mutations</option>
