@@ -3,14 +3,16 @@
     <macros>
         <import>macros.xml</import>
     </macros>
-    <expand macro="requirements"/>
+    <requirements>
+        <container type="docker">dlalgroup/simtext:1.0</container>
+    </requirements>
     <entry_points>
         <entry_point name="SimText App" requires_domain="true">
             <port>8888</port>
         </entry_point>
     </entry_points>
-    <expand macro="stdio"/>
-    <command><![CDATA[Rscript 
+    <command><![CDATA[
+    Rscript 
       '${__tool_directory__}/simtext_app.R'
       --input '$input'
       --matrix '$matrix'
@@ -19,8 +21,8 @@
       ]]>
     </command>
     <inputs>
-      <param argument="--input" label="Input file" name="input" optional="false" type="data" format="tabular" help="input"/>
-      <param argument="--matrix" label="matrix file" name="matrix" optional="false" type="data" format="tabular" help="matrix"/>
+        <param argument="--input" label="Input file" name="input" optional="false" type="data" format="tabular" help="input"/>
+        <param argument="--matrix" label="matrix file" name="matrix" optional="false" type="data" format="tabular" help="matrix"/>
     </inputs>
     <outputs>
       <data format="tabular" name="output" />

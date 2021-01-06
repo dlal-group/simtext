@@ -1,19 +1,19 @@
-<tool id="text_to_wordmatrix" name="text_to_wordmatrix" version="@VERSION@">
-    <description>Extract most frequent words from each row in a table and generate binary word matrix</description>
+<tool id="text_to_wordmatrix" name="Text to wordmatrix" version="@VERSION@">
+    <description>by extracting most frequent words</description>
     <macros>
         <import>macros.xml</import>
     </macros>
-    <expand macro="requirements">
-      <requirement type="package" version="2.0.1">r-argparse</requirement>
-      <requirement type="package" version="0.7.0">r-snowballc</requirement>
-      <requirement type="package" version="0.3.6">r-pubmedwordcloud</requirement>
-      <requirement type="package" version="1.2.0">r-semnetcleaner</requirement>
-      <requirement type="package" version="0.9.3">r-textclean</requirement>
-      <requirement type="package" version="1.4.3">r-stringi</requirement>
-      <requirement type="package" version="1.4.0">r-stringr</requirement>
-    </expand>
-    <expand macro="stdio"/>
-    <command><![CDATA[Rscript 
+    <requirements>
+        <requirement type="package" version="2.0.1">r-argparse</requirement>
+        <requirement type="package" version="0.7.0">r-snowballc</requirement>
+        <requirement type="package" version="0.3.6">r-pubmedwordcloud</requirement>
+        <requirement type="package" version="1.2.0">r-semnetcleaner</requirement>
+        <requirement type="package" version="0.9.3">r-textclean</requirement>
+        <requirement type="package" version="1.4.3">r-stringi</requirement>
+        <requirement type="package" version="1.4.0">r-stringr</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+    Rscript 
       '${__tool_directory__}/text_to_wordmatrix.R'
       --input '$input'
       --output '$output'
@@ -26,21 +26,21 @@
       ]]>
     </command>
     <inputs>
-      <param argument="--input" label="Input file" name="input" optional="false" type="data" format="tabular" help="input"/>
-      <param argument="--number" label="Number of most frequent words that should be extracted per row" name="number" optional="false" type="integer" help="number" value="50" min="1" max="500"/>
-      <param argument="--remove_num" label="Remove any numbers in text" name="remove_num" type="boolean" truevalue="--remove_num" falsevalue="" help="remove_num" checked="false"/>
-      <param argument="--lower_case" label="Translate all characters are to lower case." name="lower_case" type="boolean" truevalue="" falsevalue="--lower_case" help="lower_case" checked="true"/>
-      <param argument="--remove_stopwords" label="Remove english stopwords (e.g., 'the' or 'not')." name="remove_stopwords" type="boolean" truevalue="" falsevalue="--remove_stopwords" help="remove_stopwords" checked="true"/>
-      <param argument="--stemDoc" label="Apply Porter's stemming algorithm: collapsing words to a common root to aid comparison of vocabulary." name="stemDoc" type="boolean" truevalue="--stemDoc" falsevalue="" help="stemDoc" checked="false"/>
-      <param argument="--plurals" label="Transform words in plural to their singular form." name="plurals" type="boolean" truevalue="" falsevalue="--plurals" help="plurals" checked="true"/>
+        <param argument="--input" type="data" format="tabular" label="Input file" />
+        <param argument="--number" type="integer" value="50" min="1" max="500" label="Number of most frequent words that should be extracted per row"/>
+        <param argument="--remove_num" type="boolean" truevalue="--remove_num" falsevalue="" checked="false" label="Remove any numbers in text" />
+        <param argument="--lower_case" type="boolean" truevalue="" falsevalue="--lower_case" checked="true" label="Translate all characters are to lower case." />
+        <param argument="--remove_stopwords" type="boolean" truevalue="" falsevalue="--remove_stopwords" checked="true" label="Remove english stopwords" help="e.g. 'the' or 'not'" />
+        <param argument="--stemDoc" type="boolean" truevalue="--stemDoc" falsevalue="" checked="false" label="Apply Porter's stemming algorithm: collapsing words to a common root to aid comparison of vocabulary." />
+        <param argument="--plurals" type="boolean" truevalue="" falsevalue="--plurals" checked="true" label="Transform words in plural to their singular form." />
     </inputs>
     <outputs>
-      <data format="tabular" name="output" />
+        <data format="tabular" name="output" />
     </outputs>
     <tests>
         <test>
-          <param name="input" value="pubmed_by_queries_output_abstracts" ftype="tabular"/>
-          <output name="output" value="text_to_wordmatrix_output"/>
+            <param name="input" value="pubmed_by_queries_output_abstracts" ftype="tabular"/>
+            <output name="output" value="text_to_wordmatrix_output"/>
         </test>
     </tests>
     <help><![CDATA[

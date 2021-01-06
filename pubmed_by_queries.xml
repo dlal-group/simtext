@@ -1,14 +1,14 @@
-<tool id="pubmed_by_queries" name="pubmed_by_queries" version="@VERSION@">
-    <description>Download a defined number of abstracts or PMIDs from PubMed for a set of search queries</description>
+<tool id="pubmed_by_queries" name="PubMed query" version="@VERSION@">
+    <description>download a defined number of abstracts or PMIDs from PubMed</description>
     <macros>
         <import>macros.xml</import>
     </macros>
-    <expand macro="requirements">
-      <requirement type="package" version="2.0.1">r-argparse</requirement>
-      <requirement type="package" version="2.13">r-easypubmed</requirement>
-    </expand>
-    <expand macro="stdio"/>
-    <command><![CDATA[Rscript 
+    <requirements>
+        <requirement type="package" version="2.0.1">r-argparse</requirement>
+        <requirement type="package" version="2.13">r-easypubmed</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+    Rscript 
       '${__tool_directory__}/pubmed_by_queries.R'
       --input '$input'
       --output '$output'
@@ -21,30 +21,34 @@
     </command>
     
     <inputs>
-      <param argument="--input" label="Input file" name="input" optional="false" type="data" format="tabular" help="input"/>
-      <param argument="--abstract" label="Save abstracts instead of PMIDs" name="abstract" type="boolean" truevalue="--abstract" falsevalue="" help="abstract" checked="false"/>
-      <param argument="--number" label="Number of PMIDs (or abstracts) to save per  ID" name="number" optional="false" type="integer" help="number" value="5"/>
-      <param argument="--key" label="NCBI API key (if available)" name="key" optional="true" type="text" help="key"/>
+        <param argument="--input" name="input" optional="false" type="data" format="tabular" label="Input file with query terms" help=""/>
+        <param argument="--abstract" type="boolean" truevalue="--abstract" falsevalue="" checked="false" label="Save abstracts instead of PMIDs"/>
+        <param argument="--number" type="integer" value="5" min="1" label="Number of PMIDs (or abstracts) to save per ID" />
+        <!-- this needs to go aways, as those parameters are stored forever and can be exposed to other users if you share your history -->
+        <param argument="--key" type="text" help="key" label="NCBI API key (if available)" />
     </inputs>
     
     <outputs>
-      <data format="tabular" name="output" />
+        <data format="tabular" name="output" />
     </outputs>
     
     <tests>
         <test>
-          <param name="input" value="test_data" ftype="tabular"/>
-          <param name="number" value="5"/>
-          <param name="abstract" value=""/>
-          <output name="output" value="pubmed_by_queries_output"/>
+            <param name="input" value="test_data" ftype="tabular"/>
+            <param name="number" value="5"/>
+            <param name="abstract" value=""/>
+            <output name="output" value="pubmed_by_queries_output"/>
         </test>
     </tests>
     <help><![CDATA[
 
-This tool uses a set of search queries to download a defined number of abstracts or PMIDs for each search query from PubMed. PubMed's search rules and syntax apply.
+This tool uses a set of search queries to download a defined number of abstracts or PMIDs for each search query from PubMed.
+PubMed's search rules and syntax apply.
  
 Input:
-Table with a list of search queries (biomedical entities of interest) in one column. The column header should start with "ID\_" (e.g., "ID_gene" if search queries are genes).
+
+Table with a list of search queries (biomedical entities of interest) in one column. The column header should start with
+"ID\_" (e.g., "ID_gene" if search queries are genes).
 
 Output: 
 Table with additional columns containing PMIDs or abstracts from PubMed.
