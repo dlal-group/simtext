@@ -237,8 +237,7 @@ word_matrix = as.data.frame(do.call(cbind, by(t(word_matrix),INDICES=names(word_
 word_matrix <- as.matrix(word_matrix)
 word_matrix[is.na(word_matrix)] <- 0
 cat("Matrix with ",nrow(word_matrix)," rows and ",ncol(word_matrix)," columns generated.","\n")
-#write.table(word_matrix, args$output)
-write.table(word_matrix, args$output, row.names = FALSE, sep = '\t')
+write.table(word_matrix, args$output, row.names = FALSE, sep = '\t', quote = FALSE)
 
 
 

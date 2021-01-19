@@ -101,4 +101,4 @@ for(row in 1:nrow(data)){
 
 cat("A matrix with ", nrow(word_matrix), " rows and ", ncol(word_matrix), "columns is generated.", "\n")
   
-write.table(word_matrix, args$output, row.names = FALSE, sep = '\t')
+write.table(word_matrix, args$output, row.names = FALSE, sep = '\t', quote = FALSE)

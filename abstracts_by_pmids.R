@@ -138,5 +138,5 @@ for(row in 1:nrow(data)){
   }
 }
 
-write.table(data, args$output, sep = '\t', row.names = FALSE, col.names = TRUE)
+write.table(data, args$output, sep = '\t', row.names = FALSE, col.names = TRUE, quote = FALSE)
 
