@@ -7,30 +7,23 @@
         <requirement type="package" version="2.0.1">r-argparse</requirement>
         <requirement type="package" version="2.13">r-easypubmed</requirement>
     </requirements>
-    
-    <command detect_errors="exit_code"><![CDATA[
-      #set $apikey = $__user__.extra_preferences.get('ncbi_account|apikey', "")
 
+    <command detect_errors="exit_code"><![CDATA[
     Rscript 
       '${__tool_directory__}/pubmed_by_queries.R'
       --input '$input'
       --output '$output'
       --number '$number'
       $abstract
-      #if str($apikey):
-        -k '$apikey'
+      #if $__user__.extra_preferences.get('ncbi_account|apikey', ""):
+        -k "\$NCBI_APIKEY"
       #end if  
       ]]>
     </command>
 
-    <configfiles>
-    <configfile name="credentials"><![CDATA[
-    #set $apikey = $__user__.extra_preferences.get('ncbi_account|apikey', "")
-    {
-        "apikey": "$apikey",
-    }
-    ]]></configfile>
-    </configfiles>
+    <environment_variables>
+        <environment_variable name="NCBI_APIKEY">$__user__.extra_preferences.get('ncbi_account|apikey', "")</environment_variable>
+    </environment_variables>
 
     <inputs>
         <param argument="--input" type="data" format="tabular" label="Input file with query terms" />
