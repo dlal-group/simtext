@@ -41,7 +41,31 @@
         <test>
             <param name="input" value="pubmed_by_queries_output" ftype="tabular"/>
             <param name="categories" value="Gene,Mutation"/>
-            <output name="output" value="pmids_to_pubtator_matrix_output"/>
+            <output name="output">
+                <assert_contents>
+                    <has_n_lines n="7"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="input" value="pubmed_by_queries_output" ftype="tabular"/>
+            <param name="categories" value="Gene,Disease"/>
+            <param name="byid" value="True"/>
+            <output name="output">
+                <assert_contents>
+                    <has_n_lines n="7"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="input" value="pubmed_by_queries_output" ftype="tabular"/>
+            <param name="categories" value="Gene,Disease"/>
+            <param name="number" value="5"/>
+            <output name="output">
+                <assert_contents>
+                    <has_n_lines n="7"/>
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help><![CDATA[

@@ -21,8 +21,8 @@
       ]]>
     </command>
     <inputs>
-        <param argument="--input" label="Input file" name="input" optional="false" type="data" format="tabular" help="input"/>
-        <param argument="--matrix" label="matrix file" name="matrix" optional="false" type="data" format="tabular" help="matrix"/>
+        <param argument="--input" label="Input file" name="input" type="data" format="tabular"/>
+        <param argument="--matrix" label="Matrix file" name="matrix" type="data" format="tabular"/>
     </inputs>
     <outputs>
       <data format="tabular" name="output" />
