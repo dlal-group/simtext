@@ -18,7 +18,7 @@
       --number '$number'
       $abstract
       #if str($apikey):
-        -k '$__user__.extra_preferences.get('ncbi_account|apikey', "")'
+        -k '$apikey'
       #end if  
       ]]>
     </command>
