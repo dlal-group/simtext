@@ -179,3 +179,21 @@ Optional arguments:
 Output: 
 
 SimText app
+
+
+## Set up user credentials on Galaxy
+
+To enable users to set their credentials (NCBI API Key) for this tool,
+make sure the file `config/user_preferences_extra.yml` has the following section:
+
+```
+preferences:
+    ncbi_account:
+        description: NCBI account information
+        inputs:
+            - name: apikey
+              label: NCBI API Key (available from "API Key Management" at https://www.ncbi.nlm.nih.gov/account/settings/)
+              type: text
+              required: False
+
+```
