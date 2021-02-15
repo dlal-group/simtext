@@ -82,7 +82,9 @@ for (row in seq(nrow(data))) {
     cat("Most frequent words for row", row, " are extracted.", "\n")
 
     if (args$plurals == TRUE) {
-      top_words$word <- sapply(top_words$word, function(x){singularize(x)} )
+      top_words$word <- sapply(top_words$word, function(x) {
+        singularize(x)
+        })
       top_words <- aggregate(freq~word, top_words, sum)
     }
 
@@ -90,7 +92,9 @@ for (row in seq(nrow(data))) {
     top_words$word <- as.character(top_words$word)
 
     number_extract <- min(args$number, nrow(top_words))
-    word_matrix[row, sapply(1:number_extract, function(x){paste0(top_words$word[x])} )] <- top_words$freq[1:number_extract]
+    word_matrix[row, sapply(1:number_extract, function(x) {
+      paste0(top_words$word[x])
+      })] <- top_words$freq[1:number_extract]
   }
 
   word_matrix <- as.matrix(word_matrix)

@@ -129,7 +129,7 @@ ui <- shinyUI(fluidPage(
                             box-shadow: 0px 0px 0px white;
                             padding:3px;
                             width: 100%"),
-                  selectInput("ID", "Select ID:", paste0(data[[colindex_id]], " (",
+                  selectInput("id_interest", "Select ID:", paste0(data[[colindex_id]], " (",
                                                          seq(1, length(data[[colindex_id]])),
                                                          ")"))),
            column(width = 3,  style = "padding-right: 0px",
@@ -149,7 +149,7 @@ ui <- shinyUI(fluidPage(
            ),
     fluidRow(width = 12, offset = 0,
            column(width = 4, #style = "height:650px;",
-                  wellPanel(textOutput("ID"),
+                  wellPanel(textOutput("id_text"),
                             style = "background-color: #333333;
                             color: white;
                             border-top-color: #333333;
@@ -167,10 +167,10 @@ ui <- shinyUI(fluidPage(
                              numericInput("nword", "Word number:",
                                           value = 50, min = 1, max = 100)),
                       column(width = 12,
-                            withSpinner(plotOutput("WordcloudPlot",
+                            withSpinner(plotOutput("wordcloud_plot",
                                                    height = "325px"))),
                       column(width = 12,
-                            downloadLink("downloadWordcloud", "Download"))),
+                            downloadLink("download_wordcloud", "Download"))),
                             style = "background-color: #ffffff;
                             border-bottom-color: #333333;
                             border-left-color: #333333;
@@ -178,7 +178,7 @@ ui <- shinyUI(fluidPage(
                             border-right-color: #333333;
                             box-shadow: 3px 3px 3px #d8d8d8;
                             margin-top: 0px"),
-                  wellPanel(textOutput("Table"),
+                  wellPanel(textOutput("table"),
                             style = "background-color: #333333;
                             color: white;
                             border-top-color: #333333;
@@ -222,13 +222,13 @@ ui <- shinyUI(fluidPage(
                                   numericInput("labelsize", "Label size:",
                                                value = 12, min = 1, max = 30)),
                            column(width = 8, style = "padding:0px;",
-                                  withSpinner(plotlyOutput("TsnePlot",
+                                  withSpinner(plotlyOutput("tsne_plot",
                                                            height = 550))),
                            column(width = 4, style = "padding:0px;",
-                                  withSpinner(plotOutput("TsnePlot_legend",
+                                  withSpinner(plotOutput("tsne_plot_legend",
                                                          height = 550))),
                            column(width = 2,
-                                  downloadLink("downloadPlotdata", label = "Download data"))),
+                                  downloadLink("download_plot_data", label = "Download data"))),
                             style = "background-color: white;
                             border-bottom-color: #333333;
                             border-left-color:  #333333;
@@ -280,48 +280,47 @@ ui <- shinyUI(fluidPage(
 server <- function(input, output, session) {
 
   ##### Global #####
-  IDs <- reactive({
-    paste0(data[[colindex_id]], " (",
-    seq(1, length(data[[colindex_id]])), ")")
+  ids <- reactive({
+    paste0(data[[colindex_id]], " (", seq(1, length(data[[colindex_id]])), ")")
     })
 
-  index_ID <- reactive({
-    which(IDs() == input$ID)
+  index_id <- reactive({
+    which(ids() == input$id_interest)
     })
 
-  ##### Wordcloud plot and download ######
+  ##### Wordcloud plot and download#####
 
-  output$ID <- renderText({
-    paste("Wordcloud of", data[[colindex_id]][index_ID()])
+  output$id_text <- renderText({
+    paste("Wordcloud of", data[[colindex_id]][index_id()])
   })
 
-  output$WordcloudPlot <- renderPlot({
-    ID_matrix <- matrix[index_ID(), ]
-    ID_matrix <- data.frame(word = as.character(names(ID_matrix)),
-                           freq = ID_matrix)
-    colnames(ID_matrix) <- c("word", "freq")
-    ID_matrix <- ID_matrix[ID_matrix$freq == 1, ]
+  output$wordcloud_plot <- renderPlot({
+    id_matrix <- matrix[index_id(), ]
+    id_matrix <- data.frame(word = as.character(names(id_matrix)),
+                           freq = id_matrix)
+    colnames(id_matrix) <- c("word", "freq")
+    id_matrix <- id_matrix[id_matrix$freq == 1, ]
 
-    plotWordCloud(ID_matrix,
-                  max.words = min(nrow(ID_matrix), input$nword),
+    plotWordCloud(id_matrix,
+                  max.words = min(nrow(id_matrix), input$nword),
                   scale = c(input$fontsize / 10, input$fontsize / 10),
                   colors = brewer.pal(8, "Greys")[4:8])
   })
 
-  output$downloadWordcloud <- downloadHandler(
+  output$download_wordcloud <- downloadHandler(
     filename <- function() {
       paste0(paste0("Wordcloudof",
-                    data[[colindex_id]][index_ID()]), ".pdf", sep = "")
+                    data[[colindex_id]][index_id()]), ".pdf", sep = "")
     },
     content <- function(file) {
-      ID_matrix <- matrix[index_ID(), ]
-      ID_matrix <- data.frame(word = names(ID_matrix), freq = ID_matrix)
-      colnames(ID_matrix) <- c("word", "freq")
-      ID_matrix <- ID_matrix[ID_matrix$freq == 1, ]
+      id_matrix <- matrix[index_id(), ]
+      id_matrix <- data.frame(word = names(id_matrix), freq = id_matrix)
+      colnames(id_matrix) <- c("word", "freq")
+      id_matrix <- id_matrix[id_matrix$freq == 1, ]
 
       pdf(file)
-      plotWordCloud(ID_matrix,
-                    max.words = min(max(nrow(ID_matrix)), input$nword),
+      plotWordCloud(id_matrix,
+                    max.words = min(nrow(id_matrix), input$nword),
                     scale = c(input$fontsize / 10, input$fontsize / 10),
                     colors = brewer.pal(8, "Greys")[4:8])
       dev.off()
@@ -329,7 +328,7 @@ server <- function(input, output, session) {
   )
 
   ##### Table #####
-  output$Table  <-  renderText({
+  output$table  <-  renderText({
     paste("Most occuring words among IDs")
   })
 
@@ -356,9 +355,8 @@ server <- function(input, output, session) {
                   )
   })
 
-####Colour/Grouping####
-
-  outVar <- reactive({
+  ##### Colour #####
+  outvar <- reactive({
     if (input$colour == "Grouping variable") {
       return(names(data)[index_grouping])
     } else {
@@ -367,7 +365,7 @@ server <- function(input, output, session) {
   })
 
   observe({
-    updateSelectInput(session, "colour_select", choices = outVar())})
+    updateSelectInput(session, "colour_select", choices = outvar())})
 
   colour_choice <- reactive({
     if (input$colour == "Grouping variable") {
@@ -379,7 +377,7 @@ server <- function(input, output, session) {
                               "Selected word associated with ID",
                               "Selected word not associated with ID")
       return(as.factor(colour_byword))
-  }
+      }
     })
 
   color_palette <- reactive({
@@ -406,7 +404,7 @@ server <- function(input, output, session) {
     }
   })
 
-  output$TsnePlot <- renderPlotly({
+  output$tsne_plot <- renderPlotly({
 
     if (input$label == "Index") {
         labeling <- as.character(seq(1, nrow(data)))
@@ -417,8 +415,8 @@ server <- function(input, output, session) {
     p <- plot_ly(colors = color_palette()) %>%
       add_trace(type = "scatter",
                 mode = "markers",
-                x = data_dimred()$X_Coord[index_ID()],
-                y = data_dimred()$Y_Coord[index_ID()],
+                x = data_dimred()$X_Coord[index_id()],
+                y = data_dimred()$Y_Coord[index_id()],
                 opacity = 0.15,
                 marker = list(
                   color = "grey",
@@ -441,7 +439,7 @@ server <- function(input, output, session) {
                 hoverinfo = "text",
                 color = factor(colour_choice())) %>%
       layout(showlegend = FALSE,
-             yaxis= list(title = "",
+             yaxis = list(title = "",
                          zeroline = FALSE,
                          linecolor = toRGB("black"),
                          linewidth = 1,
@@ -461,14 +459,13 @@ server <- function(input, output, session) {
                                         "hoverCompareCartesian",
                                         "hoverClosestPie", "toggleSpikelines"),
              displaylogo = FALSE) %>%
-      style(hoverinfo = "none", traces = c(1,2))
+      style(hoverinfo = "none", traces = c(1, 2))
 
     p
   })
 
   #legend of plotly plot by ggplot
-
-  output$TsnePlot_legend <- renderPlot({
+  output$tsne_plot_legend <- renderPlot({
     p <- ggplot(data, aes(x = 1, y = 1)) +
         geom_text(aes(label = seq(1, nrow(data)), colour = factor(colour_choice())),
                 size = 3.5, fontface = "bold") +
@@ -481,7 +478,7 @@ server <- function(input, output, session) {
     as_ggplot(leg)
   })
 
-  output$downloadPlotdata <- downloadHandler(
+  output$download_plot_data <- downloadHandler(
     filename <- function() {
       paste0(input$method, "_coordinates.csv")
     },

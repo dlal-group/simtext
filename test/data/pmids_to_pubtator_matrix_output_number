@@ -1,7 +1,7 @@
-ankrd11	anxiety	autism	autism spectrum disorder	bdnf	cb2r	depression	egfr	epilepsy	foxp2	glioblastoma	glun2a	grin2a	kbg syndrome	learning disabilities	p21	pain	pcdh19	pogz	psd-95	scn1a	scn9a	seizure	shank2	shank3	short stature	white-sutton syndrome
-0	0	0	0	0	1	0	0	1	0	0	0	0	0	0	0	0	1	0	0	1	0	1	0	0	0	0
-0	0	0	0	0	0	0	1	1	0	1	0	0	0	0	0	1	0	0	0	0	1	0	0	0	0	0
-0	0	0	0	1	0	1	0	0	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0
-1	0	1	0	0	0	0	0	0	0	0	0	0	1	0	1	0	0	0	0	0	0	0	0	0	1	0
-0	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	1	1	0	0
-0	1	1	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	1	0	0	0	0	0	0	0	1
+amyloid precursor protein	ankrd11	anxiety	asah1	asd	autism	bdnf	cldn18	dravet syndrome	embryonic kidney	epilepsy	gastric srcc	itch	kbg syndrome	learning disabilities	memory impairment	nav1.7	ns5	p21	pain	pogz	scn1a	scn2a	scn9a	shank2	short stature	tumors	white-sutton syndrome
+0	0	0	1	0	0	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	1	1	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	1	0	0	1	0	0	0	1	0	0	1	0	0	0	1	0	0	0	0
+0	0	1	0	0	0	1	1	0	0	0	1	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0
+0	1	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	1	0	0	0	0	0	0	1	1	0
+1	0	0	0	1	1	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	1	0	0	0
+0	0	1	0	0	1	0	0	0	0	0	0	0	0	1	0	0	0	0	0	1	0	0	0	0	0	0	1

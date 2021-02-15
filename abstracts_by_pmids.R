@@ -42,7 +42,7 @@ args <- parser$parse_args()
 data <- read.delim(args$input, stringsAsFactors = FALSE, header = TRUE, sep = "\t")
 pmids_cols_index <- grep("PMID", names(data))
 
-fetch_abstracts <- function(PMIDs, row) {
+fetch_abstracts <- function(pmids, row) {
 
   efetch_result <- NULL
   try_num <- 1
@@ -64,7 +64,7 @@ fetch_abstracts <- function(PMIDs, row) {
     }
 
     efetch_result <- tryCatch({
-      suppressWarnings(efetch(uid = PMIDs, db = "pubmed", retmode = "xml"))
+      suppressWarnings(efetch(uid = pmids, db = "pubmed", retmode = "xml"))
     }, error = function(e) {
       NULL
     })
@@ -116,7 +116,9 @@ fetch_abstracts <- function(PMIDs, row) {
   abstracts <- as.character(abstracts)
 
   if (length(abstracts) > 0) {
-    data[row, sapply(seq(length(abstracts)), function(i) {paste0("ABSTRACT_", i)})] <- abstracts
+    data[row, sapply(seq(length(abstracts)), function(i) {
+      paste0("ABSTRACT_", i)
+      })] <- abstracts
     cat(length(abstracts), " abstracts for PMIDs of row ", row, " are added in the table.", "\n")
   }
 
@@ -125,11 +127,11 @@ fetch_abstracts <- function(PMIDs, row) {
     
 
 for (row in seq(nrow(data))) {
-  PMIDs <-  as.character(unique(data[row, pmids_cols_index]))
-  PMIDs <- PMIDs[!PMIDs == "NA"]
+  pmids <-  as.character(unique(data[row, pmids_cols_index]))
+  pmids <- pmids[!pmids == "NA"]
 
-  if (length(PMIDs) > 0) {
-    data <- tryCatch(fetch_abstracts(PMIDs, row),
+  if (length(pmids) > 0) {
+    data <- tryCatch(fetch_abstracts(pmids, row),
                     error = function(e) {
                       Sys.sleep(3)
                       })
@@ -137,5 +139,4 @@ for (row in seq(nrow(data))) {
     print(paste("No PMIDs in row", row))
   }
 }
-
 write.table(data, args$output, sep = "\t", row.names = FALSE, col.names = TRUE, quote = FALSE)
