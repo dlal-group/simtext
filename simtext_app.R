@@ -48,6 +48,7 @@ if ("--install_packages" %in% commandArgs()) {
   if (!require("dendextend")) install.packages("dendextend", repo = "http://cran.rstudio.com/");
   if (!require("Rtsne")) install.packages("Rtsne", repo = "http://cran.rstudio.com/");
   if (!require("umap")) install.packages("umap", repo = "http://cran.rstudio.com/");
+  if (!require("mclust")) install.packages("mclust", repo = "http://cran.rstudio.com/");
 }
 
 suppressPackageStartupMessages(library("shiny"))
@@ -69,6 +70,7 @@ suppressPackageStartupMessages(library("RColorBrewer"))
 suppressPackageStartupMessages(library("dendextend"))
 suppressPackageStartupMessages(library("Rtsne"))
 suppressPackageStartupMessages(library("umap"))
+suppressPackageStartupMessages(library("mclust"))
 
 #command arguments
 parser <- ArgumentParser()
@@ -97,8 +99,7 @@ if (!is.null(args$port)) {
 #load data
 data <- read.delim(args$input, stringsAsFactors = FALSE)
 index_grouping <- grep("GROUPING_", names(data))
-names(data)[index_grouping] <- sub(".*_", "",
-                                   names(data)[index_grouping])
+names(data)[index_grouping] <- sub(".*_", "", names(data)[index_grouping])
 colindex_id <- grep("^ID_", names(data))
 
 matrix <- read.delim(args$matrix,
@@ -198,7 +199,7 @@ ui <- shinyUI(fluidPage(
                             margin-top: 0px")
                   ),
            column(width = 8, #style="padding:0px;",
-                  wellPanel("T-SNE plot of wordmatrix",
+                  wellPanel("Dimensionality reduction of matrix",
                             style = "background-color: #333333;
                             color: white;
                             border-top-color: #333333;
@@ -238,7 +239,7 @@ ui <- shinyUI(fluidPage(
                             #height=575px
                        ))),
     fluidRow(column(width = 12,
-                  wellPanel("Hierarchical clustering of wordmatrix",
+                  wellPanel("Hierarchical clustering of matrix",
                             style = "background-color: #333333;
                             color: white;
                             border-top-color: #333333;
@@ -261,7 +262,16 @@ ui <- shinyUI(fluidPage(
                           column(width = 9,
                                 withSpinner(plotOutput("hclust"))),
                           column(width = 3,
-                                 withSpinner(plotOutput("hclust_legend")))
+                                 withSpinner(plotOutput("hclust_legend"))),
+                          column(width = 10,
+                                 h4("Adjusted rand index")),
+                          column(width = 4,
+                                 numericInput("kclusters", "Select number of clusters to compute adjusted rand index with:",
+                                              value = length(unique(as.character(data[,index_grouping[1]]))), min = 2, max = nrow(data))),
+                          column(width = 10,
+                                 br(),
+                                 uiOutput("hclust_ari"),
+                                 HTML("<p><a href='https://link.springer.com/article/10.1007%2FBF01908075' target='_blank'>The adjusted rand index</a> compares two partitions of the same data and ranges from 0 to 1, with 1 showing perfect agreement between the two partitions.</p>"))
                           ),
                                 style = "background-color: #ffffff;
                                 border-bottom-color: #333333;
@@ -355,7 +365,7 @@ server <- function(input, output, session) {
                   )
   })
 
-  ##### Colour #####
+  ##### colour #####
   outvar <- reactive({
     if (input$colour == "Grouping variable") {
       return(names(data)[index_grouping])
@@ -520,6 +530,18 @@ server <- function(input, output, session) {
       as_ggplot(leg)
     })
 
+    
+    output$hclust_ari <- renderUI({
+    #adjusted Rand index
+    clustering <- hclust(dist(matrix), method = input$hcmethod)
+    mc_ari <- adjustedRandIndex(as.character(data[, index_grouping[1]]), cutree(clustering, k = input$kclusters))
+    
+    text1 <- paste("By dividing the data into", input$kclusters, "clusters and comparing the resulting partition with the initial grouping variable, the adjusted rand index equals")
+    text2 <- paste(round(mc_ari,2),".")
+    
+    HTML(paste(text1, text2))
+  
+    })
 
   ##### Test field for development ######
   #output$test <- renderPrint({

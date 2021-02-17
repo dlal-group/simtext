@@ -33,6 +33,7 @@ RUN apt-get update -qq && apt-get -y upgrade && apt-get -y --no-install-recommen
   && Rscript -e 'if (!require("easyPubMed")) install.packages("easyPubMed", repos="https://cloud.r-project.org");' \
   && Rscript -e 'if (!require("RCurl")) install.packages("RCurl", repos="https://cloud.r-project.org");' \
   && Rscript -e 'if (!require("SnowballC")) install.packages("SnowballC", repos="https://cloud.r-project.org");' \
+  && Rscript -e 'if (!require("mclust")) install.packages("mclust", repos="https://cloud.r-project.org");' \
   && Rscript -e 'if (!require("SemNetCleaner")) install.packages("SemNetCleaner", repos="https://cloud.r-project.org");' 
 
 ENV PATH "/simtext/:${PATH}"
