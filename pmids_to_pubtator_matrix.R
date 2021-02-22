@@ -34,8 +34,8 @@ if ("--install_packages" %in% commandArgs()) {
 
 suppressPackageStartupMessages(library("argparse"))
 library("stringr")
-library("stringi")
 library("RCurl")
+library("stringi")
 
 parser <- ArgumentParser()
 

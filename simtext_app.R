@@ -27,28 +27,84 @@
 #hierarchical clustering and table with words and their frequency among the entities.
 #
 #Packages
-if ("--install_packages" %in% commandArgs()) {
-  print("Installing packages")
-  if (!require("shiny")) install.packages("shiny", repo = "http://cran.rstudio.com/");
-  if (!require("plotly")) install.packages("plotly", repo = "http://cran.rstudio.com/");
-  if (!require("DT")) install.packages("DT", repo = "http://cran.rstudio.com/");
-  if (!require("shinycssloaders")) install.packages("shinycssloaders", repo = "http://cran.rstudio.com/");
-  if (!require("shinythemes")) install.packages("shinythemes", repo = "http://cran.rstudio.com/");
-  if (!require("tableHTML")) install.packages("tableHTML", repo = "http://cran.rstudio.com/");
-  if (!require("argparse")) install.packages("argparse", repo = "http://cran.rstudio.com/");
-  if (!require("PubMedWordcloud")) install.packages("PubMedWordcloud", repo = "http://cran.rstudio.com/");
-  if (!require("ggplot2")) install.packages("ggplot2", repo = "http://cran.rstudio.com/");
-  if (!require("stringr")) install.packages("stringr", repo = "http://cran.rstudio.com/");
-  if (!require("tidyr")) install.packages("tidyr", repo = "http://cran.rstudio.com/");
-  if (!require("magrittr")) install.packages("magrittr", repo = "http://cran.rstudio.com/");
-  if (!require("plyr")) install.packages("plyr", repo = "http://cran.rstudio.com/");
-  if (!require("ggpubr")) install.packages("ggpubr", repo = "http://cran.rstudio.com/");
-  if (!require("rafalib")) install.packages("rafalib", repo = "http://cran.rstudio.com/");
-  if (!require("RColorBrewer")) install.packages("RColorBrewer", repo = "http://cran.rstudio.com/");
-  if (!require("dendextend")) install.packages("dendextend", repo = "http://cran.rstudio.com/");
-  if (!require("Rtsne")) install.packages("Rtsne", repo = "http://cran.rstudio.com/");
-  if (!require("umap")) install.packages("umap", repo = "http://cran.rstudio.com/");
-  if (!require("mclust")) install.packages("mclust", repo = "http://cran.rstudio.com/");
+if (!require("shiny") & "--install_packages" %in% commandArgs()) {
+  install.packages("shiny", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("plotly")  & "--install_packages" %in% commandArgs()) {
+  install.packages("plotly", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("DT")  & "--install_packages" %in% commandArgs()) {
+  install.packages("DT", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("shinycssloaders")  & "--install_packages" %in% commandArgs()) {
+  install.packages("shinycssloaders", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("shinythemes") & "--install_packages" %in% commandArgs()) {
+  install.packages("shinythemes", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("tableHTML") & "--install_packages" %in% commandArgs()) {
+  install.packages("tableHTML", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("argparse") & "--install_packages" %in% commandArgs()) {
+  install.packages("argparse", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("PubMedWordcloud") & "--install_packages" %in% commandArgs()) {
+  install.packages("PubMedWordcloud", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("ggplot2") & "--install_packages" %in% commandArgs()) {
+  install.packages("ggplot2", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("stringr") & "--install_packages" %in% commandArgs()) {
+  install.packages("stringr", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("tidyr") & "--install_packages" %in% commandArgs()) {
+  install.packages("tidyr", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("magrittr") & "--install_packages" %in% commandArgs()) {
+  install.packages("magrittr", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("plyr") & "--install_packages" %in% commandArgs()) {
+  install.packages("plyr", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("ggpubr") & "--install_packages" %in% commandArgs()) {
+  install.packages("ggpubr", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("rafalib") & "--install_packages" %in% commandArgs()) {
+  install.packages("rafalib", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("RColorBrewer") & "--install_packages" %in% commandArgs()) {
+  install.packages("RColorBrewer", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("dendextend") & "--install_packages" %in% commandArgs()) {
+  install.packages("dendextend", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("Rtsne") & "--install_packages" %in% commandArgs()) {
+  install.packages("Rtsne", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("umap") & "--install_packages" %in% commandArgs()) {
+  install.packages("umap", repo = "http://cran.rstudio.com/")
+}
+
+if (!require("mclust") & "--install_packages" %in% commandArgs()) {
+  install.packages("mclust", repo = "http://cran.rstudio.com/")
 }
 
 suppressPackageStartupMessages(library("shiny"))
@@ -95,7 +151,7 @@ if (!is.null(args$host))  {
 if (!is.null(args$port)) {
   options(shiny.port = args$port)
 }
-  
+
 #load data
 data <- read.delim(args$input, stringsAsFactors = FALSE)
 index_grouping <- grep("GROUPING_", names(data))
@@ -116,13 +172,13 @@ ui <- shinyUI(fluidPage(
              title = "SimText",
              tabPanel("Home",
                       value = "panel1",
-                tabPanel("Results",
-                        value = "panel1",
-      fluidRow(width = 12,
-               offset = 0,
-           column(width = 4,  style = "padding-right: 0px",
-                  wellPanel(h5(strong("ID of interest")),
-                            style = "background-color:white;
+                      tabPanel("Results",
+                               value = "panel1",
+                               fluidRow(width = 12,
+                                        offset = 0,
+                                        column(width = 4,  style = "padding-right: 0px",
+                                               wellPanel(h5(strong("ID of interest")),
+                                                         style = "background-color:white;
                             border-bottom: 2px solid #EEEEEE;
                             border-top-color: white;
                             border-right-color: white;
@@ -130,12 +186,12 @@ ui <- shinyUI(fluidPage(
                             box-shadow: 0px 0px 0px white;
                             padding:3px;
                             width: 100%"),
-                  selectInput("id_interest", "Select ID:", paste0(data[[colindex_id]], " (",
-                                                         seq(1, length(data[[colindex_id]])),
-                                                         ")"))),
-           column(width = 3,  style = "padding-right: 0px",
-                  wellPanel(h5(strong("Color settings")),
-                            style = "background-color:white;
+                                               selectInput("id_interest", "Select ID:", paste0(data[[colindex_id]], " (",
+                                                                                               seq(1, length(data[[colindex_id]])),
+                                                                                               ")"))),
+                                        column(width = 3,  style = "padding-right: 0px",
+                                               wellPanel(h5(strong("Color settings")),
+                                                         style = "background-color:white;
                             border-bottom: 2px solid #EEEEEE;
                             border-top-color: white;
                             border-right-color: white;
@@ -143,15 +199,15 @@ ui <- shinyUI(fluidPage(
                             box-shadow: 0px 0px 0px white;
                             padding:3px;
                             width: 100%"),
-                  radioButtons("colour", "Color by:",
-                               c("Grouping variable", "Individual word")),
-                  selectInput("colour_select", "Select:",
-                              choices = c(names(data)[index_grouping])))
-           ),
-    fluidRow(width = 12, offset = 0,
-           column(width = 4, #style = "height:650px;",
-                  wellPanel(textOutput("id_text"),
-                            style = "background-color: #333333;
+                                               radioButtons("colour", "Color by:",
+                                                            c("Grouping variable", "Individual word")),
+                                               selectInput("colour_select", "Select:",
+                                                           choices = c(names(data)[index_grouping])))
+                               ),
+                               fluidRow(width = 12, offset = 0,
+                                        column(width = 4, #style = "height:650px;",
+                                               wellPanel(textOutput("id_text"),
+                                                         style = "background-color: #333333;
                             color: white;
                             border-top-color: #333333;
                             border-left-color: #333333;
@@ -159,28 +215,28 @@ ui <- shinyUI(fluidPage(
                             box-shadow: 3px 3px 3px #d8d8d8;
                             margin-bottom: 0px;
                             padding:5px"),
-                  wellPanel(
-                    fluidRow(
-                      column(width = 4,
-                             numericInput("fontsize", "Font size:",
-                                          value = 7, min = 1, max = 50)),
-                      column(width = 4,
-                             numericInput("nword", "Word number:",
-                                          value = 50, min = 1, max = 100)),
-                      column(width = 12,
-                            withSpinner(plotOutput("wordcloud_plot",
-                                                   height = "325px"))),
-                      column(width = 12,
-                            downloadLink("download_wordcloud", "Download"))),
-                            style = "background-color: #ffffff;
+                                               wellPanel(
+                                                 fluidRow(
+                                                   column(width = 4,
+                                                          numericInput("fontsize", "Font size:",
+                                                                       value = 7, min = 1, max = 50)),
+                                                   column(width = 4,
+                                                          numericInput("nword", "Word number:",
+                                                                       value = 50, min = 1, max = 100)),
+                                                   column(width = 12,
+                                                          withSpinner(plotOutput("wordcloud_plot",
+                                                                                 height = "325px"))),
+                                                   column(width = 12,
+                                                          downloadLink("download_wordcloud", "Download"))),
+                                                 style = "background-color: #ffffff;
                             border-bottom-color: #333333;
                             border-left-color: #333333;
                             height: 470px;
                             border-right-color: #333333;
                             box-shadow: 3px 3px 3px #d8d8d8;
                             margin-top: 0px"),
-                  wellPanel(textOutput("table"),
-                            style = "background-color: #333333;
+                                               wellPanel(textOutput("table"),
+                                                         style = "background-color: #333333;
                             color: white;
                             border-top-color: #333333;
                             border-left-color: #333333;
@@ -188,19 +244,19 @@ ui <- shinyUI(fluidPage(
                             box-shadow: 3px 3px 3px #d8d8d8;
                             margin-bottom: 0px;
                             padding:5px"),
-                  wellPanel(withSpinner(DT::dataTableOutput("datatable",
-                                                            height = "150px")),
-                            style = "background-color: #ffffff;
+                                               wellPanel(withSpinner(DT::dataTableOutput("datatable",
+                                                                                         height = "150px")),
+                                                         style = "background-color: #ffffff;
                             border-bottom-color: #333333;
                             border-left-color: #333333;
                             border-right-color: #333333;
                             height: 175px;
                             box-shadow: 3px 3px 3px #d8d8d8;
                             margin-top: 0px")
-                  ),
-           column(width = 8, #style="padding:0px;",
-                  wellPanel("Dimensionality reduction of matrix",
-                            style = "background-color: #333333;
+                                        ),
+                                        column(width = 8, #style="padding:0px;",
+                                               wellPanel("Dimensionality reduction of matrix",
+                                                         style = "background-color: #333333;
                             color: white;
                             border-top-color: #333333;
                             border-left-color: #333333;
@@ -208,39 +264,39 @@ ui <- shinyUI(fluidPage(
                             box-shadow: 3px 3px 3px #d8d8d8;
                             margin-bottom: 0px;
                             padding:5px"),
-                  wellPanel(
-                     fluidRow(
-                           column(width = 2,
-                                  radioButtons("method", "Method:",
-                                               choices = c("t-SNE", "UMAP"))),
-                           column(width = 2,
-                                  numericInput("perplexity", "Perplexity:",
-                                               value = 2, min = 1, max = nrow(data) - 1)),
-                           column(width = 2,
-                                  radioButtons("label", "Labels:",
-                                               choices = c("Index", "IDs"))),
-                           column(width = 2,
-                                  numericInput("labelsize", "Label size:",
-                                               value = 12, min = 1, max = 30)),
-                           column(width = 8, style = "padding:0px;",
-                                  withSpinner(plotlyOutput("tsne_plot",
-                                                           height = 550))),
-                           column(width = 4, style = "padding:0px;",
-                                  withSpinner(plotOutput("tsne_plot_legend",
-                                                         height = 550))),
-                           column(width = 2,
-                                  downloadLink("download_plot_data", label = "Download data"))),
-                            style = "background-color: white;
+                                               wellPanel(
+                                                 fluidRow(
+                                                   column(width = 2,
+                                                          radioButtons("method", "Method:",
+                                                                       choices = c("t-SNE", "UMAP"))),
+                                                   column(width = 2,
+                                                          numericInput("perplexity", "Perplexity:",
+                                                                       value = 2, min = 1, max = nrow(data) - 1)),
+                                                   column(width = 2,
+                                                          radioButtons("label", "Labels:",
+                                                                       choices = c("Index", "IDs"))),
+                                                   column(width = 2,
+                                                          numericInput("labelsize", "Label size:",
+                                                                       value = 12, min = 1, max = 30)),
+                                                   column(width = 8, style = "padding:0px;",
+                                                          withSpinner(plotlyOutput("tsne_plot",
+                                                                                   height = 550))),
+                                                   column(width = 4, style = "padding:0px;",
+                                                          withSpinner(plotOutput("tsne_plot_legend",
+                                                                                 height = 550))),
+                                                   column(width = 2,
+                                                          downloadLink("download_plot_data", label = "Download data"))),
+                                                 style = "background-color: white;
                             border-bottom-color: #333333;
                             border-left-color:  #333333;
                             border-right-color: #333333;
                             box-shadow: 3px 3px 3px #d8d8d8;
                             margin-top: 0px"
-                            #height=575px
-                       ))),
-    fluidRow(column(width = 12,
-                  wellPanel("Hierarchical clustering of matrix",
-                            style = "background-color: #333333;
+                                                 #height=575px
+                                               ))),
+                               fluidRow(column(width = 12,
+                                               wellPanel("Hierarchical clustering of matrix",
+                                                         style = "background-color: #333333;
                             color: white;
                             border-top-color: #333333;
                             border-left-color: #333333;
@@ -248,58 +304,55 @@ ui <- shinyUI(fluidPage(
                             box-shadow: 3px 3px 3px #d8d8d8;
                             margin-bottom: 0px;
                             padding:5px")
-                  ,
-                  wellPanel(
-                    fluidRow(
-                          column(width = 2,
-                                 radioButtons("hcmethod", "Method:",
-                                              choices = c("ward.D2", "average", "complete", "single"))),
-                          column(width = 2,
-                                 numericInput("labelsize_hc", "Label size:",
-                                              value = 8, min = 1, max = 30))
-                          ),
-                      fluidRow(
-                          column(width = 9,
-                                withSpinner(plotOutput("hclust"))),
-                          column(width = 3,
-                                 withSpinner(plotOutput("hclust_legend"))),
-                          column(width = 10,
-                                 h4("Adjusted rand index")),
-                          column(width = 4,
-                                 numericInput("kclusters", "Select number of clusters to compute adjusted rand index with:",
-                                              value = length(unique(as.character(data[,index_grouping[1]]))), min = 2, max = nrow(data))),
-                          column(width = 10,
-                                 br(),
-                                 uiOutput("hclust_ari"),
-                                 HTML("<p><a href='https://link.springer.com/article/10.1007%2FBF01908075' target='_blank'>The adjusted rand index</a> compares two partitions of the same data and ranges from 0 to 1, with 1 showing perfect agreement between the two partitions.</p>"))
-                          ),
-                                style = "background-color: #ffffff;
+                                               ,
+                                               wellPanel(
+                                                 fluidRow(
+                                                   column(width = 2,
+                                                          radioButtons("hcmethod", "Method:",
+                                                                       choices = c("ward.D2", "average", "complete", "single"))),
+                                                   column(width = 2,
+                                                          numericInput("labelsize_hc", "Label size:",
+                                                                       value = 8, min = 1, max = 30))
+                                                 ),
+                                                 fluidRow(
+                                                   column(width = 9,
+                                                          withSpinner(plotOutput("hclust"))),
+                                                   column(width = 3,
+                                                          withSpinner(plotOutput("hclust_legend"))),
+                                                   column(width = 10,
+                                                          h4("Adjusted rand index")),
+                                                   column(width = 4,
+                                                          numericInput("kclusters", "Select number of clusters to compute adjusted rand index with:",
+                                                                       value = length(unique(as.character(data[, index_grouping[1]]))), min = 2, max = nrow(data))),
+                                                   column(width = 10,
+                                                          br(),
+                                                          uiOutput("hclust_ari"),
+                                                          HTML("<p><a href='https://link.springer.com/article/10.1007%2FBF01908075' target='_blank'>The adjusted rand index</a> compares two partitions of the same data and ranges from -1 to 1, with 0 showing random labeling and 1 showing perfect agreement between the two partitions.</p>"))
+                                                 ),
+                                                 style = "background-color: #ffffff;
                                 border-bottom-color: #333333;
                                 border-left-color: #333333;
                                 border-right-color: #333333;
                                 box-shadow: 3px 3px 3px #d8d8d8;
                                 margin-top: 0px")
-                  ,
-                  verbatimTextOutput("test")
-                ))
-    ))
+                                               ,
+                                               verbatimTextOutput("test")
+                               ))
+                      ))
   )))
-
 
 ###### SERVER ######
 server <- function(input, output, session) {
 
-  ##### Global #####
+##### Global #####
   ids <- reactive({
     paste0(data[[colindex_id]], " (", seq(1, length(data[[colindex_id]])), ")")
-    })
-
+  })
   index_id <- reactive({
     which(ids() == input$id_interest)
-    })
+  })
 
   ##### Wordcloud plot and download#####
-
   output$id_text <- renderText({
     paste("Wordcloud of", data[[colindex_id]][index_id()])
   })
@@ -307,10 +360,9 @@ server <- function(input, output, session) {
   output$wordcloud_plot <- renderPlot({
     id_matrix <- matrix[index_id(), ]
     id_matrix <- data.frame(word = as.character(names(id_matrix)),
-                           freq = id_matrix)
+                            freq = id_matrix)
     colnames(id_matrix) <- c("word", "freq")
     id_matrix <- id_matrix[id_matrix$freq == 1, ]
-
     plotWordCloud(id_matrix,
                   max.words = min(nrow(id_matrix), input$nword),
                   scale = c(input$fontsize / 10, input$fontsize / 10),
@@ -327,7 +379,6 @@ server <- function(input, output, session) {
       id_matrix <- data.frame(word = names(id_matrix), freq = id_matrix)
       colnames(id_matrix) <- c("word", "freq")
       id_matrix <- id_matrix[id_matrix$freq == 1, ]
-
       pdf(file)
       plotWordCloud(id_matrix,
                     max.words = min(nrow(id_matrix), input$nword),
@@ -343,11 +394,9 @@ server <- function(input, output, session) {
   })
 
   output$datatable <- DT::renderDataTable({
-
     colsum_data <- data.frame(word = colnames(matrix), freq = colSums(matrix))
     colsum_data <- colsum_data[order(colsum_data$freq, decreasing = T), ]
     colnames(colsum_data) <- c("Word", paste0("IDs (total n=", nrow(matrix), ")"))
-
     DT::datatable(colsum_data,
                   extensions = c("Buttons"),
                   rownames = F,
@@ -362,7 +411,7 @@ server <- function(input, output, session) {
                                  columnDefs = list(
                                    list(className = "dt-center", targets = "_all"),
                                    list(width = "50%", targets = "_all")))
-                  )
+    )
   })
 
   ##### colour #####
@@ -380,27 +429,26 @@ server <- function(input, output, session) {
   colour_choice <- reactive({
     if (input$colour == "Grouping variable") {
       return(as.factor(data[, input$colour_select]))
-  } else {
+    } else {
       matrix <- as.data.frame(matrix)
       colour_byword <- matrix[[input$colour_select]]
       colour_byword <- ifelse(colour_byword > 0,
                               "Selected word associated with ID",
                               "Selected word not associated with ID")
       return(as.factor(colour_byword))
-      }
-    })
+    }
+  })
 
   color_palette <- reactive({
     palette <- c("#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C", "#FB9A99",
                  "#E31A1C", "#FDBF6F", "#FF7F00", "#CAB2D6", "#6A3D9A",
-                  "#00AFBB", "#E7B800", "#FC4E07", "#999999", "#E69F00",
-                  "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00")
-                  return(palette[seq(length(levels(colour_choice())))])
+                 "#00AFBB", "#E7B800", "#FC4E07", "#999999", "#E69F00",
+                 "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00")
+    return(palette[seq(length(levels(colour_choice())))])
   })
 
   ##### Dimension reduction plot and download #####
-
-   data_dimred <- reactive({
+  data_dimred <- reactive({
     if (input$method == "t-SNE") {
       tsne_result <- Rtsne(matrix, perplexity = input$perplexity, check_duplicates = F)
       data["X_Coord"] <- tsne_result$Y[, 1]
@@ -415,13 +463,11 @@ server <- function(input, output, session) {
   })
 
   output$tsne_plot <- renderPlotly({
-
     if (input$label == "Index") {
-        labeling <- as.character(seq(1, nrow(data)))
+      labeling <- as.character(seq(1, nrow(data)))
     } else if (input$label == "IDs") {
-        labeling <- as.character(data[[colindex_id]])
+      labeling <- as.character(data[[colindex_id]])
     }
-
     p <- plot_ly(colors = color_palette()) %>%
       add_trace(type = "scatter",
                 mode = "markers",
@@ -450,11 +496,11 @@ server <- function(input, output, session) {
                 color = factor(colour_choice())) %>%
       layout(showlegend = FALSE,
              yaxis = list(title = "",
-                         zeroline = FALSE,
-                         linecolor = toRGB("black"),
-                         linewidth = 1,
-                         showticklabels = FALSE,
-                         showgrid = FALSE),
+                          zeroline = FALSE,
+                          linecolor = toRGB("black"),
+                          linewidth = 1,
+                          showticklabels = FALSE,
+                          showgrid = FALSE),
              xaxis = list(title = "",
                           zeroline = FALSE,
                           linecolor = toRGB("black"),
@@ -470,20 +516,19 @@ server <- function(input, output, session) {
                                         "hoverClosestPie", "toggleSpikelines"),
              displaylogo = FALSE) %>%
       style(hoverinfo = "none", traces = c(1, 2))
-
     p
   })
 
   #legend of plotly plot by ggplot
   output$tsne_plot_legend <- renderPlot({
     p <- ggplot(data, aes(x = 1, y = 1)) +
-        geom_text(aes(label = seq(1, nrow(data)), colour = factor(colour_choice())),
+      geom_text(aes(label = seq(1, nrow(data)), colour = factor(colour_choice())),
                 size = 3.5, fontface = "bold") +
-        theme_classic() +
-        scale_color_manual(values = color_palette()) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 9))
+      theme_classic() +
+      scale_color_manual(values = color_palette()) +
+      theme(legend.title = element_blank()) +
+      theme(legend.position = "right") +
+      theme(legend.text = element_text(size = 9))
     leg <- get_legend(p)
     as_ggplot(leg)
   })
@@ -498,7 +543,6 @@ server <- function(input, output, session) {
   )
 
   ##### Hierarchical clustering #######
-
   output$hclust <- renderPlot({
     set.seed(42)
     clustering <- hclust(dist(matrix), method = input$hcmethod)
@@ -513,41 +557,35 @@ server <- function(input, output, session) {
               main = "",
               yaxt = "n",
               ylab = "")
-    })
+  })
 
-    #legend
-    output$hclust_legend <- renderPlot({
-      p <- ggplot(data, aes(x = 1, y = 1)) +
-        geom_text(aes(label = seq(1, nrow(data)),
-                      colour = factor(colour_choice())),
-                      fontface = "bold") +
-        theme_classic() +
-        scale_color_manual(values = color_palette()) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 9))
-      leg <- get_legend(p)
-      as_ggplot(leg)
-    })
+  #legend
+  output$hclust_legend <- renderPlot({
+    p <- ggplot(data, aes(x = 1, y = 1)) +
+      geom_text(aes(label = seq(1, nrow(data)),
+                    colour = factor(colour_choice())),
+                fontface = "bold") +
+      theme_classic() +
+      scale_color_manual(values = color_palette()) +
+      theme(legend.title = element_blank()) +
+      theme(legend.position = "right") +
+      theme(legend.text = element_text(size = 9))
+    leg <- get_legend(p)
+    as_ggplot(leg)
+  })
 
-    
-    output$hclust_ari <- renderUI({
+  output$hclust_ari <- renderUI({
     #adjusted Rand index
     clustering <- hclust(dist(matrix), method = input$hcmethod)
     mc_ari <- adjustedRandIndex(as.character(data[, index_grouping[1]]), cutree(clustering, k = input$kclusters))
-    
     text1 <- paste("By dividing the data into", input$kclusters, "clusters and comparing the resulting partition with the initial grouping variable, the adjusted rand index equals")
-    text2 <- paste(round(mc_ari,2),".")
-    
+    text2 <- paste(round(mc_ari, 2), ".")
     HTML(paste(text1, text2))
-  
-    })
-
+  })
   ##### Test field for development ######
   #output$test <- renderPrint({
   #})
-
-    }
+}
 
 ###### APP ######
 shinyApp(ui, server)

@@ -4,7 +4,7 @@
         <import>macros.xml</import>
     </macros>
     <requirements>
-        <container type="docker">dlalgroup/simtext:1.0</container>
+        <container type="docker">dlalgroup/simtext:2.0</container>
     </requirements>
     <entry_points>
         <entry_point name="SimText App" requires_domain="true">

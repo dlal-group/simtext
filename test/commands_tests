@@ -1,6 +1,6 @@
 #commands to test the tools with "test_data" 
 
- $ cd <path>/SimText/test
+ $ cd <path>/simtext/test
 
  $ Rscript ../pubmed_by_queries.R --input "data/test_data" --output "data/pubmed_by_queries_output"
  #output: data/pubmed_by_queries_output --install_packages
