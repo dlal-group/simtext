@@ -24,11 +24,28 @@ A text mining framework for interactive analysis and visualization of similariti
 
  Shiny app with word clouds, dimension reduction plot, dendrogram of hierarchical clustering and table with words and their frequency among the search queries.
 
-## Requirements
+## Set up user credentials on Galaxy
+
+To enable users to set their credentials (NCBI API Key) for this tool,
+make sure the file `config/user_preferences_extra_conf.yml` has the following section:
+
+```
+preferences:
+    ncbi_account:
+        description: NCBI account information
+        inputs:
+            - name: apikey
+              label: NCBI API Key (available from "API Key Management" at https://www.ncbi.nlm.nih.gov/account/settings/)
+              type: text
+              required: False
+
+```
+
+## Requirements command-line version
 
  - R (version > 4.0.0)
 
-## Installation
+## Installation command-line version
 
 ```
 $ mkdir -p <path>/simtext
@@ -57,7 +74,7 @@ Optional arguments:
  -n NUMBER, --number NUMBER  number of PMIDs or abstracts to save per ID [default "5"]
  -a, --abstract              if abstracts instead of PMIDs should be retrieved use --abstracts 
  -k KEY, --key KEY           if NCBI API key is available, add it to speed up the download of PubMed data
- --install_packages           if you want to auto install missing required packages
+ --install_packages          if you want to auto install missing required packages
 ```
 
 Output: 
@@ -179,21 +196,3 @@ Optional arguments:
 Output: 
 
 SimText app
-
-
-## Set up user credentials on Galaxy
-
-To enable users to set their credentials (NCBI API Key) for this tool,
-make sure the file `config/user_preferences_extra_conf.yml` has the following section:
-
-```
-preferences:
-    ncbi_account:
-        description: NCBI account information
-        inputs:
-            - name: apikey
-              label: NCBI API Key (available from "API Key Management" at https://www.ncbi.nlm.nih.gov/account/settings/)
-              type: text
-              required: False
-
-```
